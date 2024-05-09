@@ -36,7 +36,7 @@ namespace JsonFormattingAssignment
             }
             else if (type.IsClass)
             {
-                SerializeObjet(obj, stringBuilder);
+                SerializeObject(obj, stringBuilder);
             }
         }
 
@@ -44,17 +44,18 @@ namespace JsonFormattingAssignment
         {
             if (obj is string)
             {
-                stringBuilder.Append($"\"{InputString((string)obj)}\"");    
+                stringBuilder.Append($"\"{InputString((string)obj)}\"");
             }
             else if (obj is DateTime)
             {
-                stringBuilder.Append($"\"{((DateTime)obj).ToString("yyyy-MM-dd")} \"");
+                stringBuilder.Append($"\"{((DateTime)obj).ToString("yyyy,MM,dd")}\"");
             }
             else
             {
                 stringBuilder.Append(obj);
             }
         }
+        
 
         private static void SerializeArrayOrList(object obj, StringBuilder stringBuilder)
         {
@@ -73,18 +74,18 @@ namespace JsonFormattingAssignment
             stringBuilder.Append("]");
         }
 
-        private static void SerializeObjet(object obj, StringBuilder stringBuilder)
+        private static void SerializeObject(object obj, StringBuilder stringBuilder)
         {
             stringBuilder.Append("{");
             PropertyInfo[] properties = obj.GetType().GetProperties();  
-            for (int i = 0; i < properties.Length; i++) 
+            for (int i = 0; i < properties.Length; i++)
             {
                 stringBuilder.Append($"\"{properties[i].Name}\":");
-                SerializeValue(properties[i].GetValue(obj), stringBuilder);  
-                
+                SerializeValue(properties[i].GetValue(obj), stringBuilder); 
+
                 if (i < properties.Length - 1)
                 {
-                    stringBuilder.Append(",");
+                    stringBuilder.Append(", ");
                 }
             }
             stringBuilder.Append("}");
@@ -100,13 +101,9 @@ namespace JsonFormattingAssignment
         private static string InputString(string input)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (char c in input)
+            foreach (var i in input)
             {
-                //if (c == '"' || c == '\\')
-                //{
-                //    stringBuilder.Append('\\');
-                //}
-                stringBuilder.Append(c);
+                stringBuilder.Append(i);
             }
             return stringBuilder.ToString();
         }

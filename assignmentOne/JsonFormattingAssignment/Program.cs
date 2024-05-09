@@ -10,6 +10,7 @@ namespace JsonFormattingAssignment
     {
         static void Main(string[] args)
         {
+            /*
             Course course = new Course();
             course.Title = "Asp.Net";
             course.Fees = 30000;
@@ -54,17 +55,18 @@ namespace JsonFormattingAssignment
                 {
                     StartDate = new DateTime(2024,05,08),
                     EndDate = new DateTime(2024,05,20),
-                    TestFees = 1000
+                    TestFees = new double[] {100, 200}
                 },
                 new AddmissionTest()
                 {
                     StartDate = new DateTime(2024,06,10),
                     EndDate = new DateTime(2024,06,20),
-                    TestFees = 2000
+                    TestFees = new double[] {300, 400}
                 }
             };
             string JsonString = JsonFormattingAssignment.JsonFormatter.Serialize(course);
-            //Console.WriteLine(JsonString);
+            Console.WriteLine(JsonString);
+            */
 
             Console.WriteLine("Hello World!");
 
