@@ -1,8 +1,8 @@
-using Blog.Models;
+using Blog.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Blog.Controllers
+namespace Blog.Web.Controllers
 {
     public class HomeController : Controller
     {
@@ -15,7 +15,9 @@ namespace Blog.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = new IndexModel();
+            model.Name = "Hello World";
+            return View(model);
         }
 
         public IActionResult Privacy()
