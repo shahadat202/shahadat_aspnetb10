@@ -44,18 +44,17 @@ namespace JsonFormattingAssignment
         {
             if (obj is string)
             {
-                stringBuilder.Append($"\"{InputString((string)obj)}\"");
+                stringBuilder.Append($"\"{InputString((string)obj)}\"");    
             }
             else if (obj is DateTime)
             {
-                stringBuilder.Append($"\"{((DateTime)obj).ToString("yyyy,MM,dd")}\"");
+                stringBuilder.Append($"\"{((DateTime)obj).ToString("yyyy-MM-dd")}\"");
             }
             else
             {
                 stringBuilder.Append(obj);
             }
         }
-        
 
         private static void SerializeArrayOrList(object obj, StringBuilder stringBuilder)
         {
@@ -81,8 +80,8 @@ namespace JsonFormattingAssignment
             for (int i = 0; i < properties.Length; i++)
             {
                 stringBuilder.Append($"\"{properties[i].Name}\":");
-                SerializeValue(properties[i].GetValue(obj), stringBuilder); 
-
+                SerializeValue(properties[i].GetValue(obj), stringBuilder);
+                
                 if (i < properties.Length - 1)
                 {
                     stringBuilder.Append(", ");
@@ -101,9 +100,9 @@ namespace JsonFormattingAssignment
         private static string InputString(string input)
         {
             StringBuilder stringBuilder = new StringBuilder();
-            foreach (var i in input)
+            foreach (var item in input)
             {
-                stringBuilder.Append(i);
+                stringBuilder.Append(item);
             }
             return stringBuilder.ToString();
         }
