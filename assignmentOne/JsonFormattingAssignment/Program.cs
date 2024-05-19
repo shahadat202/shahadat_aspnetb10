@@ -69,7 +69,6 @@ namespace JsonFormattingAssignment
             */
 
             Console.WriteLine("Hello World!");
-
         }
     }
 }
