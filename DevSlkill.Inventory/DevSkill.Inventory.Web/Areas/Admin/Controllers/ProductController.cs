@@ -27,7 +27,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var product = new Product { Title = model.Title };
+                var product = new Product { Id = Guid.NewGuid(), Title = model.Title };
 
                 _productManagementService.InsertProduct(product);
                 return RedirectToAction("Index");

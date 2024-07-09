@@ -1,4 +1,5 @@
-﻿using DevSkill.Inventory.Domain.RepositoryContracts;
+﻿using DevSkill.Inventory.Application;
+using DevSkill.Inventory.Domain.RepositoryContracts;
 using DevSkill.Inventory.Infrastructure.UnitOfWorks;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Inventory.Infrastructure.UnitOfWorks
 {
-    public class ProductUnitOfWork : UnitOfWork
+    public class ProductUnitOfWork : UnitOfWork, IProductUnitOfWork
     {
-        public IProductRepository ProductRepository { get; set; }
+        public IProductRepository ProductRepository { get; private set; }
         public ProductUnitOfWork(ProductDbContext dbContext, 
             IProductRepository productRepository) : base(dbContext)
         {

@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using DevSkill.Inventory.Infrastructure;
 using DevSkill.Inventory.Web;
 using DevSkill.Inventory.Web.Data;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +39,11 @@ try
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
     
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+        options.UseSqlServer(connectionString, (x) =>x.MigrationsAssembly(migrationAssembly)));
+
+    builder.Services.AddDbContext<ProductDbContext>(options =>
+        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
+
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     #region Autofac Configuration....
