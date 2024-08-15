@@ -2,6 +2,6 @@
 {
     public class BlogPost
     {
-
+        public string Title { get; set; }
     }
 }
