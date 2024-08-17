@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Blog.Infrastructure;
 using Blog.Web;
 using Blog.Web.Data;
 using Blog.Web.Models;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using System.Reflection;
 
 #region Bootstrap Logger Configuration
 var configuration = new ConfigurationBuilder()
@@ -36,15 +38,21 @@ try
 
     // Add services to the container.
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+    var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
+    
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
+
+    builder.Services.AddDbContext<BlogDbContext>(options =>
+        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
+
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     #region Autofac Configuration
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
-        containerBuilder.RegisterModule(new WebModule());
+        containerBuilder.RegisterModule(new WebModule(connectionString, migrationAssembly));
     });
     #endregion
 

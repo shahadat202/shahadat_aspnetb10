@@ -8,13 +8,11 @@ namespace Blog.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly IMemberShip _memberShip;
         public HomeController([FromKeyedServices("home")] IEmailSender emailSender,
-            ILogger<HomeController> logger, IMemberShip memberShip)
+            ILogger<HomeController> logger)
         {
             _logger = logger;
             _emailSender = emailSender;
-            _memberShip = memberShip;
         }
 
         public IActionResult Index()

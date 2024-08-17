@@ -21,7 +21,8 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var model = new BlogPostCreateModel();
+            return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -29,7 +30,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var blog = new BlogPost { Title = model.Title };
+                var blog = new BlogPost { Id = Guid.NewGuid(), Title = model.Title };
                 _blogPostManagementService.CreateBlogPost(blog);
                 return RedirectToAction("Index");
             }
