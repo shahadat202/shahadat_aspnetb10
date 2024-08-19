@@ -20,10 +20,10 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
+        public JsonResult GetBlogPostJsonData(BlogPostListModel model)
         {
             var result = _blogPostManagementService.GetBlogPosts(model.PageIndex, model.PageSize, model.Search,
-                model.FormatSortExpression("Title", "Id"));
+                model.FormatSortExpression("Title"));
 
             var blogPostJsonData = new
             {
