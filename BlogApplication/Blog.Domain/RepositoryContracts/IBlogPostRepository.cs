@@ -9,6 +9,9 @@ namespace Blog.Domain.RepositoryContracts
 {
     public interface IBlogPostRepository : IRepositoryBase<BlogPost, Guid>
     {
+        (IList<BlogPost> data, int total, int totalDisplay) GetPagedBlogPosts(int pageIndex,
+            int pageSize, DataTablesSearch search, string? order);
 
+        //bool IsTitleDuplicate(string title, Guid? id = null);
     }
 }

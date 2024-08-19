@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="~/adminlte/plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="~/adminlte/plugins/summernote/summernote-bs4.min.css">
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -863,6 +865,8 @@
     <script src="~/adminlte/plugins/summernote/summernote-bs4.min.js"></script>
     <!-- overlayScrollbars -->
     <script src="~/adminlte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
     <!-- AdminLTE App -->
     <script src="~/adminlte/js/adminlte.js"></script>
     <!-- AdminLTE for demo purposes -->

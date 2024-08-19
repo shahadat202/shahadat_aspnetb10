@@ -3,6 +3,7 @@ using Blog.Domain.Entities;
 using Blog.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
+using System.Web;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -17,6 +18,26 @@ namespace Blog.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
+        {
+            var result = _blogPostManagementService.GetBlogPosts(model.PageIndex, model.PageSize, model.Search,
+                model.FormatSortExpression("Title", "Id"));
+
+            var blogPostJsonData = new
+            {
+                recordsTotal = result.total,
+                recordsFiltered = result.totalDisplay,
+                data = (from record in result.data
+                        select new string[]
+                        {
+                            HttpUtility.HtmlEncode(record.Title),
+                            record.Id.ToString()
+                        }
+                    ).ToArray()
+            };
+            return Json(blogPostJsonData);
         }
 
         public IActionResult Create()

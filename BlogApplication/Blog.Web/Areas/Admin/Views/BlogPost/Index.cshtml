@@ -1,8 +1,88 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
+@section Styles
+{
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+}
+@section Scripts
+{
+    <script src="~/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/adminlte/plugins/jszip/jszip.min.js"></script>
+    <script src="~/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script>
+        $(function () {
+            $("#blogposts").DataTable({
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                lengthChange: true,
+                autoWidth: false,
+                // lengthMenu: [
+                //     [10, 25, 50, -1],
+                //     [10, 25, 50, 'All']
+                // ],
+                ajax: {
+                    url: "/Admin/BlogPost/GetBlogPostJsonData",
+                    type: "POST",
+                    contentType: "application/json", //must be added
+                    dataType: "json", //better to add, not mandatory
+                    data: function (d) {
+                        d.SearchItem = {
+                        };
+                        return JSON.stringify(d);
+                    },
+                },
+                // columnDefs: [
+                //     {
+                //         orderable: false,
+                //         targets: 1,
+                //         render: function (data, type, row) {
+                //             console.log(type);
+                //             return `<button type="submit" class="btn btn-info btn-sm" onclick="window.location.href='/admin/blogpost/update/${data}'" value='${data}'>
+                //                                         <i class="fas fa-pencil-alt">
+                //                                         </i>
+                //                                         Edit
+                //                                     </button>
+                //                                     <button type="submit" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
+                //                                         <i class="fas fa-trash">
+                //                                         </i>
+                //                                         Delete
+                //                                     </button>`;
+                //         }
+                //     }
+                // ],
+                dom: '<"row"<"col-sm-12 col-md-6"lB><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#blogposts_wrapper .col-md-6:eq(0)');
+
+            // $('#blogposts').on('click', '.show-bs-modal', function (event) {
+            //     let id = $(this).data("id");
+            //     let modal = $("#modal-default");
+            //     modal.find('.modal-body p').text('Are you sure you want to delete this record?');
+            //     $("#deleteId").val(id);
+            //     $("#deleteForm").attr("action", "/admin/blogpost/delete");
+            //     modal.modal('show');
+            // });
+
+            // $("#deleteButton").click(function () {
+            //     $("#deleteForm").submit();
+            // });
+        });
+    </script>
+}
 <!-- Content Header (Page header) -->
 <section class="content-header">
     <div class="container-fluid">
@@ -19,3 +99,42 @@
     </div><!-- /.container-fluid -->
 </section>
 
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All available blog posts</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        @* <partial name="_ResponsePartial" />
+                        <partial name="_ModalPartial" /> *@
+                        <table id="blogposts" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
