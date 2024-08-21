@@ -4,6 +4,7 @@ using Blog.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using System.Web;
+using Blog.Infrastructure;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -11,9 +12,12 @@ namespace Blog.Web.Areas.Admin.Controllers
     public class BlogPostController : Controller
     {
         private readonly IBlogPostManagementService _blogPostManagementService;
-        public BlogPostController(IBlogPostManagementService blogPostManagementService)
+        private readonly ILogger<BlogPostController> _logger;
+        public BlogPostController(IBlogPostManagementService blogPostManagementService
+            , ILogger<BlogPostController> logger)
         {
             _blogPostManagementService = blogPostManagementService;
+            _logger = logger;
         }
         public IActionResult Index()
         {
@@ -53,7 +57,25 @@ namespace Blog.Web.Areas.Admin.Controllers
             {
                 var blog = new BlogPost { Id = Guid.NewGuid(), Title = model.Title };
                 _blogPostManagementService.CreateBlogPost(blog);
-                return RedirectToAction("Index");
+
+                try
+                {
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Blog post created successfully!",
+                        Type = ResponseTypes.Success
+                    });
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Blog post creation failed!",
+                        Type = ResponseTypes.Danger
+                    });
+                    _logger.LogError(ex, "Blog post creation failed!");
+                }
             }
             return View();
         }

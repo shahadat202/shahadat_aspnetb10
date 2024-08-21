@@ -29,10 +29,10 @@
                 responsive: true,
                 lengthChange: true,
                 autoWidth: false,
-                lengthMenu: [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, 'All']
-                ],
+                // lengthMenu: [
+                //     [10, 25, 50, -1],
+                //     [10, 25, 50, 'All']
+                // ],
                 ajax: {
                     url: "/Admin/BlogPost/GetBlogPostJsonData",
                     type: "GET",
@@ -110,7 +110,8 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        @* <partial name="_ResponsePartial" />
+                        <partial name="_ResponsePartial" />
+                        @* 
                         <partial name="_ModalPartial" /> *@
                         <table id="blogposts" class="table table-bordered table-striped">
                             <thead>
