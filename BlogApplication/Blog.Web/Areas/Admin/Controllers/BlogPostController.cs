@@ -24,7 +24,8 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public JsonResult GetBlogPostJsonData(BlogPostListModel model)
+        [HttpPost]
+        public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
         {
             var result = _blogPostManagementService.GetBlogPosts(model.PageIndex, model.PageSize, model.Search,
                 model.FormatSortExpression("Title"));

@@ -29,20 +29,20 @@
                 responsive: true,
                 lengthChange: true,
                 autoWidth: false,
-                // lengthMenu: [
-                //     [10, 25, 50, -1],
-                //     [10, 25, 50, 'All']
-                // ],
+                lengthMenu: [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, 'All']
+                ],
                 ajax: {
                     url: "/Admin/BlogPost/GetBlogPostJsonData",
-                    type: "GET",
+                    type: "POST",
                     contentType: "application/json", //must be added
                     dataType: "json", //better to add, not mandatory
-                    // data: function (d) {
-                    //     d.SearchItem = {
-                    //     };
-                    //     return JSON.stringify(d);
-                    // },
+                    data: function (d) {
+                        d.SearchItem = {
+                        };
+                        return JSON.stringify(d);
+                    },
                 },
                 // columnDefs: [
                 //     {
