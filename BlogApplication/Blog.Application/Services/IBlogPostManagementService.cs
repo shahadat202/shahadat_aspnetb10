@@ -7,10 +7,9 @@ namespace Blog.Application.Services
     {
         void CreateBlogPost(BlogPost blogPost);
         void DeleteBlogPost(Guid id);
+        BlogPost GetBlogPost(Guid id);
         (IList<BlogPost> data, int total, int totalDisplay) GetBlogPosts(int pageIndex,
             int pageSize, DataTablesSearch search, string? order);
-        BlogPost GetBlogPosts(Guid id);
-        //void UpdateBlogPost(BlogPost blog);
+        void UpdateBlogPost(BlogPost blog);
     }
-
 }

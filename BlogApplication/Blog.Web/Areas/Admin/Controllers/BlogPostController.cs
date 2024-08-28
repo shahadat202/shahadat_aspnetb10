@@ -80,5 +80,72 @@ namespace Blog.Web.Areas.Admin.Controllers
             }
             return View();
         }
+
+        public IActionResult Update(Guid id)
+        {
+            var model = new BlogPostUpdateModel();
+
+            BlogPost post = _blogPostManagementService.GetBlogPost(id);
+            model.Title = post.Title;
+            model.Id = post.Id;
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Update(BlogPostUpdateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var blog = new BlogPost { Id = model.Id, Title = model.Title };
+                    _blogPostManagementService.UpdateBlogPost(blog);
+
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Blog post updated successfully!",
+                        Type = ResponseTypes.Success
+                    });
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Blog post update failed! There is another entity with this name.",
+                        Type = ResponseTypes.Danger
+                    });
+                    _logger.LogError(ex, "Blog post update failed!");
+                }
+            }
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Delete(Guid id)
+        {
+            try
+            {
+                _blogPostManagementService.DeleteBlogPost(id);
+
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "Blog post deleted successfully!",
+                    Type = ResponseTypes.Success
+                });
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "Blog post delete failed!",
+                    Type = ResponseTypes.Danger
+                });
+                _logger.LogError(ex, "Blog post delete failed!");
+            }
+            return View();
+        }
     }
 }

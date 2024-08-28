@@ -18,17 +18,17 @@ namespace Blog.Infrustructure.Repositories
 
         }
 
-        //public bool IsTitleDuplicate(string title, Guid? id = null)
-        //{
-        //    if (id.HasValue)
-        //    {
-        //        return GetCount(x => x.Id != id.Value && x.Title == title) > 0;
-        //    }
-        //    else
-        //    {
-        //        return GetCount(x => x.Title == title) > 0;
-        //    }
-        //}
+        public bool IsTitleDuplicate(string title, Guid? id = null)
+        {
+            if (id.HasValue)
+            {
+                return GetCount(x => x.Id != id.Value && x.Title == title) > 0;
+            }
+            else
+            {
+                return GetCount(x => x.Title == title) > 0;
+            }
+        }
 
         public (IList<BlogPost> data, int total, int totalDisplay) GetPagedBlogPosts(int pageIndex, int pageSize,
             DataTablesSearch search, string? order)
@@ -36,7 +36,7 @@ namespace Blog.Infrustructure.Repositories
             if (string.IsNullOrWhiteSpace(search.Value))
                 return GetDynamic(null, order, null, pageIndex, pageSize, true);
             else
-                return GetDynamic(x => x.Title == search.Value, order, null, pageIndex, pageSize, true);
+                return GetDynamic(x => x.Title.Contains(search.Value), order, null, pageIndex, pageSize, true);
         }
     }
 }

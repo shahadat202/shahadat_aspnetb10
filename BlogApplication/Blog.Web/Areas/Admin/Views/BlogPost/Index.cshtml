@@ -44,42 +44,42 @@
                         return JSON.stringify(d);
                     },
                 },
-                // columnDefs: [
-                //     {
-                //         orderable: false,
-                //         targets: 1,
-                //         render: function (data, type, row) {
-                //             console.log(type);
-                //             return `<button type="submit" class="btn btn-info btn-sm" onclick="window.location.href='/admin/blogpost/update/${data}'" value='${data}'>
-                //                                         <i class="fas fa-pencil-alt">
-                //                                         </i>
-                //                                         Edit
-                //                                     </button>
-                //                                     <button type="submit" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
-                //                                         <i class="fas fa-trash">
-                //                                         </i>
-                //                                         Delete
-                //                                     </button>`;
-                //         }
-                //     }
-                // ],
+                columnDefs: [
+                    {
+                        orderable: false,
+                        targets: 1,
+                        render: function (data, type, row) {
+                            console.log(type);
+                            return `<button type="submit" class="btn btn-info btn-sm" onclick="window.location.href='/admin/blogpost/update/${data}'" value='${data}'>
+                                                        <i class="fas fa-pencil-alt">
+                                                        </i>
+                                                        Edit
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Delete
+                                                    </button>`;
+                        }
+                    }
+                ],
                 dom: '<"row"<"col-sm-12 col-md-6"lB><"col-sm-12 col-md-6"f>><"row"<"col-sm-12"tr>><"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
 
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
             }).buttons().container().appendTo('#blogposts_wrapper .col-md-6:eq(0)');
 
-            // $('#blogposts').on('click', '.show-bs-modal', function (event) {
-            //     let id = $(this).data("id");
-            //     let modal = $("#modal-default");
-            //     modal.find('.modal-body p').text('Are you sure you want to delete this record?');
-            //     $("#deleteId").val(id);
-            //     $("#deleteForm").attr("action", "/admin/blogpost/delete");
-            //     modal.modal('show');
-            // });
+            $('#blogposts').on('click', '.show-bs-modal', function (event) {
+                let id = $(this).data("id");
+                let modal = $("#modal-default");
+                modal.find('.modal-body p').text('Are you sure you want to delete this record?');
+                $("#deleteId").val(id);
+                $("#deleteForm").attr("action", "/admin/blogpost/delete");
+                modal.modal('show');
+            });
 
-            // $("#deleteButton").click(function () {
-            //     $("#deleteForm").submit();
-            // });
+            $("#deleteButton").click(function () {
+                $("#deleteForm").submit();
+            });
         });
     </script>
 }
@@ -111,8 +111,7 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                         <partial name="_ResponsePartial" />
-                        @* 
-                        <partial name="_ModalPartial" /> *@
+                        <partial name="_ModalPartial" />
                         <table id="blogposts" class="table table-bordered table-striped">
                             <thead>
                                 <tr>

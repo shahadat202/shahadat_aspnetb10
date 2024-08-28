@@ -12,6 +12,6 @@ namespace Blog.Domain.RepositoryContracts
         (IList<BlogPost> data, int total, int totalDisplay) GetPagedBlogPosts(int pageIndex,
             int pageSize, DataTablesSearch search, string? order);
 
-        //bool IsTitleDuplicate(string title, Guid? id = null);
+        bool IsTitleDuplicate(string title, Guid? id = null);
     }
 }

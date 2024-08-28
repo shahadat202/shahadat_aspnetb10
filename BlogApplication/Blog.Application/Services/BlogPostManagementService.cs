@@ -12,13 +12,17 @@ namespace Blog.Application.Services
         }
         public void CreateBlogPost(BlogPost blogPost)
         {
-            _blogUnitOfWork.BlogPostRepository.Add(blogPost);
-            _blogUnitOfWork.Save();
+            if (!_blogUnitOfWork.BlogPostRepository.IsTitleDuplicate(blogPost.Title))
+            {
+                _blogUnitOfWork.BlogPostRepository.Add(blogPost);
+                _blogUnitOfWork.Save();
+            }
         }
 
         public void DeleteBlogPost(Guid id)
         {
-            throw new NotImplementedException();
+            _blogUnitOfWork.BlogPostRepository.Remove(id);
+            _blogUnitOfWork.Save();
         }
 
         public (IList<BlogPost> data, int total, int totalDisplay) GetBlogPosts(int pageIndex,
@@ -27,22 +31,22 @@ namespace Blog.Application.Services
             return _blogUnitOfWork.BlogPostRepository.GetPagedBlogPosts(pageIndex, pageSize, search, order);
         }
 
-        public BlogPost GetBlogPosts(Guid id)
+        public BlogPost GetBlogPost(Guid id)
         {
             return _blogUnitOfWork.BlogPostRepository.GetById(id);
         }
 
-        //public void UpdateBlogPost(BlogPost blogPost)
-        //{
-        //    if (!_blogUnitOfWork.BlogPostRepository.IsTitleDuplicate(blogPost.Title, blogPost.Id))
-        //    {
-        //        _blogUnitOfWork.BlogPostRepository.Edit(blogPost);
-        //        _blogUnitOfWork.Save();
-        //    }
-        //    else
-        //    {
-        //        throw new InvalidOperationException("Title should be unique.");
-        //    }
-        //}
+        public void UpdateBlogPost(BlogPost blogPost)
+        {
+            if (!_blogUnitOfWork.BlogPostRepository.IsTitleDuplicate(blogPost.Title, blogPost.Id))
+            {
+                _blogUnitOfWork.BlogPostRepository.Edit(blogPost);
+                _blogUnitOfWork.Save();
+            }
+            else
+            {
+                throw new InvalidOperationException("Title should be unique.");
+            }
+        }
     }
 }

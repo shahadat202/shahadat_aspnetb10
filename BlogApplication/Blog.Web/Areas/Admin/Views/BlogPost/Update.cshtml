@@ -1,6 +1,6 @@
-﻿@model BlogPostCreateModel
+﻿@model BlogPostUpdateModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Update";
 }
 
 <!-- Content Header (Page header) -->
@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create New Post</h1>
+                <h1>Update Post</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -28,12 +28,13 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Write a Post</h3>
+                        <h3 class="card-title">Update this post</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form asp-antiforgery="true" asp-area="Admin" asp-controller="BlogPost" asp-action="Create" method="post">
+                    <form asp-antiforgery="true" asp-area="Admin" asp-controller="BlogPost" asp-action="Update" method="post">
                         <partial name="_ResponsePartial" />
+                        <input type="hidden" asp-for="Id" />
                         <div class="card-body">
                             <div class="form-group">
                                 <label asp-for="Title" />
