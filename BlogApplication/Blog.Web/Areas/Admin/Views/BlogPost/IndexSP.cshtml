@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "IndexSP";
 }
 @section Styles
 {
@@ -34,7 +34,7 @@
                     [10, 25, 50, 'All']
                 ],
                 ajax: {
-                    url: "/Admin/BlogPost/GetBlogPostJsonData",
+                    url: "/Admin/BlogPost/GetBlogPostJsonDataSP",
                     type: "POST",
                     contentType: "application/json", //must be added
                     dataType: "json", //better to add, not mandatory

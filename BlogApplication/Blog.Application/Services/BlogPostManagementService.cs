@@ -1,4 +1,5 @@
 ﻿using Blog.Domain;
+using Blog.Domain.Dtos;
 using Blog.Domain.Entities;
 
 namespace Blog.Application.Services
@@ -25,13 +26,20 @@ namespace Blog.Application.Services
             _blogUnitOfWork.Save();
         }
 
+
         public (IList<BlogPost> data, int total, int totalDisplay) GetBlogPosts(int pageIndex,
             int pageSize, DataTablesSearch search, string? order)
         {
-            return _blogUnitOfWork.BlogPostRepository.GetPagedBlogPosts(pageIndex, pageSize, search, order);
+            return _blogUnitOfWork.BlogPostRepository.GetPagedBlogPosts(pageIndex, pageSize, search, order);    
         }
 
-        public BlogPost GetBlogPost(Guid id)
+        public async Task<(IList<BlogPostDto> data, int total, int totalDisplay)> GetBlogPostsSP(int pageIndex,
+            int pageSize, DataTablesSearch search, string? order)
+        {
+            return await _blogUnitOfWork.GetPagedBlogPostsUsingSPAsync(pageIndex, pageSize, search, order);
+        }
+
+        public BlogPost GetBlogPosts(Guid id)
         {
             return _blogUnitOfWork.BlogPostRepository.GetById(id);
         }
@@ -47,6 +55,11 @@ namespace Blog.Application.Services
             {
                 throw new InvalidOperationException("Title should be unique.");
             }
+        }
+
+        public async Task<BlogPost> GetBlogPostAsync(Guid id)
+        {
+            return await _blogUnitOfWork.BlogPostRepository.GetBlogPostAsync(id);
         }
     }
 }

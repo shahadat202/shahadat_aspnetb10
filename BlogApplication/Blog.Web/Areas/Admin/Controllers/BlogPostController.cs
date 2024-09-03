@@ -24,6 +24,11 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View();
         }
 
+        public IActionResult IndexSP()
+        {
+            return View();
+        }
+
         [HttpPost]
         public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
         {
@@ -38,6 +43,33 @@ namespace Blog.Web.Areas.Admin.Controllers
                         select new string[]
                         {
                             HttpUtility.HtmlEncode(record.Title),
+                            HttpUtility.HtmlEncode(record.Body),
+                            HttpUtility.HtmlEncode(record.Category?.Name),
+                            record.PostDate.ToString(),
+                            record.Id.ToString()
+                        }
+                    ).ToArray()
+            };
+            return Json(blogPostJsonData);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> GetBlogPostJsonDataSP([FromBody] BlogPostListModel model)
+        {
+            var result = await _blogPostManagementService.GetBlogPostsSP(model.PageIndex, model.PageSize, model.Search,
+                model.FormatSortExpression("Title"));
+
+            var blogPostJsonData = new
+            {
+                recordsTotal = result.total,
+                recordsFiltered = result.totalDisplay,
+                data = (from record in result.data
+                        select new string[]
+                        {
+                            HttpUtility.HtmlEncode(record.Title),
+                            HttpUtility.HtmlEncode(record.Body),
+                            HttpUtility.HtmlEncode(record.CategoryName),
+                            record.PostDate.ToString(),
                             record.Id.ToString()
                         }
                     ).ToArray()
@@ -81,13 +113,12 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> Update(Guid id)
         {
             var model = new BlogPostUpdateModel();
-
-            BlogPost post = _blogPostManagementService.GetBlogPost(id);
+            BlogPost post = await _blogPostManagementService.GetBlogPostAsync(id);
             model.Title = post.Title;
-            model.Id = post.Id;
+            model.Id = id;
 
             return View(model);
         }

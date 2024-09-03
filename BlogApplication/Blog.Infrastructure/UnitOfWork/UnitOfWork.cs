@@ -11,9 +11,11 @@ namespace Blog.Infrastructure.UnitOfWork
     public abstract class UnitOfWork : IUnitOfWork
     {
         private readonly DbContext _dbContext;
+        protected ISqlUtility SqlUtility { get; private set; }
         public UnitOfWork(DbContext dbContext)
         {
             _dbContext = dbContext;
+            SqlUtility = new SqlUtility(_dbContext.Database.GetDbConnection()); 
         }
 
         public void Dispose() => _dbContext?.Dispose();

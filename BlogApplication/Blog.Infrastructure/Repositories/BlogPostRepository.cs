@@ -1,4 +1,5 @@
 ﻿using Blog.Domain;
+using Blog.Domain.Dtos;
 using Blog.Domain.Entities;
 using Blog.Domain.RepositoryContracts;
 using Blog.Infrastructure;
@@ -34,9 +35,16 @@ namespace Blog.Infrustructure.Repositories
             DataTablesSearch search, string? order)
         {
             if (string.IsNullOrWhiteSpace(search.Value))
-                return GetDynamic(null, order, null, pageIndex, pageSize, true);
+                return GetDynamic(null, order, y => y.Include(z => z.Category), 
+                    pageIndex, pageSize, true);
             else
-                return GetDynamic(x => x.Title.Contains(search.Value), order, null, pageIndex, pageSize, true);
+                return GetDynamic(x => x.Title.Contains(search.Value), order,
+                    y => y.Include(z => z.Category), pageIndex, pageSize, true);
+        }
+
+        public async Task<BlogPost> GetBlogPostAsync(Guid id)
+        {
+            return (await GetAsync(x => x.Id == id, y => y.Include(z => z.Category))).FirstOrDefault();
         }
     }
 }

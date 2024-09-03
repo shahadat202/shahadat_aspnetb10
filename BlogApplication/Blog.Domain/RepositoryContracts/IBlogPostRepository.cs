@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.Domain.Dtos;
+using Blog.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,11 @@ namespace Blog.Domain.RepositoryContracts
 {
     public interface IBlogPostRepository : IRepositoryBase<BlogPost, Guid>
     {
-        (IList<BlogPost> data, int total, int totalDisplay) GetPagedBlogPosts(int pageIndex,
-            int pageSize, DataTablesSearch search, string? order);
+        (IList<BlogPost> data, int total, int totalDisplay) GetPagedBlogPosts(int pageIndex, 
+            int pageSize,DataTablesSearch search, string? order);
 
         bool IsTitleDuplicate(string title, Guid? id = null);
+
+        Task<BlogPost> GetBlogPostAsync(Guid id);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Blog.Domain;
+using Blog.Domain.Dtos;
+using Blog.Domain.Entities;
 using Blog.Domain.RepositoryContracts;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,8 @@ namespace Blog.Application
 {
     public interface IBlogUnitOfWork : IUnitOfWork
     {
-        public IBlogPostRepository BlogPostRepository { get; }
+        IBlogPostRepository BlogPostRepository { get; }
+        Task<(IList<BlogPostDto> data, int total, int totalDisplay)> GetPagedBlogPostsUsingSPAsync(int pageIndex,
+            int pageSize, DataTablesSearch search, string? order);
     }
 }

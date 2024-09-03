@@ -29,6 +29,20 @@ namespace Blog.Infrastructure
 
             base.OnConfiguring(optionsBuilder);
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Category>().HasData(new Category()
+            {
+                Id = new Guid("254A327B-299A-4A25-8964-54C6352690F4"),
+                Name = "General"
+            });
+
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<BlogPost> BlogPosts { get; set; }
+        public DbSet<Category> Categories { get; set; }
+
     }
 }
