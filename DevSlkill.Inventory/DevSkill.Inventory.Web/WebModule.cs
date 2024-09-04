@@ -18,7 +18,7 @@ public class WebModule(string connectionString, string migrationAssembly) : Modu
             .As<IProductManagementService>()
             .InstancePerLifetimeScope();
 
-        builder.RegisterType<ProductDbContext>().AsSelf()
+        builder.RegisterType<InventoryDbContext>().AsSelf()
             .WithParameter("connectionString", connectionString)
             .WithParameter("migrationAssembly", migrationAssembly)
             .InstancePerLifetimeScope();
@@ -32,8 +32,8 @@ public class WebModule(string connectionString, string migrationAssembly) : Modu
             .As<IProductRepository>()
             .InstancePerLifetimeScope();
 
-        builder.RegisterType<ProductUnitOfWork>()
-            .As<IProductUnitOfWork>()
+        builder.RegisterType<InventoryUnitOfWork>()
+            .As<IInventoryUnitOfWork>()
             .InstancePerLifetimeScope();
     }
 }

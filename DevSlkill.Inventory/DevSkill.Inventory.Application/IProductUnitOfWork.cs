@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Inventory.Application
 {
-    public interface IProductUnitOfWork : IUnitOfWork
+    public interface IInventoryUnitOfWork : IUnitOfWork
     {
         public IProductRepository ProductRepository { get; }
     }

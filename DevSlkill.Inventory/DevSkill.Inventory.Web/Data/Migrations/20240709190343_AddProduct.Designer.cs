@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DevSkill.Inventory.Web.Data.Migrations
 {
-    [DbContext(typeof(ProductDbContext))]
+    [DbContext(typeof(InventoryDbContext))]
     [Migration("20240709190343_AddProduct")]
     partial class AddProduct
     {

@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Inventory.Infrastructure
 {
-    public class ProductDbContext : DbContext
+    public class InventoryDbContext : DbContext
     {
         private readonly string _connectionString;
         private readonly string _migrationAssembly;
 
-        public ProductDbContext(string connectionString, string migrationAssembly)
+        public InventoryDbContext(string connectionString, string migrationAssembly)
         {
             _connectionString = connectionString;
             _migrationAssembly = migrationAssembly;

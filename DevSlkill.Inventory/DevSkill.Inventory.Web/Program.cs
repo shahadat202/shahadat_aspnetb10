@@ -41,7 +41,7 @@ try
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString, (x) =>x.MigrationsAssembly(migrationAssembly)));
 
-    builder.Services.AddDbContext<ProductDbContext>(options =>
+    builder.Services.AddDbContext<InventoryDbContext>(options =>
         options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();

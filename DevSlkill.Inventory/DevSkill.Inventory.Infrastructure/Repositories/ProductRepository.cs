@@ -12,7 +12,7 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
 {
     public class ProductRepository : Repository<Product, Guid>, IProductRepository
     {
-        public ProductRepository(ProductDbContext context) : base(context)
+        public ProductRepository(InventoryDbContext context) : base(context)
         {
         }
     }

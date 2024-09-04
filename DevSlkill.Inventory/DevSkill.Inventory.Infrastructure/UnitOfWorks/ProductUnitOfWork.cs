@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace DevSkill.Inventory.Infrastructure.UnitOfWorks
 {
-    public class ProductUnitOfWork : UnitOfWork, IProductUnitOfWork
+    public class InventoryUnitOfWork : UnitOfWork, IInventoryUnitOfWork
     {
         public IProductRepository ProductRepository { get; private set; }
-        public ProductUnitOfWork(ProductDbContext dbContext, 
+        public InventoryUnitOfWork(InventoryDbContext dbContext, 
             IProductRepository productRepository) : base(dbContext)
         {
             ProductRepository = productRepository;

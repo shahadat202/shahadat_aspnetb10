@@ -4,15 +4,15 @@ namespace DevSkill.Inventory.Application.Services
 {
     public class ProductManagementService : IProductManagementService
     {
-        private readonly IProductUnitOfWork _productUnitOfWork;
-        public ProductManagementService(IProductUnitOfWork productUnitOfWork)
+        private readonly IInventoryUnitOfWork _InventoryUnitOfWork;
+        public ProductManagementService(IInventoryUnitOfWork InventoryUnitOfWork)
         {
-            _productUnitOfWork = productUnitOfWork;
+            _InventoryUnitOfWork = InventoryUnitOfWork;
         }
         public void InsertProduct(Product product)
         {
-            _productUnitOfWork.ProductRepository.Add(product);
-            _productUnitOfWork.Save();
+            _InventoryUnitOfWork.ProductRepository.Add(product);
+            _InventoryUnitOfWork.Save();
         }
     }
 }
