@@ -12,11 +12,14 @@ namespace Blog.Web.Areas.Admin.Controllers
     public class BlogPostController : Controller
     {
         private readonly IBlogPostManagementService _blogPostManagementService;
+        private readonly ICategoryManagementService _categoryManagementService; 
         private readonly ILogger<BlogPostController> _logger;
-        public BlogPostController(IBlogPostManagementService blogPostManagementService
-            , ILogger<BlogPostController> logger)
+        public BlogPostController(IBlogPostManagementService blogPostManagementService,
+            ICategoryManagementService categoryManagementService,
+            ILogger<BlogPostController> logger)
         {
             _blogPostManagementService = blogPostManagementService;
+            _categoryManagementService = categoryManagementService;
             _logger = logger;
         }
         public IActionResult Index()
@@ -26,14 +29,16 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         public IActionResult IndexSP()
         {
-            return View();
+            var model = new BlogPostListModel();
+            model.SetCategoryValues(_categoryManagementService.GetCategories());
+            return View(model);
         }
 
         [HttpPost]
         public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
         {
             var result = _blogPostManagementService.GetBlogPosts(model.PageIndex, model.PageSize, model.Search,
-                model.FormatSortExpression("Title"));
+                model.FormatSortExpression("Title", "Id"));
 
             var blogPostJsonData = new
             {
@@ -56,8 +61,9 @@ namespace Blog.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<JsonResult> GetBlogPostJsonDataSP([FromBody] BlogPostListModel model)
         {
-            var result = await _blogPostManagementService.GetBlogPostsSP(model.PageIndex, model.PageSize, model.Search,
-                model.FormatSortExpression("Title"));
+            var result = await _blogPostManagementService.GetBlogPostsSP(model.PageIndex, 
+                model.PageSize, model.SearchItem,
+                model.FormatSortExpression("Title", "Id"));
 
             var blogPostJsonData = new
             {

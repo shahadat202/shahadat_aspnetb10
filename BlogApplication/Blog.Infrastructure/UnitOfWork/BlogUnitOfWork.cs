@@ -17,13 +17,16 @@ namespace Blog.Infrustructure.UnitOfWorks
     public class BlogUnitOfWork : UnitOfWork , IBlogUnitOfWork
     {
         public IBlogPostRepository BlogPostRepository { get; private set; }
+        public ICategoryRepository CategoryRepository { get; private set; }
         public BlogUnitOfWork(BlogDbContext dbContext,
-            IBlogPostRepository blogPostRepository) : base(dbContext)
+            IBlogPostRepository blogPostRepository,
+            ICategoryRepository categoryRepository) : base(dbContext)
         {
             BlogPostRepository = blogPostRepository;
+            CategoryRepository = categoryRepository;
         }
         public async Task<(IList<BlogPostDto> data, int total, int totalDisplay)> GetPagedBlogPostsUsingSPAsync(int pageIndex,
-            int pageSize, DataTablesSearch search, string? order)
+            int pageSize, BlogPostSearchDto search, string? order)
         {
             var procedureName = "GetBlogPosts";
 
@@ -33,7 +36,8 @@ namespace Blog.Infrustructure.UnitOfWorks
                     { "PageIndex", pageIndex },
                     { "PageSize", pageSize },
                     { "OrderBy", order },
-                    { "Title", search.Value }
+                    { "Title", search.Title == string.Empty ? null : search.Title },
+                    { "CategoryId", search.CategoryId == Guid.Empty ? null : search.CategoryId}
                 },
                 new Dictionary<string, Type>
                 {

@@ -35,6 +35,13 @@ namespace Blog.Web
             builder.RegisterType<ApplicationDbContext>().AsSelf()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<CategoryRepository>()
+                .As<ICategoryRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<CategoryManagementService>()
+                .As<ICategoryManagementService>()
+                .InstancePerLifetimeScope();
         }
     }
 }

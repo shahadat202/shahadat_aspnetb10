@@ -1,4 +1,5 @@
-﻿@{
+﻿@model BlogPostListModel
+@{
     ViewData["Title"] = "IndexSP";
 }
 @section Styles
@@ -40,6 +41,10 @@
                     dataType: "json", //better to add, not mandatory
                     data: function (d) {
                         d.SearchItem = {
+                            Title: $("#SearchItem_Title").val(),
+                            CategoryId: $("#SearchItem_CategoryId").val(),
+                            //CreateDateFrom: $("#SearchItem_CreateDateFrom").val() === "" ? "2/2/1990 12:00 AM" : $("#SearchItem_CreateDateFrom").val(),
+                            //CreateDateTo: $("#SearchItem_CreateDateTo").val() === "" ? "2/2/2050 12:00 AM" : $("#SearchItem_CreateDateTo").val()
                         };
                         return JSON.stringify(d);
                     },
@@ -80,6 +85,10 @@
             $("#deleteButton").click(function () {
                 $("#deleteForm").submit();
             });
+
+            $("#searchButton").click(function () {
+                $('#blogposts').DataTable().ajax.reload(null, false);
+            });
         });
     </script>
 }
@@ -101,6 +110,54 @@
 
 <!-- Main content -->
 <section class="content">
+    <div class="col-12">
+        <div class="card card-outline card-primary collapsed-card">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-search mr-1"></i>Search Blog Post</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" asp-for="SearchItem.Title" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select asp-for="SearchItem.CategoryId" asp-items="Model.Categories" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Create Date From</label>
+                            <input type="text" asp-for="SearchItem.CreateDateFrom" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label>Create Date To</label>
+                            <input type="text" asp-for="SearchItem.CreateDateTo" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <button id="searchButton" type="submit" class="btn btn-primary float-right">Search</button>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">

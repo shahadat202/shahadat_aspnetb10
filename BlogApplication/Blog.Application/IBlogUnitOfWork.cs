@@ -13,7 +13,8 @@ namespace Blog.Application
     public interface IBlogUnitOfWork : IUnitOfWork
     {
         IBlogPostRepository BlogPostRepository { get; }
+        ICategoryRepository CategoryRepository { get; }
         Task<(IList<BlogPostDto> data, int total, int totalDisplay)> GetPagedBlogPostsUsingSPAsync(int pageIndex,
-            int pageSize, DataTablesSearch search, string? order);
+            int pageSize, BlogPostSearchDto search, string? order);
     }
 }

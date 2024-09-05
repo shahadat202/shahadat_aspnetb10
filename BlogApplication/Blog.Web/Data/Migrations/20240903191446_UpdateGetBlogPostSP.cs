@@ -5,7 +5,7 @@
 namespace Blog.Web.Migrations.BlogDb
 {
     /// <inheritdoc />
-    public partial class UpdateGetBlogPostSP : Migration
+    public partial class UpdateGetBlogPostSp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

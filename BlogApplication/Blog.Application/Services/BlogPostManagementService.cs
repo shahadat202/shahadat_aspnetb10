@@ -34,7 +34,7 @@ namespace Blog.Application.Services
         }
 
         public async Task<(IList<BlogPostDto> data, int total, int totalDisplay)> GetBlogPostsSP(int pageIndex,
-            int pageSize, DataTablesSearch search, string? order)
+            int pageSize, BlogPostSearchDto search, string? order)
         {
             return await _blogUnitOfWork.GetPagedBlogPostsUsingSPAsync(pageIndex, pageSize, search, order);
         }

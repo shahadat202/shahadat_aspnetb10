@@ -13,7 +13,7 @@ namespace Blog.Application.Services
             DataTablesSearch search, string? order);
 
         Task<(IList<BlogPostDto> data, int total, int totalDisplay)> GetBlogPostsSP(int pageIndex, int pageSize,
-            DataTablesSearch search, string? order);
+            BlogPostSearchDto search, string? order);
         void UpdateBlogPost(BlogPost blog);
     }
 }
