@@ -43,8 +43,8 @@
                         d.SearchItem = {
                             Title: $("#SearchItem_Title").val(),
                             CategoryId: $("#SearchItem_CategoryId").val(),
-                            //CreateDateFrom: $("#SearchItem_CreateDateFrom").val() === "" ? "2/2/1990 12:00 AM" : $("#SearchItem_CreateDateFrom").val(),
-                            //CreateDateTo: $("#SearchItem_CreateDateTo").val() === "" ? "2/2/2050 12:00 AM" : $("#SearchItem_CreateDateTo").val()
+                            CreateDateFrom: $("#SearchItem_CreateDateFrom").val(),
+                            CreateDateTo: $("#SearchItem_CreateDateTo").val()
                         };
                         return JSON.stringify(d);
                     },

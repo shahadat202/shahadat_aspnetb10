@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using System.Web;
 using Blog.Infrastructure;
+using AutoMapper;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
@@ -14,13 +15,16 @@ namespace Blog.Web.Areas.Admin.Controllers
         private readonly IBlogPostManagementService _blogPostManagementService;
         private readonly ICategoryManagementService _categoryManagementService; 
         private readonly ILogger<BlogPostController> _logger;
+        private readonly IMapper _mapper;
         public BlogPostController(IBlogPostManagementService blogPostManagementService,
             ICategoryManagementService categoryManagementService,
-            ILogger<BlogPostController> logger)
+            ILogger<BlogPostController> logger, 
+            IMapper mapper)
         {
             _blogPostManagementService = blogPostManagementService;
             _categoryManagementService = categoryManagementService;
             _logger = logger;
+            _mapper = mapper;
         }
         public IActionResult Index()
         {
@@ -86,6 +90,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         public IActionResult Create()
         {
             var model = new BlogPostCreateModel();
+            model.SetCategoryValues(_categoryManagementService.GetCategories());
             return View(model);
         }
 
@@ -94,11 +99,14 @@ namespace Blog.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var blog = new BlogPost { Id = Guid.NewGuid(), Title = model.Title };
-                _blogPostManagementService.CreateBlogPost(blog);
-
+                var blog = _mapper.Map<BlogPost>(model);
+                blog.Id = Guid.NewGuid();
+                blog.PostDate = DateTime.Now;
+                blog.Category = _categoryManagementService.GetCategory(model.CategoryId);
                 try
                 {
+                    _blogPostManagementService.CreateBlogPost(blog);
+                    
                     TempData.Put("ResponseMessage", new ResponseModel
                     {
                         Message = "Blog post created successfully!",
@@ -116,7 +124,8 @@ namespace Blog.Web.Areas.Admin.Controllers
                     _logger.LogError(ex, "Blog post creation failed!");
                 }
             }
-            return View();
+            model.SetCategoryValues(_categoryManagementService.GetCategories());
+            return View(model);
         }
 
         public async Task<IActionResult> Update(Guid id)

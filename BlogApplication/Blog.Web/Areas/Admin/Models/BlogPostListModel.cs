@@ -1,6 +1,7 @@
 ﻿using Blog.Domain;
 using Blog.Domain.Dtos;
 using Blog.Domain.Entities;
+using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Blog.Web.Areas.Admin.Models
@@ -18,11 +19,7 @@ namespace Blog.Web.Areas.Admin.Models
 
         public void SetCategoryValues(IList<Category> categories)
         {
-            Categories = (from c in categories
-                          select new SelectListItem(c.Name, c.Id.ToString()))
-                          .ToList();
-
-            Categories.Insert(0, new SelectListItem("All", Guid.Empty.ToString()));
+            Categories = RazorUtility.ConvertCategories(categories);
         }
     }
 }

@@ -9,8 +9,8 @@ namespace Blog.Domain.Dtos
     public class BlogPostSearchDto
     {
         public string? Title { get; set; }
-        public DateTime? CreateDateFrom { get; set; }
-        public DateTime? CreateDateTo { get; set; }
+        public string? CreateDateFrom { get; set; }
+        public string? CreateDateTo { get; set; }
         public Guid? CategoryId { get; set; }
     }
 }

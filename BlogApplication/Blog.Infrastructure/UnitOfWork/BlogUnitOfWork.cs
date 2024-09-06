@@ -36,6 +36,8 @@ namespace Blog.Infrustructure.UnitOfWorks
                     { "PageIndex", pageIndex },
                     { "PageSize", pageSize },
                     { "OrderBy", order },
+                    { "CreateDateFrom", DateTime.Parse(search.CreateDateFrom) },
+                    { "CreateDateTo", DateTime.Parse(search.CreateDateTo) },
                     { "Title", search.Title == string.Empty ? null : search.Title },
                     { "CategoryId", search.CategoryId == Guid.Empty ? null : search.CategoryId}
                 },
