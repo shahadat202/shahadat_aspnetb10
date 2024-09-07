@@ -7,9 +7,11 @@ namespace Blog.Web.Areas.Admin.Models
 {
     public class BlogPostCreateModel
     {
+        [Required, StringLength(100)]
         public string Title { get; set; }
+        [Required, StringLength(100)]
         public string Body { get; set; }
-        [Display(Name = "Category")]
+        [Display(Name = "Category"), Required]
         public Guid CategoryId { get; set; }
         public IList<SelectListItem>? Categories { get; private set; }
 

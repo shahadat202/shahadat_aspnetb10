@@ -11,6 +11,7 @@ using Blog.Application;
 using Blog.Domain;
 using Blog.Domain.Entities;
 using Blog.Domain.Dtos;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Blog.Infrustructure.UnitOfWorks
 {
@@ -36,10 +37,10 @@ namespace Blog.Infrustructure.UnitOfWorks
                     { "PageIndex", pageIndex },
                     { "PageSize", pageSize },
                     { "OrderBy", order },
-                    { "CreateDateFrom", DateTime.Parse(search.CreateDateFrom) },
-                    { "CreateDateTo", DateTime.Parse(search.CreateDateTo) },
-                    { "Title", search.Title == string.Empty ? null : search.Title },
-                    { "CategoryId", search.CategoryId == Guid.Empty ? null : search.CategoryId}
+                    { "PostDateFrom", string.IsNullOrEmpty(search.CreateDateFrom) ? null : DateTime.Parse(search.CreateDateFrom) },
+                    { "PostDateTo", string.IsNullOrEmpty(search.CreateDateTo)? null : DateTime.Parse(search.CreateDateTo) },
+                    { "Title", string.IsNullOrEmpty(search.Title) ? null : search.Title },
+                    { "CategoryId", string.IsNullOrEmpty(search.CategoryId) ? null : Guid.Parse(search.CategoryId) }
                 },
                 new Dictionary<string, Type>
                 {

@@ -35,11 +35,21 @@
                     <form asp-antiforgery="true" asp-area="Admin" asp-controller="BlogPost" asp-action="Update" method="post">
                         <partial name="_ResponsePartial" />
                         <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label asp-for="Title" />
-                                <input type="text" asp-for="Title" class="form-control">
-                            </div>
+                            <label asp-for="Title"></label>
+                            <input type="text" asp-for="Title" class="form-control" />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Body"></label>
+                            <textarea asp-for="Body" class="form-control"></textarea>
+                            <span asp-validation-for="Body" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CategoryId"></label>
+                            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control"></select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </div>
                         <!-- /.card-body -->
 
@@ -56,3 +66,7 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

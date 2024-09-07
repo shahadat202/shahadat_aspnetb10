@@ -130,23 +130,25 @@ namespace Blog.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Update(Guid id)
         {
-            var model = new BlogPostUpdateModel();
             BlogPost post = await _blogPostManagementService.GetBlogPostAsync(id);
-            model.Title = post.Title;
-            model.Id = id;
+            var model = _mapper.Map<BlogPostUpdateModel>(post);
+            model.SetCategoryValues(_categoryManagementService.GetCategories());
 
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Update(BlogPostUpdateModel model)
+        public async Task<IActionResult> Update(BlogPostUpdateModel model)
         {
             if (ModelState.IsValid)
             {
+                var post = await _blogPostManagementService.GetBlogPostAsync(model.Id);
+                post = _mapper.Map(model, post);
+
+                post.Category = _categoryManagementService.GetCategory(model.CategoryId);
                 try
                 {
-                    var blog = new BlogPost { Id = model.Id, Title = model.Title };
-                    _blogPostManagementService.UpdateBlogPost(blog);
+                    _blogPostManagementService.UpdateBlogPost(post);
 
                     TempData.Put("ResponseMessage", new ResponseModel
                     {
@@ -165,7 +167,8 @@ namespace Blog.Web.Areas.Admin.Controllers
                     _logger.LogError(ex, "Blog post update failed!");
                 }
             }
-            return View();
+            model.SetCategoryValues(_categoryManagementService.GetCategories());
+            return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]

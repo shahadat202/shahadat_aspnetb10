@@ -11,6 +11,6 @@ namespace Blog.Domain.Dtos
         public string? Title { get; set; }
         public string? CreateDateFrom { get; set; }
         public string? CreateDateTo { get; set; }
-        public Guid? CategoryId { get; set; }
+        public string? CategoryId { get; set; }
     }
 }

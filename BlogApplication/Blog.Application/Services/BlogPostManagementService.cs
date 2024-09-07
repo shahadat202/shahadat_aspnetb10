@@ -39,9 +39,9 @@ namespace Blog.Application.Services
             return await _blogUnitOfWork.GetPagedBlogPostsUsingSPAsync(pageIndex, pageSize, search, order);
         }
 
-        public BlogPost GetBlogPosts(Guid id)
+        public async Task<BlogPost> GetBlogPosts(Guid id)
         {
-            return _blogUnitOfWork.BlogPostRepository.GetById(id);
+            return await _blogUnitOfWork.BlogPostRepository.GetBlogPostAsync(id);
         }
 
         public void UpdateBlogPost(BlogPost blogPost)

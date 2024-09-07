@@ -46,5 +46,6 @@ namespace Blog.Infrustructure.Repositories
         {
             return (await GetAsync(x => x.Id == id, y => y.Include(z => z.Category))).FirstOrDefault();
         }
+
     }
 }
