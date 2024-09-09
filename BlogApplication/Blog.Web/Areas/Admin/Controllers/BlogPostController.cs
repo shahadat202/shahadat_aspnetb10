@@ -6,10 +6,11 @@ using System.Reflection;
 using System.Web;
 using Blog.Infrastructure;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
     public class BlogPostController : Controller
     {
         private readonly IBlogPostManagementService _blogPostManagementService;

@@ -20,8 +20,9 @@ namespace Blog.Web
                 .WithParameter("migrationAssembly", migrationAssembly)
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<BlogPostManagementService>()
-                .As<IBlogPostManagementService>()
+            builder.RegisterType<ApplicationDbContext>().AsSelf()
+                .WithParameter("connectionString", connectionString)
+                .WithParameter("migrationAssembly", migrationAssembly)
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<BlogPostRepository>()
@@ -32,7 +33,8 @@ namespace Blog.Web
                 .As<IBlogUnitOfWork>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<ApplicationDbContext>().AsSelf()
+            builder.RegisterType<BlogPostManagementService>()
+                .As<IBlogPostManagementService>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<CategoryRepository>()

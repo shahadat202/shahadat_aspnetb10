@@ -1,6 +1,8 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Blog.Infrastructure;
+using Blog.Infrastructure.Identity;
 using Blog.Web;
 using Blog.Web.Data;
 using Blog.Web.Models;
@@ -39,14 +41,6 @@ try
     // Add services to the container.
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
     var migrationAssembly = Assembly.GetExecutingAssembly().FullName;
-    
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
-
-    builder.Services.AddDbContext<BlogDbContext>(options =>
-        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
-
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     #region Autofac Configuration
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -57,11 +51,25 @@ try
     #endregion
 
     #region Automapper Configuration
-    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());    
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     #endregion
 
-    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
+
+    builder.Services.AddDbContext<BlogDbContext>(options =>
+        options.UseSqlServer(connectionString, (x) => x.MigrationsAssembly(migrationAssembly)));
+
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+    builder.Services
+        .AddIdentity<ApplicationUser, ApplicationRole>()
+        .AddEntityFrameworkStores<ApplicationDbContext>()
+        .AddUserManager<ApplicationUserManager>()
+        .AddRoleManager<ApplicationRoleManager>()
+        .AddSignInManager<ApplicationSignInManager>()
+        .AddDefaultTokenProviders();
+
     builder.Services.AddControllersWithViews();
 
     builder.Services.AddKeyedScoped<IEmailSender, EmailSender>("home");
@@ -95,7 +103,8 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    app.MapRazorPages();
+    
+    //app.MapRazorPages();
 
     app.Run();
 }
