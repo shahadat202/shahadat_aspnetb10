@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
+using Blog.Domain;
 using Blog.Infrastructure;
 using Blog.Infrastructure.Identity;
 using Blog.Web;
@@ -8,10 +9,12 @@ using Blog.Web.Data;
 using Blog.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
+using Blog.Infrastructure.Extensions;
 
 #region Bootstrap Logger Configuration
 var configuration = new ConfigurationBuilder()
@@ -62,18 +65,13 @@ try
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-    builder.Services
-        .AddIdentity<ApplicationUser, ApplicationRole>()
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddUserManager<ApplicationUserManager>()
-        .AddRoleManager<ApplicationRoleManager>()
-        .AddSignInManager<ApplicationSignInManager>()
-        .AddDefaultTokenProviders();
-
+    builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
 
     builder.Services.AddKeyedScoped<IEmailSender, EmailSender>("home");
     builder.Services.AddKeyedScoped<IEmailSender, HtmlEmailSender>("another");
+
+    builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));   
 
     var app = builder.Build();
 
@@ -94,6 +92,7 @@ try
 
     app.UseRouting();
 
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllerRoute(

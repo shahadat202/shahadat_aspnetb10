@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Blog.Application;
 using Blog.Application.Services;
+using Blog.Domain;
 using Blog.Domain.RepositoryContracts;
 using Blog.Infrastructure;
 using Blog.Infrastructure.Repositories;
@@ -43,6 +44,10 @@ namespace Blog.Web
 
             builder.RegisterType<CategoryManagementService>()
                 .As<ICategoryManagementService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<EmailUtility>()
+                .As<IEmailUtility>()
                 .InstancePerLifetimeScope();
         }
     }
