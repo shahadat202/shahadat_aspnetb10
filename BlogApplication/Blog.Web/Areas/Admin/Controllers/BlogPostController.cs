@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
-    [Area("Admin"), Authorize]
+    [Area("Admin"), Authorize("Admin")]
     public class BlogPostController : Controller
     {
         private readonly IBlogPostManagementService _blogPostManagementService;
@@ -27,11 +27,13 @@ namespace Blog.Web.Areas.Admin.Controllers
             _logger = logger;
             _mapper = mapper;
         }
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Index()
         {
             return View();
         }
 
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult IndexSP()
         {
             var model = new BlogPostListModel();
@@ -39,7 +41,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [Authorize(Roles = "Member,Admin,Support")]
         public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
         {
             var result = _blogPostManagementService.GetBlogPosts(model.PageIndex, model.PageSize, model.Search,
@@ -63,7 +65,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return Json(blogPostJsonData);
         }
 
-        [HttpPost]
+        [Authorize(Roles = "Member,Admin,Support")]
         public async Task<JsonResult> GetBlogPostJsonDataSP([FromBody] BlogPostListModel model)
         {
             var result = await _blogPostManagementService.GetBlogPostsSP(model.PageIndex, 
@@ -88,6 +90,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return Json(blogPostJsonData);
         }
 
+        [Authorize(Roles = "Member,Support")]
         public IActionResult Create()
         {
             var model = new BlogPostCreateModel();
@@ -95,7 +98,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin,Support")]
         public IActionResult Create(BlogPostCreateModel model)
         {
             if (ModelState.IsValid)
@@ -129,6 +132,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin,Support")]
         public async Task<IActionResult> Update(Guid id)
         {
             BlogPost post = await _blogPostManagementService.GetBlogPostAsync(id);
@@ -138,7 +142,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin,Support")]
         public async Task<IActionResult> Update(BlogPostUpdateModel model)
         {
             if (ModelState.IsValid)
@@ -172,7 +176,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public IActionResult Delete(Guid id)
         {
             try
