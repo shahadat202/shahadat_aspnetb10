@@ -25,6 +25,33 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View();
         }
 
+        public IActionResult AddClaim()
+        {
+            var model = new ClaimAddModel();
+
+            var users = from c in _userManager.Users.ToList() select c;
+            model.UserId = users.First().Id;
+            model.Users = new SelectList(users, "Id", "UserName");
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddClaim(ClaimAddModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+                await _userManager.AddClaimAsync(user,
+                    new System.Security.Claims.Claim(model.ClaimName, model.ClaimValue));
+            }
+            var users = from c in _userManager.Users.ToList() select c;
+            model.UserId = users.First().Id;
+            model.Users = new SelectList(users, "Id", "UserName");
+
+            return View(model);
+        }
+
         public IActionResult CreateRole()
         {
             var model = new RoleCreateModel();

@@ -143,5 +143,10 @@ namespace Blog.Web.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

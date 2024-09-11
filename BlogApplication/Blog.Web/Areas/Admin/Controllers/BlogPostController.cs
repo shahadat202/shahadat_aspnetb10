@@ -10,9 +10,12 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.Web.Areas.Admin.Controllers
 {
-    [Area("Admin"), Authorize("Admin")]
+    //[Area("Admin"), Authorize("Admin")]
+    [Area("Admin"), Authorize]
     public class BlogPostController : Controller
     {
+        const string AgeRestriction = "AgeRestriction";
+
         private readonly IBlogPostManagementService _blogPostManagementService;
         private readonly ICategoryManagementService _categoryManagementService; 
         private readonly ILogger<BlogPostController> _logger;
@@ -41,7 +44,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Member,Admin,Support")]
+        [HttpPost, Authorize(Roles = "Member,Admin,Support")]
         public JsonResult GetBlogPostJsonData([FromBody] BlogPostListModel model)
         {
             var result = _blogPostManagementService.GetBlogPosts(model.PageIndex, model.PageSize, model.Search,
@@ -65,7 +68,7 @@ namespace Blog.Web.Areas.Admin.Controllers
             return Json(blogPostJsonData);
         }
 
-        [Authorize(Roles = "Member,Admin,Support")]
+        [HttpPost, Authorize(Roles = "Member,Admin,Support")]
         public async Task<JsonResult> GetBlogPostJsonDataSP([FromBody] BlogPostListModel model)
         {
             var result = await _blogPostManagementService.GetBlogPostsSP(model.PageIndex, 
@@ -90,7 +93,8 @@ namespace Blog.Web.Areas.Admin.Controllers
             return Json(blogPostJsonData);
         }
 
-        [Authorize(Roles = "Member,Support")]
+        //[Authorize(Roles = "Admin,Support")]
+        [Authorize(Policy = AgeRestriction)]
         public IActionResult Create()
         {
             var model = new BlogPostCreateModel();
@@ -98,7 +102,8 @@ namespace Blog.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin,Support")]
+        //[HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin,Support")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = AgeRestriction)]
         public IActionResult Create(BlogPostCreateModel model)
         {
             if (ModelState.IsValid)
@@ -133,6 +138,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin,Support")]
+        //[Authorize(Policy = "CustomAccess")]
         public async Task<IActionResult> Update(Guid id)
         {
             BlogPost post = await _blogPostManagementService.GetBlogPostAsync(id);
@@ -143,6 +149,7 @@ namespace Blog.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin,Support")]
+        //[HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CustomAccess")]
         public async Task<IActionResult> Update(BlogPostUpdateModel model)
         {
             if (ModelState.IsValid)

@@ -1,5 +1,7 @@
 ﻿using Blog.Infrastructure.Identity;
+using Blog.Infrastructure.Identity.Requirements;
 using Blog.Web.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -40,6 +42,26 @@ namespace Blog.Infrastructure.Extensions
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CustomAccess", policy =>
+                {
+                    //policy.RequireRole("Admin");
+                    policy.RequireRole("Member");
+                    policy.RequireRole("Support");
+                });
+                options.AddPolicy("CreatePermission", policy =>
+                {
+                    policy.RequireClaim("create", "true");
+                });
+                options.AddPolicy("AgeRestriction", policy =>
+                {
+                    policy.Requirements.Add(new AgeRequirement());
+                });
+            });
+
+            services.AddSingleton<IAuthorizationHandler, AgeRequirementHandler>();
         }
     }
 }
