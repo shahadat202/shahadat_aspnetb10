@@ -25,7 +25,7 @@ namespace DevSkill.Inventory.Infrastructure
             message.To.Add(new MailboxAddress(receiverName, receiverEmail));
             message.Subject = subject;
 
-            message.Body = new TextPart("plain")
+            message.Body = new TextPart("html")
             {
                 Text = body
             };
@@ -33,7 +33,7 @@ namespace DevSkill.Inventory.Infrastructure
             using (var client = new SmtpClient())
             {
                 client.Connect(_smtpSettings.Host, _smtpSettings.Port,
-                    _smtpSettings.SmtpEncryption != SmtpEncryptionTypes.Normal);
+                    _smtpSettings.SmtpEncryption != SmtpEncryptionTypes.SSL);
                 client.Timeout = 6000;
 
                 // Note: only needed if the SMTP server requires authentication
