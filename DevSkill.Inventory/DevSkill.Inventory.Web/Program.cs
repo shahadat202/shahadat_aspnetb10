@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
+using DevSkill.Inventory.Domain;
+using DevSkill.Inventory.Infrastructure.Extensions;
 
 #region Bootstrap Logger
 var configuration = new ConfigurationBuilder()
@@ -55,15 +57,10 @@ try
     });
     #endregion
 
-    builder.Services
-        .AddIdentity<ApplicationUser, ApplicationRole>()
-        .AddEntityFrameworkStores<ApplicationDbContext>()
-        .AddUserManager<ApplicationUserManager>()
-        .AddRoleManager<ApplicationRoleManager>()
-        .AddSignInManager<ApplicationSignInManager>()
-        .AddDefaultTokenProviders();
-
+    builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
+
+    builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
     var app = builder.Build();
 

@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using DevSkill.Inventory.Application;
 using DevSkill.Inventory.Application.Services;
+using DevSkill.Inventory.Domain;
 using DevSkill.Inventory.Domain.RepositoryContracts;
 using DevSkill.Inventory.Infrastructure;
 using DevSkill.Inventory.Infrastructure.Repositories;
@@ -34,6 +35,10 @@ public class WebModule(string connectionString, string migrationAssembly) : Modu
 
         builder.RegisterType<InventoryUnitOfWork>()
             .As<IInventoryUnitOfWork>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<EmailUtility>()
+            .As<IEmailUtility>()
             .InstancePerLifetimeScope();
     }
 }

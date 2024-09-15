@@ -9,6 +9,7 @@ using System.Text;
 using DevSkill.Inventory.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using DevSkill.Inventory.Domain;
 
 namespace Blog.Web.Controllers
 {
@@ -18,15 +19,17 @@ namespace Blog.Web.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<AccountController> _logger;
-
+        private readonly IEmailUtility _emailUtility;
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger)
+            ILogger<AccountController> logger,
+            IEmailUtility emailUtility)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _emailUtility = emailUtility;
         }
 
         [AllowAnonymous]
@@ -50,17 +53,15 @@ namespace Blog.Web.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    /*
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { area = "Identity", userId = user.Id, code = code, returnUrl = returnUrl },
+                    var callbackUrl = Url.Action("ConfirmEmail",
+                        "Account",
+                        values: new { area = "", userId = user.Id, code = code, returnUrl = model.ReturnUrl },
                         protocol: Request.Scheme);
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+
+                    _emailUtility.SendEmail(model.Email, model.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                    */
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
