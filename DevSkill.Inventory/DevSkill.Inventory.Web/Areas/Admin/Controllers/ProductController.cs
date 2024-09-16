@@ -14,16 +14,20 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             _productManagementService = productManagementService;
         }
+
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Index()
         {
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Insert()
         {
             return View();
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public IActionResult Insert(ProductInsertModel model)
         {
             if (ModelState.IsValid)
