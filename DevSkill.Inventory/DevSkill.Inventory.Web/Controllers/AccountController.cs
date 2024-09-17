@@ -142,5 +142,10 @@ namespace DevSkill.Inventory.Web.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
