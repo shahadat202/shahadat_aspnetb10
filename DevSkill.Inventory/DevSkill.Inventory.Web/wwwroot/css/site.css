@@ -16,7 +16,10 @@ html {
   position: relative;
   min-height: 100%;
 }
-
+.main-sidebar {
+    background-color: rgba(221, 42, 59, 1); 
+}
 body {
   margin-bottom: 60px;
 }
+
