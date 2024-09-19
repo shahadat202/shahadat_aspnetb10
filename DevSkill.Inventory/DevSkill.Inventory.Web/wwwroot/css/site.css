@@ -20,10 +20,8 @@ body {
 
 /*--- Side bar / Left nav bar ----*/
 .main-sidebar {
-   /* width: 80px;*/
     background-color: rgba(224,53,69,255);
 }
-
 .custom-sidebar .nav-item {
     margin-bottom: 25px;
 }
@@ -64,24 +62,7 @@ body {
     border-radius: 5px;
 }
 
-/*-----  Right nav bar  ------*/
-.custom-button {
-    background-color: rgba(224,53,69,255);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    font-weight: 550;
-}
-.custom-button:hover {
-    color: white;
-}
-.custom-button i {
-    margin-right: 8px;
-    font-size: 18px; 
-    color: white;
-}
+
 
 
 

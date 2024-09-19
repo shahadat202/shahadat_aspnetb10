@@ -1,126 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Index";
 }
-
-<div class="content-header">
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0">Dashboard</h1>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
-</div>
-<!-- /.content-header -->
-<!-- Main content -->
-<section class="content">
-    <div class="container-fluid">
-        <!-- Inventory Summary -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <h3 class="text-center">Inventory Summary</h3>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Item Block -->
-            <div class="col-lg-3 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-white">
-                    <div class="icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="inner">
-                        <h3>0</h3>
-                        <p>Items</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Folder Block -->
-            <div class="col-lg-3 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-white">
-                    <div class="icon">
-                        <i class="fas fa-folder"></i>
-                    </div>
-                    <div class="inner">
-                        <h3>0</h3>
-                        <p>Folders</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Quantity Block -->
-            <div class="col-lg-3 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-dark">
-                    <div class="icon">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <div class="inner">
-                        <h3>0</h3>
-                        <p>Total Quantity</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Value Block -->
-            <div class="col-lg-3 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-white">
-                    <div class="icon">
-                        <i class="fas fa-calculator"></i>
-                    </div>
-                    <div class="inner">
-                        <h3>0</h3>
-                        <p>Total Value</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- /.container-fluid -->
-</section>
-<!-- /.content -->
-<!-- CSS for styling the blocks -->
-<style>
-    .dashboard-box {
-        display: flex;
-        background-color: white;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        border-radius: 8px;
-        padding: 25px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        width: 180px; 
-        height: 160px; 
-        margin: 0 auto; 
-    }
-
-        .dashboard-box .icon {
-            color: #0096bc;
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .dashboard-box .inner h3 {
-            color: black;
-            font-size: 2.5rem;
-            font-weight: 550;
-            margin: 0;
-        }
-
-        .dashboard-box .inner p {
-            color: #9e9ea4;
-            font-size: 1.2rem;
-            margin: 0;
-        }
-</style>
-
-
-@* <!-- Another Design -->
+<!-- Another Design -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -146,6 +27,7 @@
                     <div class="icon">
                         <i class="fas fa-file-alt"></i>
                     </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -159,6 +41,7 @@
                     <div class="icon">
                         <i class="fas fa-folder"></i>
                     </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -172,6 +55,7 @@
                     <div class="icon">
                         <i class="fas fa-box"></i>
                     </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -185,6 +69,7 @@
                     <div class="icon">
                         <i class="fas fa-calculator"></i>
                     </div>
+                    <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             <!-- ./col -->
@@ -192,5 +77,5 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content --> 
-*@
+
 
