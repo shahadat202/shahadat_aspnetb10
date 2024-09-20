@@ -18,7 +18,6 @@ body {
   margin-bottom: 60px;
 }
 
-/*--- Side bar / Left nav bar ----*/
 .main-sidebar {
     background-color: rgba(224,53,69,255);
 }
@@ -34,33 +33,28 @@ body {
     border-radius: 8px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
+.custom-sidebar .nav-item .nav-link:hover i {
+    color: white;
+    transition: 0.3s;
+}
 .custom-sidebar .nav-link i {
-    margin-right: 12px; 
     font-size: 22px;
+    position: relative;
 }
-
 .custom-sidebar .nav-link:hover {
-    background-color: rgba(243, 178, 184, 1);
-    transform: translateY(-2px); 
-    border-radius: 8px; 
+    transition: 0.3s;
 }
+/*
+.custom-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+*/
 
-.custom-sidebar .nav-link.active {
-    background-color: rgba(228, 85, 98, 1); 
-}
 
-.custom-sidebar .nav-treeview {
-    padding-left: 20px;
-}
 
-.custom-sidebar .nav-treeview .nav-link {
-    padding: 8px 15px; 
-}
 
-.custom-sidebar .nav-treeview .nav-link:hover {
-    background-color: rgba(243, 178, 184, 1);
-    border-radius: 5px;
-}
+
+
 
 
 

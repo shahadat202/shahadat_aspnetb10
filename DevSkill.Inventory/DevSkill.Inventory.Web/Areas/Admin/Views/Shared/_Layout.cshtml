@@ -66,7 +66,6 @@
             <a asp-area="Admin" asp-controller="Dashboard" asp-action="" class="brand-link" style="padding: 40px 0px; margin-bottom: 30px">
                 <img src="~/images/favicon.png" alt="Sortly Logo" class="brand-image" style="width: 50px; height: 60px;">
             </a>
-
             <!-- Sidebar -->
             <div class="sidebar">
                 <!-- Sidebar Menu -->
@@ -75,53 +74,23 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">
                                 <i class="fas fa-th-large"></i>
-                                <p>Dashboard</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-box"></i>
-                                <p>Items</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-magnifying-glass"></i>
-                                <p>Search</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="ion ion-stats-bars" style="font-size: 1.7rem;"></i>
-                                @* <i class="fas fa-chart-bar"></i> *@
-                                <p>Reports</p>
                             </a>
                         </li>
-
-                        <!--- Product Menu --->
-                       @*  <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fa-solid fa-copy"></i>
-                                <p>
-                                    Products
-                                    <i class="fas fa-angle-left right"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>All Products</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-area="Admin" asp-controller="Product" asp-action="Insert" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Insert New</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> *@
                     </ul>
                 </nav>
                 <!-- /.sidebar-menu -->
@@ -185,7 +154,21 @@
     <script src="~/adminlte/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/adminlte/js/pages/dashboard.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Set fixed width on hover
+            $('.main-sidebar').hover(
+                function () {
+                    $(this).css('width', '80px'); 
+                },
+                function () {
+                    $(this).css('width', '80px');
+                }
+            );
+        });
+    </script>
 </body>
 </html>
+
 
 
