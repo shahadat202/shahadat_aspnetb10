@@ -18,6 +18,7 @@ body {
   margin-bottom: 60px;
 }
 
+/* Style for nav-link,  Style for _Layout.cshtml page */
 .main-sidebar {
     background-color: rgba(224,53,69,255);
 }
@@ -27,28 +28,70 @@ body {
 .custom-sidebar .nav-link {
     display: flex;
     align-items: center;
+    padding: 10px;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.custom-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.03);
+    transition: 0.2s;
+}
+.custom-sidebar .nav-link i {
+    font-size: 22px;
+    padding: 6px;
+    margin-right: 10px;
+}
+.custom-sidebar .nav-link:hover i {
+    color: white;
+}
+.custom-sidebar .nav-link p {
+    margin: 0;
+    transition: color 0.3s ease;
+}
+.custom-sidebar .nav-link:hover p {
+    color: white;
+}
+
+/*
+.custom-sidebar .nav-link {
+    display: flex;
+    align-items: center;
     padding: 10px 15px;
     color: white;
     font-size: 16px;
     border-radius: 8px;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
-.custom-sidebar .nav-item .nav-link:hover i {
-    color: white;
+.custom-sidebar .nav-item .nav-link:hover {
+    background-color: white;
+    transition: 0.3s;
+}
+.custom-sidebar .nav-link:hover {
     transition: 0.3s;
 }
 .custom-sidebar .nav-link i {
     font-size: 22px;
-    position: relative;
 }
-.custom-sidebar .nav-link:hover {
-    transition: 0.3s;
-}
-/*
 .custom-sidebar .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 */
+
+/* Style for nav-link,  Style for _Items.cshtml page */
+.row {
+    margin-left: -80px;
+}
+.card {
+    height: 100vh; 
+    
+}
+.card-body {
+    overflow-y: auto; 
+}
+
 
 
 
