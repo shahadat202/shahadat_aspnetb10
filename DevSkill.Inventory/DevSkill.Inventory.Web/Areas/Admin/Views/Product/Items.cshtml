@@ -1,113 +1,4 @@
-﻿@* @{
-    ViewData["Title"] = "Items";
-}
-
-<div class="content-wrapper">
-    <div class="row">
-        <!-- Sidebar -->
-        <aside class="col-md-3">
-            <div class="card" style="height: 100vh;">
-                <div class="card-body" style="overflow-y: auto;">
-                    <form>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="folderSearch" placeholder="Search folders" aria-label="Search folders">
-                                <div class="input-group-append">
-                                    <span class="input-group-text" id="search-icon">
-                                        <i class="fas fa-search"></i>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="header-border mb-4"></div>
-                        </div>
-                    </form>
-
-                    <!-- All Items Section -->
-                    <div class="all-items">
-                        <h5 class="all-items-title" style="cursor: pointer; padding: 10px;">
-                            <i class="fas fa-box" style="margin-right: 8px; padding: 5px;"></i> All Items
-                        </h5>
-                        <div class="sub-folders" style="display: none;">
-                            <!-- Initially hidden -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <div class="col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
-                <h1 class="items-title">All Items</h1>
-                <div class="button-group">
-                    <a href="#" class="custom-button" style="margin-right: 10px;"> ADD ITEM </a>
-                    <a href="#" class="custom-button"> ADD FOLDER </a>
-                </div>
-            </div>
-            <div class="header-border mb-4"></div>
-
-            <!-- Search Bar and Value Fields -->
-            <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: right;">
-                <form>
-                    <div class="input-group" style="display: inline-flex; max-width: 300px;">
-                        <input type="text" class="form-control" id="folderSearch" placeholder="Search folders" aria-label="Search folders">
-                        <div class="input-group-append">
-                            <span class="input-group-text" id="search-icon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        </div>
-                    </div>
-                </form>
-
-                <div class="value-fields" style="padding: 15px 0;">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <strong>Folders:</strong> <span id="folderCount">0</span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>Items:</strong> <span id="itemCount">0</span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>Total Quantity:</strong> <span id="totalQuantity">0</span>
-                        </div>
-                        <div class="col-md-3">
-                            <strong>Total Value:</strong> <span id="totalValue">0 TK</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <p>This is the Items page content.</p>
-            <!-- This is where your items will be displayed after the search -->
-        </div>
-    </div>
-</div>
-
-<style>
-    .header-border {
-        border-top: 1.5px solid #9e9ea4; /* Color for header border */
-        margin: 20px 0; /* Space around the border */
-    }
-
-    .value-fields {
-        padding: 15px 0;
-        border-top: 1px solid #ccc; /* Optional: Add a top border for separation */
-    }
-
-        .value-fields strong {
-            color: #333; /* Change color as needed */
-        }
-
-        .value-fields span {
-            font-weight: 600; /* Make count values bold */
-        }
-
-    .button-group {
-        margin-left: 10px; /* Adjust margin for button group */
-    }
-</style>
- *@
-@{
+﻿@{
     ViewData["Title"] = "Items";
 }
 
@@ -159,31 +50,35 @@
             <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
                 <form>
                     <div class="input-group" style="display: inline-flex; position: relative; max-width: 300px;">
-                        <input type="text" class="form-control" id="folderSearch" placeholder="Search All Items" aria-label="Search folders" style="padding-left: 30px;">
+                        <input type="text" class="form-control" id="folderSearch" placeholder="Search All Items" aria-label="Search folders" style="padding-left: 30px; border-bottom: none;">
                         <div class="input-group-append" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;">
                             <span class="input-group-text" id="search-icon" style="background: transparent; border: none; padding: 0;">
                                 <i class="fas fa-search"></i>
                             </span>
                         </div>
+                        <!--Grid icon-->
+                        <i class="fas fa-th-large grid-icon" id="gridIcon" style="position: absolute; right: -630px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
                 </form>
+
                 <!-- Closer Value Fields -->
                 <div class="value-fields" style="padding: 10px 0;">
                     <div class="row" style="margin: 0;">
-                        <div class="col-md-3" style="padding: 0;">
+                        <div class="col-md-3 no-padding">
                             <strong>Folders:</strong> <span id="folderCount">0</span>
                         </div>
-                        <div class="col-md-3" style="padding: 0;">
+                        <div class="col-md-3 no-padding">
                             <strong>Items:</strong> <span id="itemCount">0</span>
                         </div>
-                        <div class="col-md-3" style="padding: 0;">
+                        <div class="col-md-3 no-padding">
                             <strong>Total Quantity:</strong> <span id="totalQuantity">0</span>
                         </div>
-                        <div class="col-md-3" style="padding: 0;">
+                        <div class="col-md-3 no-padding">
                             <strong>Total Value:</strong> <span id="totalValue">0 TK</span>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <p>This is the Items page content.</p>
@@ -192,26 +87,22 @@
     </div>
 </div>
 
-<style>
-    .header-border {
-        border-top: 1.5px solid #9e9ea4; /* Color for header border */
-        margin: 20px 0; /* Space around the border */
-    }
+<!-- Modal Structure -->
+<div id="layoutModal" class="modal-right" style="margin-top:120px;">
+    <div class="modal-content" style="border-radius: 5px;">
+        <h5>LAYOUT TYPE</h5>
+        <div class="layout-options">
+            <div class="option"><i class="fas fa-th-large"></i> Grid</div>
+            <div class="option"><i class="fas fa-list"></i> List</div>
+            <div class="option"><i class="fas fa-table"></i> Table</div>
+        </div>
+        <hr>
+        <h5>VIEW OPTION</h5>
+        <div class="view-option">
+            <input type="checkbox" id="hideFolders"> Hide folders
+        </div>
+    </div>
+</div>
 
-    .value-fields {
-        padding: 10px 0; /* Reduced padding for closer fields */
-        /* Optional: Add a top border for separation */
-    }
 
-        .value-fields strong {
-            color: #333; /* Change color as needed */
-        }
 
-        .value-fields span {
-            font-weight: 600; /* Make count values bold */
-        }
-
-    .button-group {
-        margin-left: 10px; /* Adjust margin for button group */
-    }
-</style>

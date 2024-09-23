@@ -120,9 +120,61 @@ body {
     color: white;
     background-color: #e45562;
 }
+/*   Countable fields (Folders, Items, Total Quantity, Total Value) */
+.no-padding {
+    padding: 0 !important; 
+}
+.value-fields {
+    padding: 10px 0;
+}
+.value-fields strong {
+    color: #333;
+}
+.value-fields span {
+    font-weight: 600;
+}
+.button-group {
+    margin-left: 10px;
+}
 
-
-
+/*   Modal Styles  */
+#layoutModal {
+    position: fixed;
+    top: 50px;
+    right: 20px;
+    background: #fff;
+    width: 250px;
+    border: 1px solid #ddd;
+    z-index: 9999;
+    display: none;
+}
+.modal-content {
+    padding: 20px;
+    border-radius: 4px;
+    border: none;
+    box-shadow: none;
+}
+.layout-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.option {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+}
+.option:hover {
+    background-color: #f0f0f0;
+}
+.grid-icon {
+    font-size: 24px;
+    margin-left: 10px;
+}
+/* Close the modal when clicking outside */
+.modal-backdrop {
+    display: none;
+}
 
 
 
