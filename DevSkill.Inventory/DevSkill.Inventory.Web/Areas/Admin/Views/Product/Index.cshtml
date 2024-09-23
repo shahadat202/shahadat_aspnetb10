@@ -2,11 +2,11 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="content-header">
+<div class="content-header" style="padding-left: 30px">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Dashboard</h1>
+                <h1 class="m-0 dashboard-title" style="padding-left:60px">Dashboard</h1>
             </div><!-- /.col -->
             <!-- Right Navbar for SET FOLDERS Button -->
             <div class="col-sm-6 d-flex justify-content-end align-items-center">
@@ -20,7 +20,7 @@
 </div>
 
 <!-- Main content -->
-<section class="content">
+<section class="content" style="padding-left: 30px">
     <div class="container-fluid">
         <!-- Inventory Summary -->
         <div class="row mb-4">
@@ -95,7 +95,14 @@
         margin-top: 10px;
         margin-bottom: 30px;
     }
-
+    .dashboard-title {
+        font-family: 'Helvetica Neue', sans-serif; 
+        font-size: 2.5rem; 
+        font-weight: 700; 
+        color: #333; 
+        margin-bottom: 15px; 
+        display: inline-block;
+    }
     .dashboard-box {
         display: flex;
         background-color: white;

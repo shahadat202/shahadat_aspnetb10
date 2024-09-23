@@ -55,42 +55,72 @@ body {
     color: white;
 }
 
-/*
-.custom-sidebar .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 10px 15px;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-.custom-sidebar .nav-item .nav-link:hover {
-    background-color: white;
-    transition: 0.3s;
-}
-.custom-sidebar .nav-link:hover {
-    transition: 0.3s;
-}
-.custom-sidebar .nav-link i {
-    font-size: 22px;
-}
-.custom-sidebar .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-*/
-
-/* Style for nav-link,  Style for _Items.cshtml page */
+/* Style for nav-link,  Style for _Items.cshtml page   */
 .row {
     margin-left: -80px;
 }
 .card {
     height: 100vh; 
-    
 }
 .card-body {
     overflow-y: auto; 
 }
+/*  Search bar section  */
+.input-group {
+    width: 100%;
+}
+.input-group-text {
+    background-color: transparent;
+    border: none;
+}
+#folderSearch {
+    border: none;
+    box-shadow: none;
+}
+#folderSearch:focus {
+    outline: none;
+}
+.all-items-title {
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.all-items-title:hover {
+    background-color: #f0f0f0;
+}
+
+/*  All Items, Add Item, Add folder section  */
+.header-border {
+    border-bottom: 1.5px solid #9e9ea4; 
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+.items-title {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+.button-group {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+}
+.custom-button {
+    background-color: rgba(224,53,69,255);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    font-weight: 550;
+    text-decoration: none;
+}
+.custom-button:hover {
+    color: white;
+    background-color: #e45562;
+}
+
 
 
 

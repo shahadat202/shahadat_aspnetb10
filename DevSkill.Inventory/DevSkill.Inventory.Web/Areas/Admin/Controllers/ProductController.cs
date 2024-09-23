@@ -18,6 +18,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Index()
         {
+            ViewData["HideNavbar"] = true;
+            ViewData["IsSidebarCollapsed"] = true;
             return View();
         }
 
