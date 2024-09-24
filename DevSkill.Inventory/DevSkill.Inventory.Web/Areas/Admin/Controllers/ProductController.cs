@@ -47,6 +47,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewData["IsSidebarCollapsed"] = true;
             return View();
         }
-
+        public IActionResult AddItem()
+        {
+            ViewData["HideNavbar"] = true;
+            ViewData["IsSidebarCollapsed"] = true;
+            return View();
+        }
     }
 }

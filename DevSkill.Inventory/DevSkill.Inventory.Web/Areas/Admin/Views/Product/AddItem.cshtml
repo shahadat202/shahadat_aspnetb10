@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "AddItem";
+}
+
+<div class="container-fluid">
+    <!-- Page Title Section -->
+    <div class="page-title">
+        <i class="fas fa-box"></i> <!-- Item Icon -->
+        <h1>Add Item</h1>
+    </div>
+
+    <!-- Input Field Section -->
+    <div class="add-item-section">
+        <input type="text" placeholder="Item Name*" class="h1-input">
+    </div>
+
+    <!-- Additional Fields or Buttons can go below -->
+</div>
+
+<style>
+    /* Ensure the layout stays close to the sidebar */
+    .container-fluid {
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    /* Page Title Section - covers top, left, and right */
+    .page-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #f0f0f0; /* Background color only for the title section */
+        padding: 20px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+        .page-title i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+    /* Remove background for other sections */
+    .add-item-section {
+        padding: 5px 0px 20px 10px;
+        margin-right: 10px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        background: none; /* No background color for other content */
+    }
+
+    .h1-input {
+        font-size: 2em; /* Make input text appear like h1 */
+        border: none;
+        border-bottom: 2px solid #000; /* Create an underline effect */
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+</style>
