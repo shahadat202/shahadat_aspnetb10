@@ -1,4 +1,4 @@
-﻿@{
+﻿@* @{
     ViewData["Title"] = "AddItem";
 }
 
@@ -63,3 +63,268 @@
         background: transparent;
     }
 </style>
+ *@
+
+@{
+    ViewData["Title"] = "AddItem";
+}
+
+<div class="container-fluid">
+    <!-- Page Title Section -->
+    <div class="page-title">
+        <i class="fas fa-box"></i> <!-- Item Icon -->
+        <h1>Add Item</h1>
+    </div>
+
+    <!-- Input Field Section (Item Name) -->
+    <div class="add-item-section">
+        <input type="text" placeholder="Item Name*" class="h1-input">
+    </div>
+
+    <div class="row">
+        <!-- Left Section - Item Details -->
+        <div class="col-md-7 item-details-section" style="margin-left: 70px;">
+            <h2>ITEM DETAILS</h2>
+
+            <div class="form-row">
+                <!-- Quantity and Price -->
+                <div class="col-md-6">
+                    <label for="quantity" class="input-label">Quantity</label>
+                    <input type="text" id="quantity" placeholder="Quantity" class="details-input">
+                </div>
+                <div class="col-md-6">
+                    <label for="price" class="input-label">Price, $</label>
+                    <input type="text" id="price" placeholder="Price, $" class="details-input">
+                </div>
+            </div>
+            <div class="form-row">
+                <!-- Min Level and Tags -->
+                <div class="col-md-6">
+                    <label for="minLevel" class="input-label">Min Level</label>
+                    <input type="text" id="minLevel" placeholder="Min Level" class="details-input">
+                </div>
+                <div class="col-md-6">
+                    <label for="tags" class="input-label">Tags</label>
+                    <input type="text" id="tags" placeholder="Tags" class="details-input">
+                </div>
+            </div>
+            <div class="form-row">
+                <!-- Notes -->
+                <div class="col-md-12">
+                    <label for="notes" class="input-label">Notes</label>
+                    <textarea id="notes" placeholder="Notes" class="details-input"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section - Photos -->
+        <div class="col-md-4 photo-section">
+            <h2>PHOTOS</h2>
+            <div class="photo-box" style="margin-top: 20px;">
+                <!-- Added margin for spacing -->
+                <label for="photo-input" class="photo-label">
+                    <i class="fas fa-camera"></i> Add Photo
+                </label>
+                <input type="file" id="photo-input" class="photo-input" onchange="showPhoto(event)">
+                <img id="preview-photo" src="#" alt="Photo Preview" style="display:none;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="footer-buttons">
+        <button class="cancel-btn" onclick="cancelForm()">CANCEL</button>
+        <button class="add-btn">ADD</button>
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Discard unsaved changes?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-modal-btn" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="discard-btn" onclick="goToItemsPage()">DISCARD</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Show the selected photo in the preview box
+    function showPhoto(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('preview-photo');
+            output.src = reader.result;
+            output.style.display = 'block'; // Display the photo
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // Navigate to the items page on discard
+    function goToItemsPage() {
+        window.location.href = '/items';
+    }
+</script>
+
+<style>
+    /* Container adjustments */
+    .container-fluid {
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    /* Page Title Section */
+    .page-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+        .page-title i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+    .add-item-section {
+        padding: 5px 0px 20px 10px;
+        margin-right: 10px;
+    }
+
+    .h1-input {
+        font-size: 2em;
+        border: none;
+        border-bottom: 2px solid #000;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .item-details-section, .photo-section {
+        padding: 20px;
+    }
+
+        .item-details-section h2, .photo-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+    /* Styling the input fields */
+    .details-input {
+        width: 100%;
+        padding: 12px; /* Increased padding for a professional look */
+        margin-bottom: 20px; /* Added more space between fields */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    textarea.details-input {
+        height: 100px;
+        resize: none;
+    }
+
+    .input-label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Photo section updates */
+    .photo-box {
+        text-align: center;
+        border: 2px dashed #ccc;
+        padding: 70px 20px;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    .photo-label {
+        display: block;
+        cursor: pointer;
+        color: #888;
+        font-size: 16px;
+    }
+
+        .photo-label i {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+    .photo-input {
+        display: none; /* Hide 'choose file' text */
+    }
+
+    #preview-photo {
+        width: 100%;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    /* Footer buttons */
+    .footer-buttons {
+        text-align: right; /* Align buttons to the right */
+        margin-top: 30px;
+    }
+
+        .footer-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+            width: 120px; /* Ensuring uniform button size */
+        }
+
+    .cancel-btn {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .add-btn {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .modal-body {
+        padding: 20px;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+    }
+
+    .cancel-modal-btn {
+        background-color: #ccc;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .discard-btn {
+        background-color: #dc3545;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+    }
+</style>
+
+
+
+
