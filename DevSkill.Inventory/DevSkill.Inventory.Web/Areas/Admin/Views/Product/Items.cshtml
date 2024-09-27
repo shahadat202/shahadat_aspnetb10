@@ -12,7 +12,7 @@
         <aside class="col-md-3">
             <div class="card" style="height: 100vh;">
                 <div class="card-body" style="overflow-y: auto;">
-                    <form>
+                    <form class="search-container">
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-append">
@@ -24,8 +24,7 @@
                             </div>
                             <div class="header-border mb-4"></div>
                         </div>
-                    </form>
-
+                    </form> 
                     <!-- All Items Section -->
                     <div class="all-items">
                         <h5 class="all-items-title" style="cursor: pointer; padding: 10px;">
@@ -88,18 +87,9 @@
                 {
                     @foreach (var item in Model)
                     {
-                        var isNewItem = newItemId.HasValue && newItemId == item.Id;
+                        @* var isNewItem = newItemId.HasValue && newItemId == item.Id; *@
 
-                        <div class="col-md-4 d-flex justify-content-center">
-                            <div class="card item-box @if(isNewItem) {<text>new-item-highlight</text>}">
-                                <img src="@item.Image" alt="@item.Title" class="card-img-top" />
-                                <div class="card-body">
-                                    <h5 class="card-title">@item.Title</h5>
-                                    <p class="card-text">Quantity: @item.Quantity</p>
-                                    <p class="card-text">Price: @item.Price $</p>
-                                </div>
-                            </div>
-                        </div>
+                        @Html.Partial("_ItemBoxPartial", item)
                     }
                 }
                 else
@@ -129,39 +119,5 @@
 </div>
 
 <style>
-    .item-box {
-        height: 270px;
-        width: 230px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px; 
-        overflow: hidden; 
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out; 
-    }
-
-        /* Optional: Add a hover effect */
-        .item-box:hover {
-            transform: scale(1.05);
-        }
-
-        .item-box img {
-            height: 150px; 
-            width: 100%; 
-            object-fit: cover; 
-        }
-
-        .item-box .card-body {
-            padding: 10px;
-        }
-
-        .item-box h5 {
-            font-size: 16px; 
-            margin-bottom: 8px;
-        }
-
-        .item-box p {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
+   
 </style>

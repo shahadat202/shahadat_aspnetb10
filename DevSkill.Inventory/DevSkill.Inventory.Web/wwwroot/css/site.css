@@ -55,7 +55,7 @@ body {
     color: white;
 }
 
-/* Style for nav-link,  Style for _Items.cshtml page   */
+/* Style for _Items.cshtml page   */
 .row {
     margin-left: -80px;
 }
@@ -65,7 +65,9 @@ body {
 .card-body {
     overflow-y: auto; 
 }
-/*  Search bar section  */
+
+/*  Search(Search Folders) bar section 
+*/
 .input-group {
     width: 100%;
 }

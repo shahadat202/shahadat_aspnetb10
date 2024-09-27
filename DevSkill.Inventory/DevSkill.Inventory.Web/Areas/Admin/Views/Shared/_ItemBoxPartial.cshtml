@@ -1,0 +1,46 @@
+﻿@model Product
+@using DevSkill.Inventory.Domain.Entities
+
+<div class="col-md-4 d-flex justify-content-center">
+    <div class="card item-box @if(ViewBag.IsNewItem == true) {<text>new-item-highlight</text>}">
+        <img src="@Model.Image" alt="@Model.Title" class="card-img-top" />
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">Quantity: @Model.Quantity</p>
+            <p class="card-text">Price: @Model.Price $</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    /*  Style for Item box  */
+    .item-box {
+        height: 270px;
+        width: 230px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+    .item-box:hover {
+        transform: scale(1.05);
+    }
+    .item-box img {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+    }
+    .item-box .card-body {
+        padding: 10px;
+    }
+    .item-box h5 {
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+    .item-box p {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+</style>
