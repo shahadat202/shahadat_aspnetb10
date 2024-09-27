@@ -1,4 +1,7 @@
-﻿using DevSkill.Inventory.Application.Services;
+﻿using System.IO;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
+using DevSkill.Inventory.Application.Services;
 using DevSkill.Inventory.Domain.Entities;
 using DevSkill.Inventory.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -26,32 +29,58 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Insert()
         {
+            ViewData["HideNavbar"] = true;
+            ViewData["IsSidebarCollapsed"] = true;
             return View();
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
-        public IActionResult Insert(ProductInsertModel model)
+        public async Task<IActionResult> Insert(ProductInsertModel model)
         {
             if (ModelState.IsValid)
             {
-                var product = new Product { Id = Guid.NewGuid(), Title = model.Title };
+                var product = new Product
+                {
+                    Id = Guid.NewGuid(),
+                    Title = model.Title,
+                    Quantity = model.Quantity,
+                    MinLevel = model.MinLevel,
+                    Price = model.Price,
+                    Tags = model.Tags,
+                    Notes = model.Notes,
+                    CreatedDate = DateTime.UtcNow
+                };
+
+                if (model.Image != null && model.Image.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", model.Image.FileName);
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.Image.CopyToAsync(stream);
+                    }
+
+                    product.Image = $"/uploadedImages/{model.Image.FileName}";
+                }
 
                 _productManagementService.InsertProduct(product);
-                return RedirectToAction("Index");
+                return RedirectToAction("Items");
             }
-            return View();
+            return View(model);
         }
+
         public IActionResult Items()
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
             return View();
         }
-        public IActionResult AddItem()
-        {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
-            return View();
-        }
+        //public IActionResult AddItem()
+        //{
+        //    ViewData["HideNavbar"] = true;
+        //    ViewData["IsSidebarCollapsed"] = true;
+        //    return View();
+        //}
     }
 }

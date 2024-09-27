@@ -2,8 +2,280 @@
 @{
     ViewData["Title"] = "Insert";
 }
+<div class="container-fluid">
+    <div class="page-title">
+        <i class="fas fa-box"></i>
+        <h1>Add Item</h1>
+    </div>
 
-<!-- Content Header (Page header) -->
+    <form asp-action="Insert" method="post" enctype="multipart/form-data">
+        <div class="add-item-section">
+            <input asp-for="Title" placeholder="Item Name*" class="h1-input" required />
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 item-details-section" style="margin-left: 70px;">
+                <h2>ITEM DETAILS</h2>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label for="quantity" class="input-label">Quantity</label>
+                        <input asp-for="Quantity" id="quantity" placeholder="Quantity" class="details-input" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="price" class="input-label">Price, $</label>
+                        <input asp-for="Price" id="price" placeholder="Price, $" class="details-input" required />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <label for="minLevel" class="input-label">Min Level</label>
+                        <input asp-for="MinLevel" id="minLevel" placeholder="Min Level" class="details-input" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tags" class="input-label">Tags</label>
+                        <input asp-for="Tags" id="tags" placeholder="Tags" class="details-input" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12">
+                        <label for="notes" class="input-label">Notes</label>
+                        <textarea asp-for="Notes" id="notes" placeholder="Notes" class="details-input"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 photo-section">
+                <h2>PHOTOS</h2>
+                <div class="photo-box" style="margin-top: 20px;">
+                    <i class="fas fa-trash delete-icon" id="delete-photo" onclick="deletePhoto()" style="display:none;"></i>
+                    <label for="photo-input" class="photo-label">
+                        <i class="fas fa-camera"></i> Add Photo
+                    </label>
+                    <input type="file" asp-for="Image" id="photo-input" class="photo-input" onchange="showPhoto(event)" />
+                    <img id="preview-photo" src="#" alt="Photo Preview" style="display:none;" />
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-buttons">
+            <button type="button" class="cancel-btn" data-toggle="modal" data-target="#cancelModal">CANCEL</button>
+            <button type="submit" class="add-btn">ADD</button>
+        </div>
+    </form>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Discard unsaved changes?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-modal-btn" data-dismiss="modal">CANCEL</button>
+                <button type="button" class="discard-btn" onclick="goItemsPage()">DISCARD</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Show the selected photo in the preview box
+    function showPhoto(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('preview-photo');
+            output.src = reader.result;
+            output.style.display = 'block';
+            document.getElementById('delete-photo').style.display = 'block'; 
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    // Delete the photo and hide the preview and delete button
+    function deletePhoto() {
+        var preview = document.getElementById('preview-photo');
+        preview.src = '#';
+        preview.style.display = 'none'; 
+        document.getElementById('delete-photo').style.display = 'none';
+        document.getElementById('photo-input').value = ''; 
+    }
+
+    // Redirect to Items page
+    function goItemsPage() {
+        window.location.href = '/Admin/Product/Items';
+    }
+</script>
+
+<style>
+    .container-fluid {
+        padding: 20px;
+        margin-left: 0;
+    }
+
+    /* Page Title Section */
+    .page-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+        .page-title i {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .page-title h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+    .add-item-section {
+        padding: 5px 0px 20px 10px;
+        margin-right: 10px;
+    }
+
+    .h1-input {
+        font-size: 2em;
+        border: none;
+        border-bottom: 2px solid #000;
+        outline: none;
+        width: 100%;
+        background: transparent;
+    }
+
+    .item-details-section, .photo-section {
+        padding: 20px;
+    }
+
+        .item-details-section h2, .photo-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+    /* Styling the input fields */
+    .details-input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    textarea.details-input {
+        height: 100px;
+        resize: none;
+    }
+
+    .input-label {
+        font-size: 14px;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    /* Photo section updates */
+    .photo-box {
+        text-align: center;
+        border: 2px dashed #ccc;
+        padding: 70px 20px;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    .photo-label {
+        display: block;
+        cursor: pointer;
+        color: #888;
+        font-size: 16px;
+    }
+
+        .photo-label i {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+    .photo-input {
+        display: none;
+    }
+
+    #preview-photo {
+        width: 100%;
+        height: auto;
+        margin-top: 10px;
+    }
+
+    /* Professional Delete Icon */
+    .delete-icon {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        color: #dc3545;
+        cursor: pointer;
+        display: none;
+    }
+
+    /* Footer buttons */
+    .footer-buttons {
+        text-align: right;
+        margin-top: 30px;
+    }
+
+        .footer-buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+            width: 120px;
+        }
+
+    .cancel-btn {
+        background-color: #8e8d8e;
+        color: #fff;
+    }
+
+    .add-btn {
+        background-color: #dd2a3b;
+        color: #fff;
+    }
+
+    /* Modal section */
+    .modal-body {
+        padding: 20px;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 20px;
+    }
+
+    .cancel-modal-btn {
+        background-color: #ccc;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .discard-btn {
+        background-color: #dc3545;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+    }
+</style>
+
+
+@* <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -54,4 +326,4 @@
         <!-- /.row -->
       </div><!-- /.container-fluid -->
     </section>
-    <!-- /.content -->
+    <!-- /.content --> *@
