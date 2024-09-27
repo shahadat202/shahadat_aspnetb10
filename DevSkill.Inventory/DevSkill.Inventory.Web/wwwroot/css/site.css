@@ -66,8 +66,7 @@ body {
     overflow-y: auto; 
 }
 
-/*  Search(Search Folders) bar section 
-*/
+/*  Search(Search Folders) bar section  */
 .input-group {
     width: 100%;
 }
@@ -91,10 +90,11 @@ body {
 }
 
 /*  All Items, Add Item, Add folder section  */
-.header-border {
-    border-bottom: 1.5px solid #9e9ea4; 
-    margin-top: 10px;
-    margin-bottom: 30px;
+.fixed-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #f4f6f9;
 }
 .items-title {
     font-family: 'Helvetica Neue', sans-serif;
@@ -122,6 +122,12 @@ body {
     color: white;
     background-color: #e45562;
 }
+.header-border {
+    border-bottom: 1.5px solid #9e9ea4; 
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
 /*   Countable fields (Folders, Items, Total Quantity, Total Value) */
 .no-padding {
     padding: 0 !important; 

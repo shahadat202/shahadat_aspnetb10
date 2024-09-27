@@ -1,6 +1,18 @@
 ﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
 
+//-- Fixed header and content scrolling
+//document.addEventListener("DOMContentLoaded", function () {
+//    const fixedHeader = document.querySelector('.fixed-header');
+//    const itemContent = document.querySelector('.col-md-9'); // Adjust as needed
+
+//    itemContent.addEventListener('scroll', function () {
+//        if (itemContent.scrollTop > 0) {
+//            fixedHeader.classList.add('scrolled');
+//        } else {
+//            fixedHeader.classList.remove('scrolled');
+//        }
+//    });
+//});
 
 //-- Item page content ---  
 // Toggle modal on grid icon click
