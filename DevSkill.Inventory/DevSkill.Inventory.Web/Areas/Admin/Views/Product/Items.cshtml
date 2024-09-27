@@ -82,33 +82,19 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-            @* @if (Model != null && Model.Any())
-            {
-                foreach (var item in Model)
-                {
-                    <div>@item.Title</div> <!-- Display item details -->
-                }
-            }
-            else
-            {
-                <p>No items available.</p> <!-- Message if no items -->
-            } *@
-            
-            <div class="row">
+            <div class="row" style="margin: 0;">
                 @if (Model != null && Model.Any())
                 {
                     @foreach (var item in Model)
                     {
                         var isNewItem = newItemId.HasValue && newItemId == item.Id;
 
-                        <div class="col-md-4">
+                        <div class="col-md-4 d-flex justify-content-center">
                             <div class="card item-box @if(isNewItem) {<text>new-item-highlight</text>}">
-                                <img src="@item.Image" alt = "@item.Title" class="card-img-top" />
+                                <img src="@item.Image" alt="@item.Title" class="card-img-top" />
                                 <div class="card-body">
-                                    <h5 class="car-title">@item.Title</h5>
+                                    <h5 class="card-title">@item.Title</h5>
                                     <p class="card-text">Quantity: @item.Quantity</p>
                                     <p class="card-text">Price: @item.Price $</p>
                                 </div>
@@ -118,9 +104,9 @@
                 }
                 else
                 {
-                    <p>Not items available now.</p>
+                    <p>No items available now.</p>
                 }
-            </div> 
+            </div>
         </div>
     </div>
 </div>
@@ -143,14 +129,39 @@
 </div>
 
 <style>
-    .new-item-highlight {
-        border: 2px solid #f3b2b8;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
+    .item-box {
+        height: 270px;
+        width: 230px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px; 
+        overflow: hidden; 
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out; 
     }
 
-        .new-item-highlight:hover {
+        /* Optional: Add a hover effect */
+        .item-box:hover {
             transform: scale(1.05);
         }
 
+        .item-box img {
+            height: 150px; 
+            width: 100%; 
+            object-fit: cover; 
+        }
+
+        .item-box .card-body {
+            padding: 10px;
+        }
+
+        .item-box h5 {
+            font-size: 16px; 
+            margin-bottom: 8px;
+        }
+
+        .item-box p {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
 </style>
