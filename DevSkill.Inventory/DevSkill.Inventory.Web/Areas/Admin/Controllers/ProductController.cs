@@ -65,6 +65,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 }
 
                 _productManagementService.InsertProduct(product);
+                TempData["NewItemId"] = product.Id;
                 return RedirectToAction("Items");
             }
             return View(model);
@@ -74,7 +75,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
-            return View();
+
+            var products = _productManagementService.GetAllProducts(); 
+            return View(products);
         }
         //public IActionResult AddItem()
         //{

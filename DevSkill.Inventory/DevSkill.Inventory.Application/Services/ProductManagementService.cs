@@ -9,11 +9,18 @@ namespace DevSkill.Inventory.Application.Services
         {
             _InventoryUnitOfWork = InventoryUnitOfWork;
         }
+
         public void InsertProduct(Product product)
         {
             _InventoryUnitOfWork.ProductRepository.Add(product);
             _InventoryUnitOfWork.Save();
         }
+
+        public IEnumerable<Product> GetAllProducts()
+        {
+            return _InventoryUnitOfWork.ProductRepository.GetAllProducts();
+        }
+
     }
 }
  

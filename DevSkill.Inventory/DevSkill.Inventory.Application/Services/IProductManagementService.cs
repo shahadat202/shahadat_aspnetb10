@@ -10,5 +10,6 @@ namespace DevSkill.Inventory.Application.Services
     public interface IProductManagementService
     {
         void InsertProduct(Product product);
+        IEnumerable<Product> GetAllProducts();
     }
 }

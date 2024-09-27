@@ -1,6 +1,9 @@
-﻿
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
+
 @{
     ViewData["Title"] = "Items";
+    var newItemId = ViewBag.NewItemId as Guid?;
 }
 
 <div class="content-wrapper">
@@ -82,8 +85,42 @@
 
             </div>
 
-            <p>This is the Items page content.</p>
-            <!-- This is where your items will be displayed after the search -->
+            @* @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <div>@item.Title</div> <!-- Display item details -->
+                }
+            }
+            else
+            {
+                <p>No items available.</p> <!-- Message if no items -->
+            } *@
+            
+            <div class="row">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        var isNewItem = newItemId.HasValue && newItemId == item.Id;
+
+                        <div class="col-md-4">
+                            <div class="card item-box @if(isNewItem) {<text>new-item-highlight</text>}">
+                                <img src="@item.Image" alt = "@item.Title" class="card-img-top" />
+                                <div class="card-body">
+                                    <h5 class="car-title">@item.Title</h5>
+                                    <p class="card-text">Quantity: @item.Quantity</p>
+                                    <p class="card-text">Price: @item.Price $</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Not items available now.</p>
+                }
+            </div> 
         </div>
     </div>
 </div>
@@ -105,3 +142,15 @@
     </div>
 </div>
 
+<style>
+    .new-item-highlight {
+        border: 2px solid #f3b2b8;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .new-item-highlight:hover {
+            transform: scale(1.05);
+        }
+
+</style>

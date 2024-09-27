@@ -12,8 +12,14 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
 {
     public class ProductRepository : Repository<Product, Guid>, IProductRepository
     {
+        private readonly InventoryDbContext _context;
         public ProductRepository(InventoryDbContext context) : base(context)
         {
+            _context = context;
+        }
+        public IEnumerable<Product> GetAllProducts()
+        {
+            return _context.Products.ToList();
         }
     }
 }
