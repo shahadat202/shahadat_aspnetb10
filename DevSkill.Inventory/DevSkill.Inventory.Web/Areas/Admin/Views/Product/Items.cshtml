@@ -50,6 +50,24 @@
                 <div class="header-border mb-4"></div>
                 <partial name="_ResponsePartial"></partial>
             </div>
+
+           <!-- Div for Selected Items -->
+            <div id="selectedItemsDiv" class="selected-items" style="display: none; margin-bottom: 10px;">
+                <div class="d-flex align-items-center">
+                    <span id="selectedItemsText">0 items selected</span>
+                    <div class="dropdown" style="padding-left: 3px;">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 2px;">
+                            <a class="dropdown-item" href="#">All</a>
+                            <a class="dropdown-item" href="#">Clear Selection</a>
+                        </div>
+                    </div>
+                    <span class="delete-icon" style="margin-left: auto; cursor: pointer; margin-right: 20px;">
+                        <i class="fas fa-trash"></i>
+                    </span>
+                </div>
+            </div> 
+
             <!-- Search Bar and Value Fields -->
             <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
                 <form>
@@ -64,6 +82,7 @@
                         <i class="fas fa-th-large grid-icon" id="gridIcon" style="position: absolute; right: -630px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
                 </form>
+
                 <!-- Closer Value Fields -->
                 <div class="value-fields" style="padding: 10px 0;">
                     <div class="row" style="margin: 0;">
@@ -117,4 +136,43 @@
         </div>
     </div>
 </div>
+<style>
+    .selected-items {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
 
+    .delete-icon {
+        color: red; 
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.checkbox-delete');
+        const selectedItemsDiv = document.getElementById('selectedItemsDiv');
+        const selectedItemsText = document.getElementById('selectedItemsText');
+
+        // Initialize selected count
+        let selectedCount = 0;
+
+        // Add event listeners to each checkbox
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                // Count selected checkboxes
+                selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+
+                // Update the display
+                if (selectedCount > 0) {
+                    selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
+                    selectedItemsDiv.style.display = 'block';
+                } else {
+                    selectedItemsText.textContent = `0 items selected`;
+                    selectedItemsDiv.style.display = 'none';
+                }
+            });
+        });
+    });
+</script> 

@@ -53,7 +53,7 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        display: none; /* Initially hidden */
+        display: none; 
     }
     .item-box:hover .checkbox-delete {
         display: block;
@@ -94,3 +94,22 @@
     }
     
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Get all the checkboxes
+        const checkboxes = document.querySelectorAll('.checkbox-delete');
+
+        // Add event listeners to each checkbox
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                if (checkbox.checked) {
+                    // If any checkbox is clicked, show all checkboxes
+                    checkboxes.forEach(function (cb) {
+                        cb.style.display = 'block';
+                    });
+                }
+            });
+        });
+    });
+</script>
