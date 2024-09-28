@@ -2,18 +2,31 @@
 @using DevSkill.Inventory.Domain.Entities
 
 <div class="col-md-4 d-flex justify-content-center">
-    <div class="card item-box @if(ViewBag.IsNewItem == true) {<text>new-item-highlight</text>}">
+    <div class="card item-box @if(ViewBag.IsNewItem == true) {
+    <text>new-item-highlight</text>
+ }">
         <img src="@Model.Image" alt="@Model.Title" class="card-img-top" />
+        <h5 class="card-title">@Model.Title</h5>
         <div class="card-body">
-            <h5 class="card-title">@Model.Title</h5>
-            <p class="card-text">Quantity: @Model.Quantity</p>
-            <p class="card-text">Price: @Model.Price $</p>
+            <!-- First Line: Item Title -->
+
+            <!-- Second Line: Quantity and Price -->
+            <div class="item-info">
+                <span class="item-quantity">Quantity: @Model.Quantity</span>
+                <span class="divider">|</span>
+                <span class="item-price">Price: @Model.Price $</span>
+            </div>
+
+            <!-- Third Line: Tag Icon and Tag -->
+            <div class="item-tag">
+                <i class="fas fa-tag"></i> @Model.Tags
+            </div>
         </div>
     </div>
 </div>
 
 <style>
-    /*  Style for Item box  */
+    /* Style for the Item Box */
     .item-box {
         height: 270px;
         width: 230px;
@@ -23,6 +36,7 @@
         overflow: hidden;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease-in-out;
+        background-color: #fff;
     }
     .item-box:hover {
         transform: scale(1.05);
@@ -35,12 +49,38 @@
     .item-box .card-body {
         padding: 10px;
     }
+
+    /*  Item Title  */
     .item-box h5 {
         font-size: 16px;
-        margin-bottom: 8px;
+        margin: 5px 0px 8px 10px;
+        font-weight: bold;
+        color: #333;
     }
-    .item-box p {
+
+    /*  Quantity and Price  */
+    .item-info {
+        align-items: center;
         font-size: 14px;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
+    }
+    .item-quantity, .item-price {
+        font-size: 14px;
+        color: #666;
+    }
+    .divider {
+        margin: 0px 5px;
+        color: #999;
+    }
+
+    /*  Tag Icon and Tag  */
+    .item-tag {
+        font-size: 13px;
+        color: #666;
+        display: flex;
+        align-items: center;
+    }
+    .item-tag i {
+        margin-right: 5px;
     }
 </style>
