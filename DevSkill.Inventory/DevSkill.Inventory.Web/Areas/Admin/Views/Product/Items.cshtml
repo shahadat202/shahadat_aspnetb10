@@ -58,8 +58,8 @@
                     <div class="dropdown" style="padding-left: 3px;">
                         <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 2px;">
-                            <a class="dropdown-item" href="#">All</a>
-                            <a class="dropdown-item" href="#">Clear Selection</a>
+                            <a class="dropdown-item" href="#" id="selectAllItems">All</a>
+                            <a class="dropdown-item" href="#" id="clearSelection">Clear Selection</a>
                         </div>
                     </div>
                     <span class="delete-icon" style="margin-left: auto; cursor: pointer; margin-right: 20px;">
@@ -155,16 +155,15 @@
         const selectedItemsDiv = document.getElementById('selectedItemsDiv');
         const selectedItemsText = document.getElementById('selectedItemsText');
 
-        // Initialize selected count
         let selectedCount = 0;
 
-        // Add event listeners to each checkbox
+        //Add event listeners to each checkbox
         checkboxes.forEach(function (checkbox) {
             checkbox.addEventListener('click', function () {
-                // Count selected checkboxes
+                //Count selected checkboxes
                 selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
 
-                // Update the display
+                //Update the display
                 if (selectedCount > 0) {
                     selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
                     selectedItemsDiv.style.display = 'block';
