@@ -6,6 +6,7 @@ using DevSkill.Inventory.Domain.Entities;
 using DevSkill.Inventory.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using DevSkill.Inventory.Infrastructure;
 
 namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 {
@@ -13,17 +14,28 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IProductManagementService _productManagementService;
-        public ProductController(IProductManagementService productManagementService)
+        private readonly ILogger<ProductController> _logger;
+        public ProductController(ILogger<ProductController> logger,
+            IProductManagementService productManagementService)
         {
+            _logger = logger;
             _productManagementService = productManagementService;
         }
 
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Index()
+        public IActionResult Index() //dashboard
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
             return View();
+        }
+        public IActionResult Items() // Items
+        {
+            ViewData["HideNavbar"] = true;
+            ViewData["IsSidebarCollapsed"] = true;
+
+            var products = _productManagementService.GetAllProducts(); 
+            return View(products);
         }
 
         [Authorize(Roles = "Admin")]
@@ -51,6 +63,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     CreatedDate = DateTime.UtcNow
                 };
 
+                // Image upload logic
                 if (model.Image != null && model.Image.Length > 0)
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", model.Image.FileName);
@@ -60,24 +73,39 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     {
                         await model.Image.CopyToAsync(stream);
                     }
-
                     product.Image = $"/uploadedImages/{model.Image.FileName}";
                 }
+                try
+                {
+                    _productManagementService.InsertProduct(product);
 
-                _productManagementService.InsertProduct(product);
-                TempData["NewItemId"] = product.Id;
-                return RedirectToAction("Items");
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Product inserted successfully",
+                        Type = ResponseTypes.Success
+                    });
+                    TempData["NewItemId"] = product.Id;
+                    return RedirectToAction("Items");
+                }
+                catch (Exception ex)
+                {
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Product insertion failed",
+                        Type = ResponseTypes.Danger
+                    });
+                    _logger.LogError(ex, "Product insertion failed");
+                }
             }
+            //model.SetCategoryValues(_categoryManagementService.GetCategories());
+
             return View(model);
         }
-
-        public IActionResult Items()
+        public IActionResult Update()
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
-
-            var products = _productManagementService.GetAllProducts(); 
-            return View(products);
+            return View();
         }
         //public IActionResult AddItem()
         //{

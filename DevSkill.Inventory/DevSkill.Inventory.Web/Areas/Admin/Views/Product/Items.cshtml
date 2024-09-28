@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<Product>
 @using DevSkill.Inventory.Domain.Entities
-
 @{
     ViewData["Title"] = "Items";
     var newItemId = ViewBag.NewItemId as Guid?;
@@ -49,6 +48,7 @@
                     </div>
                 </div>
                 <div class="header-border mb-4"></div>
+                <partial name="_ResponsePartial"></partial>
             </div>
             <!-- Search Bar and Value Fields -->
             <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">

@@ -2,14 +2,11 @@
 @using DevSkill.Inventory.Domain.Entities
 
 <div class="col-md-4 d-flex justify-content-center">
-    <div class="card item-box @if(ViewBag.IsNewItem == true) {
-    <text>new-item-highlight</text>
- }">
+    <a asp-area="Admin" asp-controller="Product" asp-action="Update" class="card item-box @if(ViewBag.IsNewItem == true) {<text>new-item-highlight</text>}">
         <img src="@Model.Image" alt="@Model.Title" class="card-img-top" />
         <h5 class="card-title">@Model.Title</h5>
         <div class="card-body">
             <!-- First Line: Item Title -->
-
             <!-- Second Line: Quantity and Price -->
             <div class="item-info">
                 <span class="item-quantity">Quantity: @Model.Quantity</span>
@@ -22,7 +19,8 @@
                 <i class="fas fa-tag"></i> @Model.Tags
             </div>
         </div>
-    </div>
+        <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" />
+    </a>
 </div>
 
 <style>
@@ -48,6 +46,17 @@
     }
     .item-box .card-body {
         padding: 10px;
+    }
+
+    /* Checkbox for delete */
+    .checkbox-delete {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: none; /* Initially hidden */
+    }
+    .item-box:hover .checkbox-delete {
+        display: block;
     }
 
     /*  Item Title  */
@@ -83,4 +92,5 @@
     .item-tag i {
         margin-right: 5px;
     }
+    
 </style>
