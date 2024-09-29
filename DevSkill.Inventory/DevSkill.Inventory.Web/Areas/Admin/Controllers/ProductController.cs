@@ -108,6 +108,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
+
             return View();
         }
 
