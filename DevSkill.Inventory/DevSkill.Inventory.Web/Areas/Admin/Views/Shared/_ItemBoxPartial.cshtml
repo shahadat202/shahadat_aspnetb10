@@ -2,7 +2,9 @@
 @using DevSkill.Inventory.Domain.Entities
 
 <div class="col-md-4 d-flex justify-content-center">
-    <a asp-area="Admin" asp-controller="Product" asp-action="Update" class="card item-box @if(ViewBag.IsNewItem == true) {<text>new-item-highlight</text>}">
+    <a asp-area="Admin" asp-controller="Product" asp-action="Update" class="card item-box @if(ViewBag.IsNewItem == true) {
+    <text>new-item-highlight</text>
+}">
         <img src="@Model.Image" alt="@Model.Title" class="card-img-top" />
         <h5 class="card-title">@Model.Title</h5>
         <div class="card-body">
@@ -36,25 +38,29 @@
         transition: transform 0.3s ease-in-out;
         background-color: #fff;
     }
-    .item-box:hover {
-        transform: scale(1.05);
-    }
-    .item-box img {
-        height: 150px;
-        width: 100%;
-        object-fit: cover;
-    }
-    .item-box .card-body {
-        padding: 10px;
-    }
+
+        .item-box:hover {
+            transform: scale(1.05);
+        }
+
+        .item-box img {
+            height: 150px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .item-box .card-body {
+            padding: 10px;
+        }
 
     /* Checkbox for delete */
     .checkbox-delete {
         position: absolute;
         top: 10px;
         right: 10px;
-        display: none; 
+        display: none; /* Initially hidden */
     }
+
     .item-box:hover .checkbox-delete {
         display: block;
     }
@@ -73,10 +79,12 @@
         font-size: 14px;
         margin-bottom: 20px;
     }
+
     .item-quantity, .item-price {
         font-size: 14px;
         color: #666;
     }
+
     .divider {
         margin: 0px 5px;
         color: #999;
@@ -89,22 +97,19 @@
         display: flex;
         align-items: center;
     }
-    .item-tag i {
-        margin-right: 5px;
-    }
-    
-</style>
 
+        .item-tag i {
+            margin-right: 5px;
+        }
+</style>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // Get all the checkboxes
         const checkboxes = document.querySelectorAll('.checkbox-delete');
 
         // Add event listeners to each checkbox
         checkboxes.forEach(function (checkbox) {
             checkbox.addEventListener('click', function () {
                 if (checkbox.checked) {
-                    // If any checkbox is clicked, show all checkboxes
                     checkboxes.forEach(function (cb) {
                         cb.style.display = 'block';
                     });

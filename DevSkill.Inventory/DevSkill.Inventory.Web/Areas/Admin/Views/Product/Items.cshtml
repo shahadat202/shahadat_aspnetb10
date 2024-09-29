@@ -51,7 +51,7 @@
                 <partial name="_ResponsePartial"></partial>
             </div>
 
-           <!-- Div for Selected Items -->
+            <!-- Div for Selected Items -->
             <div id="selectedItemsDiv" class="selected-items" style="display: none; margin-bottom: 10px;">
                 <div class="d-flex align-items-center">
                     <span id="selectedItemsText">0 items selected</span>
@@ -66,7 +66,7 @@
                         <i class="fas fa-trash"></i>
                     </span>
                 </div>
-            </div> 
+            </div>
 
             <!-- Search Bar and Value Fields -->
             <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
@@ -137,6 +137,7 @@
     </div>
 </div>
 <style>
+    /*  Selected div, when select any item  */
     .selected-items {
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -145,33 +146,51 @@
     }
 
     .delete-icon {
-        color: red; 
+        color: red;
     }
 </style>
-
 <script>
+    // Selected div section when select any item
     document.addEventListener('DOMContentLoaded', function () {
         const checkboxes = document.querySelectorAll('.checkbox-delete');
         const selectedItemsDiv = document.getElementById('selectedItemsDiv');
         const selectedItemsText = document.getElementById('selectedItemsText');
+        const selectAllItems = document.getElementById('selectAllItems');
+        const clearSelection = document.getElementById('clearSelection');
 
         let selectedCount = 0;
 
-        //Add event listeners to each checkbox
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('click', function () {
-                //Count selected checkboxes
-                selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+        // Function to update the selected items display
+        function updateSelectedItemsDisplay() {
+            selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            if (selectedCount > 0) {
+                selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
+                selectedItemsDiv.style.display = 'block';
+            } else {
+                selectedItemsText.textContent = `0 items selected`;
+                selectedItemsDiv.style.display = 'none';
+            }
+        }
 
-                //Update the display
-                if (selectedCount > 0) {
-                    selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
-                    selectedItemsDiv.style.display = 'block';
-                } else {
-                    selectedItemsText.textContent = `0 items selected`;
-                    selectedItemsDiv.style.display = 'none';
-                }
+        // Add event listeners to each checkbox
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('click', updateSelectedItemsDisplay);
+        });
+
+        // Event listener for "All" selection
+        selectAllItems.addEventListener('click', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = true;
             });
+            updateSelectedItemsDisplay();
+        });
+
+        // Event listener for "Clear Selection"
+        clearSelection.addEventListener('click', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+            updateSelectedItemsDisplay();
         });
     });
-</script> 
+</script>

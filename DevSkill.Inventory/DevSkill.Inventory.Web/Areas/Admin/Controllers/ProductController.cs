@@ -27,7 +27,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
-            return View();
+
+            var items = _productManagementService.GetAllProducts();
+            return View(items);
         }
         public IActionResult Items() // Items
         {
@@ -101,17 +103,15 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
             return View(model);
         }
+
         public IActionResult Update()
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
             return View();
         }
-        //public IActionResult AddItem()
-        //{
-        //    ViewData["HideNavbar"] = true;
-        //    ViewData["IsSidebarCollapsed"] = true;
-        //    return View();
-        //}
+
+        
+
     }
 }
