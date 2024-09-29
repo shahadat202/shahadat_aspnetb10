@@ -10,5 +10,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Models
         public string Tags { get; set; }
         public string Notes { get; set; }
         public IFormFile Image { get; set; }
+        public decimal TotalValue => Quantity * Price;
     }
 }

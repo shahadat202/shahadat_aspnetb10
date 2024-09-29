@@ -7,6 +7,7 @@ using DevSkill.Inventory.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using DevSkill.Inventory.Infrastructure;
+using AutoMapper;
 
 namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 {
@@ -15,11 +16,14 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
     {
         private readonly IProductManagementService _productManagementService;
         private readonly ILogger<ProductController> _logger;
+        //private readonly IMapper _mapper;
+        
         public ProductController(ILogger<ProductController> logger,
             IProductManagementService productManagementService)
         {
             _logger = logger;
             _productManagementService = productManagementService;
+            //_mapper = mapper;
         }
 
         [Authorize(Roles = "Member,Admin,Support")]

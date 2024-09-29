@@ -11,6 +11,5 @@ namespace DevSkill.Inventory.Application.Services
     {
         void InsertProduct(Product product);
         IEnumerable<Product> GetAllProducts();
-        void DeleteProduct(Guid id);
     }
 }

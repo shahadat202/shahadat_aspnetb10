@@ -21,11 +21,6 @@ namespace DevSkill.Inventory.Application.Services
             return _InventoryUnitOfWork.ProductRepository.GetAllProducts();
         }
         
-        public void DeleteProduct(Guid id)
-        {
-            _InventoryUnitOfWork.ProductRepository.Remove(id);
-            _InventoryUnitOfWork.Save();
-        }
     }
 }
  
