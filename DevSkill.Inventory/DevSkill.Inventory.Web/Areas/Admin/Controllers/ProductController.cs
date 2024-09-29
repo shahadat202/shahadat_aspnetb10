@@ -64,6 +64,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     Quantity = model.Quantity,
                     MinLevel = model.MinLevel,
                     Price = model.Price,
+                    TotalValue = model.Quantity * model.Price,
                     Tags = model.Tags,
                     Notes = model.Notes,
                     CreatedDate = DateTime.UtcNow
