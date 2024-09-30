@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DevSkill.Inventory.Web.Migrations.InventoryDb
+namespace DevSkill.Inventory.Web.Data.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20240929182213_AddTotalValueToProduct")]
-    partial class AddTotalValueToProduct
+    [Migration("20240930050818_AddTotalValue")]
+    partial class AddTotalValue
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

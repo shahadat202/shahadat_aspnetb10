@@ -32,15 +32,29 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
 
-            var items = _productManagementService.GetAllProducts();
-            return View(items);
+            var products = _productManagementService.GetAllProducts();
+
+            var itemCount = products.Count();
+            var totalQuantity = products.Sum(p => p.Quantity);
+
+            ViewBag.ItemCount = itemCount;
+            ViewBag.TotalQuantity = totalQuantity;
+
+            return View(products);
         }
-        public IActionResult Items() // Items
+        public IActionResult Items() 
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
 
-            var products = _productManagementService.GetAllProducts(); 
+            var products = _productManagementService.GetAllProducts();
+            
+            var itemCount = products.Count();
+            var totalQuantity = products.Sum(p => p.Quantity);
+
+            ViewBag.ItemCount = itemCount;
+            ViewBag.TotalQuantity = totalQuantity;
+            
             return View(products);
         }
 
@@ -117,7 +131,13 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View();
         }
 
-        
+        public IActionResult Tags()
+        {
+            ViewData["HideNavbar"] = true;
+            ViewData["IsSidebarCollapsed"] = true;
+
+            return View();
+        }
 
     }
 }

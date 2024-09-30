@@ -40,11 +40,6 @@
 <body class="hold-transition sidebar-mini layout-fixed @((ViewData["IsSidebarCollapsed"] != null && (bool)ViewData["IsSidebarCollapsed"]) ? "sidebar-collapse" : "")">
     <div class="wrapper">
 
-        <!-- Preloader -->
-        @* <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake" src="~/adminlte/img/AdminLTELogo.png" alt="AdminLTELogo" height="60" width="60">
-        </div> *@
-
         <!-- Navbar -->
         @if (ViewData["HideNavbar"] == null || !(bool)ViewData["HideNavbar"])
         {
@@ -91,6 +86,12 @@
                             <a href="#" class="nav-link">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                                 <p>Search</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Tags" class="nav-link">
+                                <i class="fas fa-tag"></i>
+                                <p>Tags</p>
                             </a>
                         </li>
                         <li class="nav-item">
