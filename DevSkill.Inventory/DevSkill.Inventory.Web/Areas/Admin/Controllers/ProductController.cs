@@ -36,9 +36,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
+            var totalValue = products.Sum(p => p.TotalValue);
 
             ViewBag.ItemCount = itemCount;
             ViewBag.TotalQuantity = totalQuantity;
+            ViewBag.TotalValue = totalValue;
 
             return View(products);
         }
@@ -48,13 +50,15 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewData["IsSidebarCollapsed"] = true;
 
             var products = _productManagementService.GetAllProducts();
-            
+
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
+            var totalValue = products.Sum(p => p.TotalValue);
 
             ViewBag.ItemCount = itemCount;
             ViewBag.TotalQuantity = totalQuantity;
-            
+            ViewBag.TotalValue = totalValue;
+
             return View(products);
         }
 
