@@ -61,25 +61,33 @@
             <!-- Photo Section  -->
             <div class="col-md-4 photo-section">
                 <h2>PHOTOS</h2>
+
+                <!-- Photo Upload Box -->
                 <div class="photo-box" style="margin-top: 20px;">
                     <i class="fas fa-trash delete-icon" id="delete-photo" onclick="deletePhoto()" style="display:none;"></i>
                     <label for="photo-input" class="photo-label">
                         <i class="fas fa-camera"></i> Add Photo
                     </label>
                     <input type="file" asp-for="Image" id="photo-input" class="photo-input" onchange="showPhoto(event)" />
-                    <img id="preview-photo" src="#" alt="Photo Preview" style="display:none;" />
+                    <!-- Existing Image Display -->
+                    <div class="existing-photo">
+                        @if (ViewData["ExistingImage"] != null)
+                        {
+                            <img src="@Url.Content(ViewData["ExistingImage"].ToString())" alt="Existing Product Image"/>
+                        }
+                    </div>
                 </div>
             </div> 
         </div>
         <div class="footer-buttons">
             <button type="button" class="discard-btn">DISCARD</button>
-            <button type="submit" class="save-btn">SAVE</button>
+            <button asp-area="Admin" asp-controller="Product" asp-action="Items" type="submit" class="save-btn">SAVE</button>
         </div>
     </form>
 </div>
 
 <script>
-    // Show the selected photo in the preview box
+    //Show the selected photo in the preview box
     function showPhoto(event) {
         var reader = new FileReader();
         reader.onload = function () {
@@ -91,7 +99,7 @@
         reader.readAsDataURL(event.target.files[0]);
     }
 
-    // Delete the photo and hide the preview and delete button
+    //Delete the photo and hide the preview and delete button
     function deletePhoto() {
         var preview = document.getElementById('preview-photo');
         preview.src = '#';

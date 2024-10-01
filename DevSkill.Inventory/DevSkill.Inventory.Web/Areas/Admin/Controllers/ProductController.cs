@@ -121,6 +121,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     });
                     _logger.LogError(ex, "Product insertion failed");
                 }
+                return Redirect("Items");
             }
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
 
@@ -135,7 +136,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
             Product product = _productManagementService.GetProduct(id);
             
-            _logger.LogError($"product ID: {id}");
             var model = new ProductUpdateModel
             {
                 Id = product.Id,
@@ -148,6 +148,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 Notes = product.Notes,
             };
 
+            ViewData["ExistingImage"] = product.Image;
             return View(model);
         }
 
