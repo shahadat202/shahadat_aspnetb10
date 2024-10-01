@@ -17,9 +17,24 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
         {
             _context = context;
         }
+        public bool IsTitleDuplicate(string title, Guid? id = null)
+        {
+            if (id.HasValue)
+            {
+                return GetCount(x => x.Id != id.Value && x.Title == title) > 0;
+            }
+            else
+            {
+                return GetCount(x => x.Title == title) > 0;
+            }
+        }
         public IEnumerable<Product> GetAllProducts()
         {
             return _context.Products.ToList();
+        }
+        public Product GetById(Guid id)
+        {
+            return _context.Products.FirstOrDefault(x => x.Id == id);
         }
     }
 }

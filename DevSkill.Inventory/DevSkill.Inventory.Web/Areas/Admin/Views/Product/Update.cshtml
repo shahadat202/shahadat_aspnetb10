@@ -37,7 +37,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="totalValue" class="input-label">Total Value</label>
-                        <input id="totalValue" placeholder="Total Value, $" class="details-input" required />
+                        <input asp-for="TotalValue" id="totalValue" placeholder="Total Value, $" class="details-input" required />
                     </div>
                 </div>
                 <div class="form-row">
@@ -69,9 +69,8 @@
                     <input type="file" asp-for="Image" id="photo-input" class="photo-input" onchange="showPhoto(event)" />
                     <img id="preview-photo" src="#" alt="Photo Preview" style="display:none;" />
                 </div>
-            </div>
+            </div> 
         </div>
-
         <div class="footer-buttons">
             <button type="button" class="discard-btn">DISCARD</button>
             <button type="submit" class="save-btn">SAVE</button>
@@ -242,3 +241,4 @@
         color: #fff;
     }
 </style>
+ 

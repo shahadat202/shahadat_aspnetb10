@@ -10,5 +10,7 @@ namespace DevSkill.Inventory.Domain.RepositoryContracts
     public interface IProductRepository : IRepositoryBase<Product, Guid>
     {
         IEnumerable<Product> GetAllProducts();
+        bool IsTitleDuplicate(string title, Guid? id = null);
+        Product GetById(Guid productId);
     }
 }

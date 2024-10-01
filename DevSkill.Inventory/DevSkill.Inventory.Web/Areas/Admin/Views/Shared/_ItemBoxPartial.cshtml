@@ -2,7 +2,7 @@
 @using DevSkill.Inventory.Domain.Entities
 
 <div class="col-md-4 d-flex justify-content-center">
-    <a asp-area="Admin" asp-controller="Product" asp-action="Update" class="card item-box @if(ViewBag.IsNewItem == true) {
+    <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@Model.Id" class="card item-box @if(ViewBag.IsNewItem == true) {
     <text>new-item-highlight</text>}">
         <img src="@Model.Image" alt="@Model.Title" class="card-img-top" />
         <h5 class="card-title">@Model.Title</h5>

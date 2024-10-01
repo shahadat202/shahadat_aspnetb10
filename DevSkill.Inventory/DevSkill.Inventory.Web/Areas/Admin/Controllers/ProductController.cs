@@ -127,12 +127,86 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        public IActionResult Update()
+        [Authorize(Roles = "Admin")]
+        public IActionResult Update(Guid id)
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
 
-            return View();
+            Product product = _productManagementService.GetProduct(id);
+            
+            _logger.LogError($"product ID: {id}");
+            var model = new ProductUpdateModel
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Quantity = product.Quantity,
+                Price = product.Price,
+                TotalValue = product.TotalValue,
+                MinLevel = product.MinLevel,
+                Tags = product.Tags,
+                Notes = product.Notes,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Update(ProductUpdateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var product = new Product
+                {
+                    Id = model.Id,
+                    Title = model.Title,
+                    Quantity = model.Quantity,
+                    MinLevel = model.MinLevel,
+                    Price = model.Price,
+                    TotalValue = model.Quantity * model.Price,
+                    Tags = model.Tags,
+                    Notes = model.Notes,
+                    CreatedDate = DateTime.UtcNow
+                };
+
+                // Image upload logic
+                if (model.Image != null && model.Image.Length > 0)
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", model.Image.FileName);
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.Image.CopyToAsync(stream);
+                    }
+                    product.Image = $"/uploadedImages/{model.Image.FileName}";
+                }
+                try
+                {
+                    _productManagementService.UpdateProduct(product);
+
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Product updated successfully",
+                        Type = ResponseTypes.Success
+                    });
+                    TempData["NewItemId"] = product.Id;
+                    return RedirectToAction("Items");
+                }
+                catch (Exception ex)
+                {
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Product update failed",
+                        Type = ResponseTypes.Danger
+                    });
+                    _logger.LogError(ex, "Product update failed");
+                }
+                return RedirectToAction("Items");
+            }
+            //model.SetCategoryValues(_categoryManagementService.GetCategories());
+
+            return View(model);
         }
 
         public IActionResult Tags()
