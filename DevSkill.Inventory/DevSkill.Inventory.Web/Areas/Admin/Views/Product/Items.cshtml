@@ -49,6 +49,7 @@
                 </div>
                 <div class="header-border mb-4"></div>
                 <partial name="_ResponsePartial"></partial>
+                <partial name="_ModalPartial"></partial>
             </div>
 
             <!-- Div for Selected Items -->
@@ -62,7 +63,7 @@
                             <a class="dropdown-item" href="#" id="clearSelection">Clear Selection</a>
                         </div>
                     </div>
-                    <span class="delete-icon" style="margin-left: auto; cursor: pointer; margin-right: 20px;">
+                    <span class="delete-icon show-bs-modal" data-id='${data}' value='${data}' style="margin-left: auto; cursor: pointer; margin-right: 20px;">
                         <i class="fas fa-trash"></i>
                     </span>
                 </div>
@@ -149,7 +150,95 @@
         color: red;
     }
 </style>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.checkbox-delete');
+        const selectedItemsDiv = document.getElementById('selectedItemsDiv');
+        const selectedItemsText = document.getElementById('selectedItemsText');
+        const selectAllItems = document.getElementById('selectAllItems');
+        const clearSelection = document.getElementById('clearSelection');
+        const deleteIcon = document.querySelector('.delete-icon');
+
+        let selectedCount = 0;
+
+        // Function to update the selected items display
+        function updateSelectedItemsDisplay() {
+            selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+            if (selectedCount > 0) {
+                selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
+                selectedItemsDiv.style.display = 'block';
+            } else {
+                selectedItemsText.textContent = `0 items selected`;
+                selectedItemsDiv.style.display = 'none';
+            }
+        }
+
+        // Add event listeners to each checkbox
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('click', updateSelectedItemsDisplay);
+        });
+
+        // Event listener for "All" selection
+        selectAllItems.addEventListener('click', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = true;
+            });
+            updateSelectedItemsDisplay();
+        });
+
+        // Event listener for "Clear Selection"
+        clearSelection.addEventListener('click', function () {
+            checkboxes.forEach(function (checkbox) {
+                checkbox.checked = false;
+            });
+            updateSelectedItemsDisplay();
+        });
+
+        // Handle delete icon click
+        $(document).on('click', '.delete-icon', function () {
+            let selectedItems = [];
+
+            // Get all checked checkboxes and collect their values (which are item IDs)
+            $('.checkbox-delete:checked').each(function () {
+                selectedItems.push($(this).val());
+            });
+
+            if (selectedItems.length === 0) {
+                alert('Please select at least one item to delete.');
+                return;
+            }
+
+            // Ask for confirmation before proceeding
+            if (confirm('Are you sure you want to delete the selected items?')) {
+                // Send the selected item IDs to the server
+                $.ajax({
+                    url: '@Url.Action("DeleteSelectedItems", "Product", new { area = "Admin" })', // Update the URL based on your setup
+                    type: 'POST',
+                    data: JSON.stringify({ ids: selectedItems }), // Send selected IDs as JSON
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response.success) {
+                            alert('Selected items deleted successfully.');
+                            // Optionally, refresh the page or remove the deleted items from the DOM
+                            location.reload(); // Reload the page after deletion
+                        } else {
+                            alert('Failed to delete items.');
+                        }
+                    },
+                    error: function () {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+        });
+    });
+
+</script>
+
+
+
+@* <script>
     // Selected div section when select any item
     document.addEventListener('DOMContentLoaded', function () {
         const checkboxes = document.querySelectorAll('.checkbox-delete');
@@ -193,4 +282,4 @@
             updateSelectedItemsDisplay();
         });
     });
-</script>
+</script> *@
