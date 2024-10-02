@@ -121,7 +121,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     });
                     _logger.LogError(ex, "Product insertion failed");
                 }
-                return Redirect("Items");
+                //return Redirect("Items");
             }
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
 
@@ -148,7 +148,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 Notes = product.Notes,
             };
 
-            ViewData["ExistingImage"] = product.Image;
+            //ViewData["ExistingImage"] = product.Image;
             return View(model);
         }
 
@@ -169,13 +169,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     Notes = model.Notes,
                     CreatedDate = DateTime.UtcNow
                 };
-
                 // Image upload logic
                 if (model.Image != null && model.Image.Length > 0)
                 {
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", model.Image.FileName);
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await model.Image.CopyToAsync(stream);
@@ -185,7 +183,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 try
                 {
                     _productManagementService.UpdateProduct(product);
-
                     TempData.Put("ResponseMessage", new ResponseModel
                     {
                         Message = "Product updated successfully",
@@ -206,7 +203,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 return RedirectToAction("Items");
             }
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
-
             return View(model);
         }
 
