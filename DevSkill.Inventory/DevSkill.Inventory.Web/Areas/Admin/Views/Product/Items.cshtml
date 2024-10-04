@@ -48,8 +48,7 @@
                     </div>
                 </div>
                 <div class="header-border mb-4"></div>
-                <partial name="_ResponsePartial"></partial>
-                <partial name="_ModalPartial"></partial>
+                <partial name="_ResponsePartial"></partial>                
             </div>
 
             <!-- Div for Selected Items -->
@@ -63,9 +62,13 @@
                             <a class="dropdown-item" href="#" id="clearSelection">Clear Selection</a>
                         </div>
                     </div>
-                    <span class="delete-icon show-bs-modal" data-id='${data}' value='${data}' style="margin-left: auto; cursor: pointer; margin-right: 20px;">
-                        <i class="fas fa-trash"></i>
-                    </span>
+                    <div class="ml-auto">
+                        <button type="button" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
+                            <i class="fas fa-trash"></i>
+                            Delete
+                        </button>
+                        <partial name="_ModalPartial"></partial>
+                    </div>
                 </div>
             </div>
 
@@ -107,8 +110,6 @@
                 {
                     @foreach (var item in Model)
                     {
-                        @* var isNewItem = newItemId.HasValue && newItemId == item.Id; *@
-
                         @Html.Partial("_ItemBoxPartial", item)
                     }
                 }
@@ -121,7 +122,7 @@
     </div>
 </div>
 
-<!-- Modal Structure -->
+<!-- Grid Modal Structure -->
 <div id="layoutModal" class="modal-right" style="margin-top:120px;">
     <div class="modal-content" style="border-radius: 5px;">
         <h5>LAYOUT TYPE</h5>
@@ -146,9 +147,6 @@
         background-color: #f9f9f9;
     }
 
-    .delete-icon {
-        color: red;
-    }
 </style>
 
 <script>
@@ -158,7 +156,7 @@
         const selectedItemsText = document.getElementById('selectedItemsText');
         const selectAllItems = document.getElementById('selectAllItems');
         const clearSelection = document.getElementById('clearSelection');
-        const deleteIcon = document.querySelector('.delete-icon');
+        const deleteButton = document.querySelector('.show-bs-modal'); 
 
         let selectedCount = 0;
 
@@ -195,91 +193,15 @@
             updateSelectedItemsDisplay();
         });
 
-        // Handle delete icon click
-        $(document).on('click', '.delete-icon', function () {
-            let selectedItems = [];
+        // Event listener for delete button click
+        deleteButton.addEventListener('click', function () {
+            $('#modal-default').modal('show'); 
+            const selectedIds = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value); 
 
-            // Get all checked checkboxes and collect their values (which are item IDs)
-            $('.checkbox-delete:checked').each(function () {
-                selectedItems.push($(this).val());
-            });
-
-            if (selectedItems.length === 0) {
-                alert('Please select at least one item to delete.');
-                return;
-            }
-
-            // Ask for confirmation before proceeding
-            if (confirm('Are you sure you want to delete the selected items?')) {
-                // Send the selected item IDs to the server
-                $.ajax({
-                    url: '@Url.Action("DeleteSelectedItems", "Product", new { area = "Admin" })', // Update the URL based on your setup
-                    type: 'POST',
-                    data: JSON.stringify({ ids: selectedItems }), // Send selected IDs as JSON
-                    contentType: 'application/json; charset=utf-8',
-                    success: function (response) {
-                        if (response.success) {
-                            alert('Selected items deleted successfully.');
-                            // Optionally, refresh the page or remove the deleted items from the DOM
-                            location.reload(); // Reload the page after deletion
-                        } else {
-                            alert('Failed to delete items.');
-                        }
-                    },
-                    error: function () {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            }
+            document.getElementById('deleteId').value = selectedIds.join(','); 
         });
     });
 
 </script>
-
-
-
-@* <script>
-    // Selected div section when select any item
-    document.addEventListener('DOMContentLoaded', function () {
-        const checkboxes = document.querySelectorAll('.checkbox-delete');
-        const selectedItemsDiv = document.getElementById('selectedItemsDiv');
-        const selectedItemsText = document.getElementById('selectedItemsText');
-        const selectAllItems = document.getElementById('selectAllItems');
-        const clearSelection = document.getElementById('clearSelection');
-
-        let selectedCount = 0;
-
-        // Function to update the selected items display
-        function updateSelectedItemsDisplay() {
-            selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-            if (selectedCount > 0) {
-                selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
-                selectedItemsDiv.style.display = 'block';
-            } else {
-                selectedItemsText.textContent = `0 items selected`;
-                selectedItemsDiv.style.display = 'none';
-            }
-        }
-
-        // Add event listeners to each checkbox
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('click', updateSelectedItemsDisplay);
-        });
-
-        // Event listener for "All" selection
-        selectAllItems.addEventListener('click', function () {
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = true;
-            });
-            updateSelectedItemsDisplay();
-        });
-
-        // Event listener for "Clear Selection"
-        clearSelection.addEventListener('click', function () {
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = false;
-            });
-            updateSelectedItemsDisplay();
-        });
-    });
-</script> *@

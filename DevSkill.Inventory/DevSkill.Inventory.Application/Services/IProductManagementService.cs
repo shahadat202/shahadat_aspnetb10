@@ -13,6 +13,6 @@ namespace DevSkill.Inventory.Application.Services
         IEnumerable<Product> GetAllProducts();
         Product GetProduct(Guid id);
         void UpdateProduct(Product product);
-        void DeleteBlogPost(Guid id);
+        void DeleteProduct(Guid id);
     }
 }

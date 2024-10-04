@@ -37,11 +37,12 @@ namespace DevSkill.Inventory.Application.Services
                 throw new InvalidOperationException("Title should be unique.");
         }
 
-        public void DeleteBlogPost(Guid id)
+        public void DeleteProduct(Guid id)
         {
             _InventoryUnitOfWork.ProductRepository.Remove(id);
-            _InventoryUnitOfWork.Save();
+            _InventoryUnitOfWork.Save();  
         }
+
     }
 }
  

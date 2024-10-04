@@ -211,7 +211,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             try
             {
-                // Ensure that there are items to delete
                 if (ids == null || !ids.Any())
                 {
                     TempData.Put("ResponseMessage", new ResponseModel
@@ -222,10 +221,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Call the service to delete each selected item
                 foreach (var id in ids)
                 {
-                    _productManagementService.DeleteBlogPost(id);
+                    _productManagementService.DeleteProduct(id); 
                 }
 
                 TempData.Put("ResponseMessage", new ResponseModel
@@ -247,6 +245,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+
 
         public IActionResult Tags()
         {
