@@ -74,7 +74,12 @@
 
             <!-- Search Bar and Value Fields -->
             <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
-                <form>
+                <form id="searchForm">
+                    <div class="input-group" style="max-width: 300px;">
+                        <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;">
+                    </div>
+                </form>
+                @* <form>
                     <div class="input-group" style="display: inline-flex; position: relative; max-width: 300px;">
                         <input type="text" class="form-control" id="folderSearch" placeholder="Search All Items" aria-label="Search folders" style="padding-left: 30px; border-bottom: none;">
                         <div class="input-group-append" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;">
@@ -85,7 +90,7 @@
                         <!--Grid icon-->
                         <i class="fas fa-th-large grid-icon" id="gridIcon" style="position: absolute; right: -630px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
                     </div>
-                </form>
+                </form>  *@
 
                 <!-- Closer Value Fields -->
                 <div class="value-fields" style="padding: 10px 0;">
