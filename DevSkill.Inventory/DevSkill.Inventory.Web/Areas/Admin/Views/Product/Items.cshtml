@@ -108,7 +108,6 @@
                                 <img src="@item.Image" alt="@item.Title" class="card-img-top" />
                                 <h5 class="card-title">@item.Title</h5>
                                 <div class="card-body">
-                                    <!-- First Line: Item Title -->
                                     <!-- Second Line: Quantity and Price -->
                                     <div class="item-info">
                                         <span class="item-quantity">Quantity: @item.Quantity</span>
@@ -126,7 +125,6 @@
                                 <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" value="@item.Id" />
                             </a>
                         </div>
-                        <!-- End merged _ItemBoxPartial content -->
                     }
                 }
                 else
@@ -137,73 +135,7 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const checkboxes = document.querySelectorAll('.checkbox-delete');
-        const selectedItemsDiv = document.getElementById('selectedItemsDiv');
-        const selectedItemsText = document.getElementById('selectedItemsText');
-        const selectAllItems = document.getElementById('selectAllItems');
-        const clearSelection = document.getElementById('clearSelection');
-        const deleteButton = document.querySelector('.show-bs-modal');
 
-        let selectedCount = 0;
-
-        // Add event listeners to each checkbox
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('click', function () {
-                if (checkbox.checked) {
-                    checkboxes.forEach(function (cb) {
-                        cb.style.display = 'block';
-                    });
-                }
-            });
-        });
-
-        // Function to update the selected items display
-        function updateSelectedItemsDisplay() {
-            selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-            if (selectedCount > 0) {
-                selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
-                selectedItemsDiv.style.display = 'block';
-            } else {
-                selectedItemsText.textContent = `0 items selected`;
-                selectedItemsDiv.style.display = 'none';
-            }
-        }
-
-        // Add event listeners to each checkbox
-        checkboxes.forEach(function (checkbox) {
-            checkbox.addEventListener('click', updateSelectedItemsDisplay);
-        });
-
-        // Event listener for "All" selection
-        selectAllItems.addEventListener('click', function () {
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = true;
-            });
-            updateSelectedItemsDisplay();
-        });
-
-        // Event listener for "Clear Selection"
-        clearSelection.addEventListener('click', function () {
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = false;
-            });
-            updateSelectedItemsDisplay();
-        });
-
-        // Event listener for delete button click
-        deleteButton.addEventListener('click', function () {
-            $('#modal-default').modal('show');
-            const selectedIds = Array.from(checkboxes)
-                .filter(cb => cb.checked)
-                .map(cb => cb.value);
-
-            document.getElementById('deleteId').value = selectedIds.join(',');
-        });
-    });
-
-</script>
 <style>
     /*  Selected div, when select any item  */
     .selected-items {
