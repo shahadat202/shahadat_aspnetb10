@@ -31,14 +31,16 @@ document.addEventListener('DOMContentLoaded', function () {
         items.forEach(item => {
             const title = item.querySelector('.card-title').textContent.toLowerCase();
             if (title.includes(searchTerm)) {
-                item.style.display = 'block';
+                item.style.visibility = 'visible';
+                item.style.opacity = '1';
                 visibleItemCount++;
                 const itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
                 const itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
                 totalQuantity += itemQuantity;
                 totalValue += itemPrice;
             } else {
-                item.style.display = 'none';
+                item.style.visibility = 'hidden';
+                item.style.opacity = '0';
             }
         });
 
@@ -47,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         totalQuantityField.textContent = totalQuantity;
         totalValueField.textContent = totalValue.toFixed(2) + ' $';
     });
+
 
     let selectedCount = 0;
 
