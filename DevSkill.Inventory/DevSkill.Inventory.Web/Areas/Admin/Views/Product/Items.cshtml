@@ -23,7 +23,7 @@
                             </div>
                             <div class="header-border mb-4"></div>
                         </div>
-                    </form> 
+                    </form>
                     <!-- All Items Section -->
                     <div class="all-items">
                         <h5 class="all-items-title" style="cursor: pointer; padding: 10px;">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="header-border mb-4"></div>
-                <partial name="_ResponsePartial"></partial>                
+                <partial name="_ResponsePartial"></partial>
             </div>
 
             <!-- Div for Selected Items -->
@@ -110,7 +110,31 @@
                 {
                     @foreach (var item in Model)
                     {
-                        @Html.Partial("_ItemBoxPartial", item)
+                        <!-- Begin merged _ItemBoxPartial content -->
+                        <div class="col-md-4 d-flex justify-content-center">
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
+                                <img src="@item.Image" alt="@item.Title" class="card-img-top" />
+                                <h5 class="card-title">@item.Title</h5>
+                                <div class="card-body">
+                                    <!-- First Line: Item Title -->
+                                    <!-- Second Line: Quantity and Price -->
+                                    <div class="item-info">
+                                        <span class="item-quantity">Quantity: @item.Quantity</span>
+                                        <span class="divider">|</span>
+                                        <span class="item-price">Price: @item.Price $</span>
+                                    </div>
+
+                                    <!-- Third Line: Tag Icon and Tag -->
+                                    <div class="item-tag">
+                                        <i class="fas fa-tag"></i> @item.Tags
+                                        <span class="divider">|</span>
+                                        <span class="item-price">Total: @item.TotalValue,$</span>
+                                    </div>
+                                </div>
+                                <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" value="@item.Id" />
+                            </a>
+                        </div>
+                        <!-- End merged _ItemBoxPartial content -->
                     }
                 }
                 else
@@ -138,16 +162,6 @@
         </div>
     </div>
 </div>
-<style>
-    /*  Selected div, when select any item  */
-    .selected-items {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 10px;
-        background-color: #f9f9f9;
-    }
-
-</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -156,9 +170,20 @@
         const selectedItemsText = document.getElementById('selectedItemsText');
         const selectAllItems = document.getElementById('selectAllItems');
         const clearSelection = document.getElementById('clearSelection');
-        const deleteButton = document.querySelector('.show-bs-modal'); 
+        const deleteButton = document.querySelector('.show-bs-modal');
 
         let selectedCount = 0;
+
+        // Add event listeners to each checkbox
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('click', function () {
+                if (checkbox.checked) {
+                    checkboxes.forEach(function (cb) {
+                        cb.style.display = 'block';
+                    });
+                }
+            });
+        });
 
         // Function to update the selected items display
         function updateSelectedItemsDisplay() {
@@ -195,13 +220,100 @@
 
         // Event listener for delete button click
         deleteButton.addEventListener('click', function () {
-            $('#modal-default').modal('show'); 
+            $('#modal-default').modal('show');
             const selectedIds = Array.from(checkboxes)
                 .filter(cb => cb.checked)
-                .map(cb => cb.value); 
+                .map(cb => cb.value);
 
-            document.getElementById('deleteId').value = selectedIds.join(','); 
+            document.getElementById('deleteId').value = selectedIds.join(',');
         });
     });
 
 </script>
+<style>
+    /*  Selected div, when select any item  */
+    .selected-items {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    /* Style for the Item Box */
+    .item-box {
+        height: 270px;
+        width: 230px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        background-color: #fff;
+    }
+
+        .item-box:hover {
+            transform: scale(1.05);
+        }
+
+        .item-box img {
+            height: 150px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .item-box .card-body {
+            padding: 10px;
+        }
+
+    /* Checkbox for delete */
+    .checkbox-delete {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: none; /* Initially hidden */
+    }
+
+    .item-box:hover .checkbox-delete {
+        display: block;
+    }
+
+    /*  Item Title  */
+    .item-box h5 {
+        font-size: 16px;
+        margin: 5px 0px 8px 10px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /*  Quantity and Price  */
+    .item-info {
+        align-items: center;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .item-quantity, .item-price {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .divider {
+        margin: 0px 5px;
+        color: #999;
+    }
+
+    /*  Tag Icon and Tag  */
+    .item-tag {
+        font-size: 13px;
+        color: #666;
+        display: flex;
+        align-items: center;
+    }
+
+        .item-tag i {
+            margin-right: 5px;
+        }
+</style>
+
+

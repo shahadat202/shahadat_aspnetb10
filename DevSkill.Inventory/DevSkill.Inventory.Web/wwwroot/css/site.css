@@ -145,7 +145,7 @@ body {
     margin-left: 10px;
 }
 
-/*   Modal Styles  */
+/*  Grid Modal Styles  */
 #layoutModal {
     position: fixed;
     top: 50px;
@@ -183,6 +183,7 @@ body {
 .modal-backdrop {
     display: none;
 }
+
 
 
 
