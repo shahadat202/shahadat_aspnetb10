@@ -1,6 +1,4 @@
-﻿
-
-//-- Item page content ---  
+﻿//-- Item page content ---  
 document.addEventListener('DOMContentLoaded', function () {
     const checkboxes = document.querySelectorAll('.checkbox-delete');
     const selectedItemsDiv = document.getElementById('selectedItemsDiv');
@@ -8,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectAllItems = document.getElementById('selectAllItems');
     const clearSelection = document.getElementById('clearSelection');
     const deleteButton = document.querySelector('.show-bs-modal');
-    
+
     const searchInput = document.getElementById('searchAllItems');
     const items = document.querySelectorAll('.item-box');
     const itemCountField = document.getElementById('itemCount');
@@ -16,17 +14,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const totalValueField = document.getElementById('totalValue');
 
     // Form submission when Enter key is pressed
-    searchInput.addEventListener('keydown', function(event) {
+    searchInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            event.preventDefault(); 
+            event.preventDefault();
         }
     });
 
+    // Add event listeners to input search section
     searchInput.addEventListener('input', function () {
         const searchTerm = searchInput.value.toLowerCase();
         let visibleItemCount = 0;
         let totalQuantity = 0;
-        let totalValue = 0;
+        let totalValue = 0; 
 
         items.forEach(item => {
             const title = item.querySelector('.card-title').textContent.toLowerCase();
@@ -34,10 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.style.visibility = 'visible';
                 item.style.opacity = '1';
                 visibleItemCount++;
+
                 const itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
                 const itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                const itemTotalValue = itemQuantity * itemPrice; 
+
                 totalQuantity += itemQuantity;
-                totalValue += itemPrice;
+                totalValue += itemTotalValue;
             } else {
                 item.style.visibility = 'hidden';
                 item.style.opacity = '0';
@@ -49,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalQuantityField.textContent = totalQuantity;
         totalValueField.textContent = totalValue.toFixed(2) + ' $';
     });
-
 
     let selectedCount = 0;
 
