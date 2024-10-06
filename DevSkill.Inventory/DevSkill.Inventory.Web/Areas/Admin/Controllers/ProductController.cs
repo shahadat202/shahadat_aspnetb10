@@ -207,11 +207,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult Delete(List<Guid> ids)
+        public IActionResult Delete(string ids)
         {
             try
             {
-                if (ids == null || !ids.Any())
+                if (string.IsNullOrEmpty(ids))
                 {
                     TempData.Put("ResponseMessage", new ResponseModel
                     {
@@ -221,9 +221,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     return RedirectToAction("Index");
                 }
 
-                foreach (var id in ids)
+                var idList = ids.Split(',').Select(id => Guid.Parse(id)) .ToList();
+
+                foreach (var id in idList)
                 {
-                    _productManagementService.DeleteProduct(id); 
+                    _productManagementService.DeleteProduct(id);
                 }
 
                 TempData.Put("ResponseMessage", new ResponseModel
@@ -232,6 +234,15 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     Type = ResponseTypes.Success
                 });
 
+                return RedirectToAction("Index");
+            }
+            catch (FormatException)
+            {
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "One or more IDs are not valid GUIDs",
+                    Type = ResponseTypes.Danger
+                });
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -245,6 +256,48 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+
+        //[HttpPost, ValidateAntiForgeryToken]
+        //public IActionResult Delete(List<Guid> ids)
+        //{
+        //    try
+        //    {
+        //        if (ids == null || !ids.Any())
+        //        {
+        //            TempData.Put("ResponseMessage", new ResponseModel
+        //            {
+        //                Message = "No items selected for deletion",
+        //                Type = ResponseTypes.Danger
+        //            });
+        //            return RedirectToAction("Index");
+        //        }
+
+        //        foreach (var id in ids)
+        //        {
+        //            _productManagementService.DeleteProduct(id);
+        //        }
+
+        //        TempData.Put("ResponseMessage", new ResponseModel
+        //        {
+        //            Message = "Selected items deleted successfully",
+        //            Type = ResponseTypes.Success
+        //        });
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData.Put("ResponseMessage", new ResponseModel
+        //        {
+        //            Message = "Failed to delete selected items",
+        //            Type = ResponseTypes.Danger
+        //        });
+        //        _logger.LogError(ex, "Error occurred while deleting items");
+        //        return RedirectToAction("Index");
+        //    }
+        //}
+
 
 
 

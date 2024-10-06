@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<Product> 
 @using DevSkill.Inventory.Domain.Entities
 @{
     ViewData["Title"] = "Items";
@@ -64,8 +64,7 @@
                     </div>
                     <div class="ml-auto">
                         <button type="button" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
-                            <i class="fas fa-trash"></i>
-                            Delete
+                            <i class="fas fa-trash"></i> Delete
                         </button>
                         <partial name="_ModalPartial"></partial>
                     </div>
@@ -92,12 +91,12 @@
                             <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
                         </div>
                         <div class="col-md-3 no-padding">
-                            <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue $</span>
+                            <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin: 0;">
+            <div id="products" class="row" style="margin: 0;">
                 @if (Model != null && Model.Any())
                 {
                     @foreach (var item in Model)
@@ -113,7 +112,7 @@
                                     <div class="item-info">
                                         <span class="item-quantity">Quantity: @item.Quantity</span>
                                         <span class="divider">|</span>
-                                        <span class="item-price">Price: @item.Price $</span>
+                                        <span class="item-price">Price: @item.Price, $</span>
                                     </div>
 
                                     <!-- Third Line: Tag Icon and Tag -->
@@ -136,7 +135,45 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButton = document.querySelector('.show-bs-modal');
 
+        const searchInput = document.getElementById('searchAllItems');
+        const items = document.querySelectorAll('.item-box');
+
+        // Show items serially when search
+        searchInput.addEventListener('input', function () {
+            const searchValue = searchInput.value.toLowerCase();
+            items.forEach(function (item) {
+                const title = item.querySelector('.card-title').textContent.toLowerCase();
+
+                if (title.includes(searchValue)) {
+                    item.style.display = 'flex';
+                    item.style.margin = '0px 45px 20px 40px';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            // After filtering, reflow the visible items
+            const filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+
+            const productsContainer = document.getElementById('products');
+            productsContainer.innerHTML = '';
+            filteredItems.forEach(item => productsContainer.appendChild(item));
+        });
+
+        // Event listener for delete button click
+        deleteButton.addEventListener('click', function () {
+            $('#modal-default').modal('show');
+            const selectedIds = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            document.getElementById('deleteId').value = selectedIds.join(',');
+        }); 
+    });
+</script>
 <style>
     /*  Selected div, when select any item  */
     .selected-items {
@@ -146,7 +183,7 @@
         background-color: #f9f9f9;
     }
 
-    /* Style for the Item Box */
+    /* Style for the Product or Item Box  */
     .item-box {
         height: 270px;
         width: 230px;
@@ -155,7 +192,7 @@
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
+        transition: opacity 0.3s ease, transform 0.3s ease-in-out;
         background-color: #fff;
     }
 
@@ -178,7 +215,7 @@
         position: absolute;
         top: 10px;
         right: 10px;
-        display: none; /* Initially hidden */
+        display: none; 
     }
 
     .item-box:hover .checkbox-delete {
@@ -222,5 +259,9 @@
             margin-right: 5px;
         }
 </style>
+
+
+
+
 
 
