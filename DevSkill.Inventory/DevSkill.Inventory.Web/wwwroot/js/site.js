@@ -19,33 +19,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Add event listeners to input search section, show items serially, update countable field.
+    // Add event listeners to input search section. Update countable field.
     searchInput.addEventListener('input', function () {
         const searchTerm = searchInput.value.toLowerCase();
         let visibleItemCount = 0;
         let totalQuantity = 0;
-        let totalValue = 0;
+        let totalValue = 0; 
 
         items.forEach(item => {
             const title = item.querySelector('.card-title').textContent.toLowerCase();
             if (title.includes(searchTerm)) {
                 item.style.visibility = 'visible';
                 item.style.opacity = '1';
-                item.style.display = 'flex'; 
-                item.style.margin = '0px 45px 20px 45px'; 
-
                 visibleItemCount++;
 
                 const itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
                 const itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
-                const itemTotalValue = itemQuantity * itemPrice;
+                const itemTotalValue = itemQuantity * itemPrice; 
 
                 totalQuantity += itemQuantity;
                 totalValue += itemTotalValue;
             } else {
                 item.style.visibility = 'hidden';
                 item.style.opacity = '0';
-                item.style.display = 'none'; 
             }
         });
 
@@ -56,6 +52,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     let selectedCount = 0;
+
+    // Add event listeners to each checkbox
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('click', function () {
+            if (checkbox.checked) {
+                checkboxes.forEach(function (cb) {
+                    cb.style.display = 'block';
+                });
+            }
+        });
+    });
 
     // Function to update the selected items display
     function updateSelectedItemsDisplay() {
@@ -89,6 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         updateSelectedItemsDisplay();
     });
+
 });
+
+
 
 
