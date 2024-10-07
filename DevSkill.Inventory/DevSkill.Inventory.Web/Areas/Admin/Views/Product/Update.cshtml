@@ -9,7 +9,7 @@
             <h1 class="ms-2">Edit Item</h1>
         </div>
         <div class="title-right text-end">
-            <strong style="font-style: italic;">Created Date: @Model.CreatedDate.ToString("dd-MMM-yyyy")</strong><br />
+            <strong style="font-style: italic;">Inserted Date: @Model.CreatedDate.ToString("dd-MMM-yyyy")</strong><br />
             <strong style="font-style: italic;">Product Id: @Model.Id</strong>
         </div>
     </div>
@@ -76,18 +76,10 @@
                     <input type="file" asp-for="Image" id="photo-input" class="photo-input" onchange="showPhoto(event)" />
                     
                     <img id="preview-photo" src="#" alt="Photo Preview" style="display:none;" />
-                    <!-- Existing Image Display -->
-                    @* <div class="existing-photo">
-                        @if (ViewData["ExistingImage"] != null)
-                        {
-                            <img src="@Url.Content(ViewData["ExistingImage"].ToString())" alt="Existing Product Image"/>
-                        }
-                    </div> *@
                 </div>
             </div> 
         </div>
         <div class="footer-buttons">
-            @* <button asp-area="Admin" asp-controller="Product" asp-action="Items" type="submit" class="save-btn">SAVE</button> *@
             <button type="submit" class="save-btn">SAVE</button>
         </div>
     </form>
@@ -256,4 +248,4 @@
         color: #fff;
     }
 </style>
- 
+

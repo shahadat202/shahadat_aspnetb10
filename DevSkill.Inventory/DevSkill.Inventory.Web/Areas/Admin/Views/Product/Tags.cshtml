@@ -1,7 +1,254 @@
-﻿
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
 @{
-    ViewData["Title"] = "Tags";
+    ViewData["Title"] = "Items";
+    var newItemId = ViewBag.NewItemId as Guid?;
 }
 
-<h1>Tags</h1>
+<div class="content-wrapper">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-md-3" style="position: sticky; top: 0; height: 100vh;">
+            <div class="card" style="height: 100vh;">
+                <div class="card-body" style="overflow-y: auto;">
+                    <form class="search-container">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="search-icon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" id="folderSearch" placeholder="Search tags" aria-label="Search tags">
+                            </div>
+                            <div class="header-border mb-4"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="fixed-header">
+                <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
+                    <h1 class="items-title">Tags</h1>
+                </div>
+                <div class="header-border mb-4"></div>
+                <partial name="_ResponsePartial"></partial>
+            </div>
+
+            <!-- Div for Selected Items -->
+            <div id="selectedItemsDiv" class="selected-items" style="display: none; margin-bottom: 10px;">
+                <div class="d-flex align-items-center">
+                    <span id="selectedItemsText">0 items selected</span>
+                    <div class="dropdown" style="padding-left: 3px;">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 2px;">
+                            <a class="dropdown-item" href="#" id="selectAllItems">All</a>
+                            <a class="dropdown-item" href="#" id="clearSelection">Clear Selection</a>
+                        </div>
+                    </div>
+                    <div class="ml-auto">
+                        <button type="button" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                        <partial name="_ModalPartial"></partial>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar and Value Fields -->
+            <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
+                <form id="searchForm">
+                    <div class="input-group" style="max-width: 300px;">
+                        <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;">
+                    </div>
+                </form>
+                <!-- Closer Value Fields -->
+                <div class="value-fields" style="padding: 10px 0;">
+                    <div class="row" style="margin: 0;">
+                        <div class="col-md-3 no-padding">
+                            <strong>Folders:</strong> <span id="folderCount">0</span>
+                        </div>
+                        <div class="col-md-3 no-padding">
+                            <strong>Items:</strong> <span id="itemCount">@ViewBag.ItemCount</span>
+                        </div>
+                        <div class="col-md-3 no-padding">
+                            <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
+                        </div>
+                        <div class="col-md-3 no-padding">
+                            <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="products" class="row" style="margin: 0;">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <!-- Begin merged _ItemBoxPartial content -->
+                        <div class="col-md-4 d-flex justify-content-center">
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
+                                <span class="item-serial"></span>
+                                <img src="@item.Image" alt="@item.Title" class="card-img-top" />
+                                <h5 class="card-title">@item.Title</h5>
+                                <div class="card-body">
+                                    <!-- Second Line: Quantity and Price -->
+                                    <div class="item-info">
+                                        <span class="item-quantity">Quantity: @item.Quantity</span>
+                                        <span class="divider">|</span>
+                                        <span class="item-price">Price: @item.Price, $</span>
+                                    </div>
+
+                                    <!-- Third Line: Tag Icon and Tag -->
+                                    <div class="item-tag">
+                                        <i class="fas fa-tag card-tag"></i> @item.Tags
+                                        <span class="divider">|</span>
+                                        <span class="item-price" id="totalValue">Total: @item.TotalValue,$</span>
+                                    </div>
+                                </div>
+                                <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" value="@item.Id" />
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No items available now.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchAllItems');
+        const items = document.querySelectorAll('.item-box');
+        const deleteButton = document.querySelector('.show-bs-modal');
+
+        // Show items serially when search
+        searchInput.addEventListener('input', function () {
+            const searchValue = searchInput.value.toLowerCase();
+            items.forEach(function (item) {
+                const title = item.querySelector('.card-title').textContent.toLowerCase();
+
+                if (title.includes(searchValue)) {
+                    item.style.display = 'flex';
+                    item.style.margin = '0px 45px 20px 40px';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            // After filtering, reflow the visible items
+            const filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+
+            const productsContainer = document.getElementById('products');
+            productsContainer.innerHTML = '';
+            filteredItems.forEach(item => productsContainer.appendChild(item));
+        });
+
+        // Event listener for delete button click
+        deleteButton.addEventListener('click', function () {
+            $('#modal-default').modal('show');
+            const selectedIds = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+
+            document.getElementById('deleteId').value = selectedIds.join(',');
+        });
+    });
+</script>
+<style>
+    /*  Selected div, when select any item  */
+    .selected-items {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+
+    /* Style for the Product or Item Box  */
+    .item-box {
+        height: 270px;
+        width: 230px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+        background-color: #fff;
+    }
+
+        .item-box:hover {
+            transform: scale(1.05);
+        }
+
+        .item-box img {
+            height: 150px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .item-box .card-body {
+            padding: 10px;
+        }
+
+    /* Checkbox for delete */
+    .checkbox-delete {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: none;
+    }
+
+    .item-box:hover .checkbox-delete {
+        display: block;
+    }
+
+    /*  Item Title  */
+    .item-box h5 {
+        font-size: 16px;
+        margin: 5px 0px 8px 10px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    /*  Quantity and Price  */
+    .item-info {
+        align-items: center;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .item-quantity, .item-price {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .divider {
+        margin: 0px 5px;
+        color: #999;
+    }
+
+    /*  Tag Icon and Tag  */
+    .item-tag {
+        font-size: 13px;
+        color: #666;
+        display: flex;
+        align-items: center;
+    }
+
+        .item-tag i {
+            margin-right: 5px;
+        }
+
+</style>
+
+
+
+
+
 

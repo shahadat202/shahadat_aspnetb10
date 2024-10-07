@@ -36,5 +36,6 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
         {
             return _context.Products.FirstOrDefault(x => x.Id == id);
         }
+
     }
 }

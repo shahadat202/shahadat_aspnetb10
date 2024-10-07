@@ -121,7 +121,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     });
                     _logger.LogError(ex, "Product insertion failed");
                 }
-                //return Redirect("Items");
             }
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
 
@@ -149,7 +148,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 CreatedDate = product.CreatedDate,
             };
 
-            //ViewData["ExistingImage"] = product.Image;
             return View(model);
         }
 
@@ -205,6 +203,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
             return View(model);
         }
+
+
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Delete(string ids)
@@ -306,7 +306,17 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
 
-            return View();
+            var products = _productManagementService.GetAllProducts();
+
+            var itemCount = products.Count();
+            var totalQuantity = products.Sum(p => p.Quantity);
+            var totalValue = products.Sum(p => p.TotalValue);
+
+            ViewBag.ItemCount = itemCount;
+            ViewBag.TotalQuantity = totalQuantity;
+            ViewBag.TotalValue = totalValue;
+
+            return View(products);
         }
 
     }

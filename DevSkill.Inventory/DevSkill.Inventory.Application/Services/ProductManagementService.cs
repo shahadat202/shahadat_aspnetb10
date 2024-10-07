@@ -42,7 +42,6 @@ namespace DevSkill.Inventory.Application.Services
             _InventoryUnitOfWork.ProductRepository.Remove(id);
             _InventoryUnitOfWork.Save();  
         }
-
     }
 }
  
