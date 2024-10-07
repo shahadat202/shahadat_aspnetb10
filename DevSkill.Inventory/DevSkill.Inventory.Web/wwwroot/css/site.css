@@ -130,7 +130,6 @@ body {
     margin-bottom: 20px;
 }
 
-
 /*   Countable fields (Folders, Items, Total Quantity, Total Value) */
 .no-padding {
     padding: 0 !important; 
@@ -147,6 +146,90 @@ body {
 .button-group {
     margin-left: 10px;
 }
+
+/*  Selected div, when select any item  */
+.selected-items {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+/* Style for the Product or Item Box  */
+.item-box {
+    height: 270px;
+    width: 230px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.3s ease, transform 0.3s ease-in-out;
+    background-color: #fff;
+}
+
+    .item-box:hover {
+        transform: scale(1.05);
+    }
+
+    .item-box img {
+        height: 150px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .item-box .card-body {
+        padding: 10px;
+    }
+
+/* Checkbox for delete */
+.checkbox-delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
+}
+
+.item-box:hover .checkbox-delete {
+    display: block;
+}
+
+/*  Item Title  */
+.item-box h5 {
+    font-size: 16px;
+    margin: 5px 0px 8px 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+/*  Quantity and Price  */
+.item-info {
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.item-quantity, .item-price {
+    font-size: 14px;
+    color: #666;
+}
+
+.divider {
+    margin: 0px 5px;
+    color: #999;
+}
+
+/*  Tag Icon and Tag  */
+.item-tag {
+    font-size: 13px;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+    .item-tag i {
+        margin-right: 5px;
+    }
 
 
 

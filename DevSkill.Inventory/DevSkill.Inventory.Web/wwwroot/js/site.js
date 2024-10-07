@@ -1,4 +1,4 @@
-﻿//-- Item page content ---  
+﻿//-- Item page content ---
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchAllItems');
     const items = document.querySelectorAll('.item-box');
@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const selectedItemsText = document.getElementById('selectedItemsText');
     const selectAllItems = document.getElementById('selectAllItems');
     const clearSelection = document.getElementById('clearSelection');
+    const deleteButton = document.querySelector('.show-bs-modal');
 
     // Form submission when Enter key is pressed
     searchInput.addEventListener('keydown', function (event) {
@@ -18,39 +19,44 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
         }
     });
-
-    // Add event listeners to input search section. Update countable field.
+    // Show items serially when search
     searchInput.addEventListener('input', function () {
+        const searchValue = searchInput.value.toLowerCase();
         const searchTerm = searchInput.value.toLowerCase();
         let visibleItemCount = 0;
         let totalQuantity = 0;
-        let totalValue = 0; 
-
-        items.forEach(item => {
+        let totalValue = 0;
+        items.forEach(function (item) {
             const title = item.querySelector('.card-title').textContent.toLowerCase();
-            if (title.includes(searchTerm)) {
-                item.style.visibility = 'visible';
-                item.style.opacity = '1';
+
+            if (title.includes(searchValue)) {
+                item.style.display = 'flex';
+                item.style.margin = '0px 45px 20px 40px';
                 visibleItemCount++;
 
                 const itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
                 const itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
-                const itemTotalValue = itemQuantity * itemPrice; 
+                const itemTotalValue = itemQuantity * itemPrice;
 
                 totalQuantity += itemQuantity;
                 totalValue += itemTotalValue;
             } else {
-                item.style.visibility = 'hidden';
-                item.style.opacity = '0';
+                item.style.display = 'none';
             }
         });
+        // After filtering, reflow the visible items
+        const filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+
+        const productsContainer = document.getElementById('products');
+        productsContainer.innerHTML = '';
+        filteredItems.forEach(item => productsContainer.appendChild(item));
 
         // Update countable fields
         itemCountField.textContent = visibleItemCount;
         totalQuantityField.textContent = totalQuantity;
         totalValueField.textContent = totalValue.toFixed(2) + ' $';
     });
-
+   
     let selectedCount = 0;
 
     // Add event listeners to each checkbox
@@ -97,7 +103,18 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSelectedItemsDisplay();
     });
 
+    // Event listener for delete button click
+    deleteButton.addEventListener('click', function () {
+        $('#modal-default').modal('show');
+        const selectedIds = Array.from(checkboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+
+        document.getElementById('deleteId').value = selectedIds.join(',');
+    });
 });
+
+
 
 
 
