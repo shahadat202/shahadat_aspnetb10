@@ -11,5 +11,6 @@
         public string Notes { get; set; }
         public IFormFile Image { get; set; }
         public decimal TotalValue { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

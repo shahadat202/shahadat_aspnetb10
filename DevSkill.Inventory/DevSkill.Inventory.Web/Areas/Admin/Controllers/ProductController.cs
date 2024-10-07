@@ -146,6 +146,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 MinLevel = product.MinLevel,
                 Tags = product.Tags,
                 Notes = product.Notes,
+                CreatedDate = product.CreatedDate,
             };
 
             //ViewData["ExistingImage"] = product.Image;
@@ -167,7 +168,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     TotalValue = model.Quantity * model.Price,
                     Tags = model.Tags,
                     Notes = model.Notes,
-                    CreatedDate = DateTime.UtcNow
                 };
                 // Image upload logic
                 if (model.Image != null && model.Image.Length > 0)

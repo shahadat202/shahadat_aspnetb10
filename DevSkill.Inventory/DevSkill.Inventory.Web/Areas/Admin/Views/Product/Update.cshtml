@@ -3,11 +3,16 @@
     ViewData["Title"] = "Update";
 }
 <div class="container-fluid">
-    <div class="page-title">
-        <i class="fas fa-box"></i>
-        <h1>Edit Item</h1>
+    <div class="page-title d-flex justify-content-between align-items-center">
+        <div class="title-left d-flex align-items-center">
+            <i class="fas fa-box"></i>
+            <h1 class="ms-2">Edit Item</h1>
+        </div>
+        <div class="title-right text-end">
+            <strong style="font-style: italic;">Created Date: @Model.CreatedDate.ToString("dd-MMM-yyyy")</strong><br />
+            <strong style="font-style: italic;">Product Id: @Model.Id</strong>
+        </div>
     </div>
-
     <form asp-action="Update" method="post" enctype="multipart/form-data">
 
         <!-- Title, Cancel Button -->
