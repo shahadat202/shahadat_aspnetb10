@@ -151,10 +151,11 @@
         </div>
     </div>
 </div>
-@* <script>
-    //-- Tag page content ---
+<script>
     document.addEventListener('DOMContentLoaded', function () {
-        var folderSearch = document.getElementById('folderSearch');
+        var folderSearch = document.getElementById("folderSearch");
+        var tagsContainer = document.getElementById("searchTagsContainer");
+        var clearButton = document.getElementById("clear-button");
 
         var searchInput = document.getElementById('searchAllItems');
         var items = document.querySelectorAll('.item-box');
@@ -169,7 +170,7 @@
             let totalValue = 0;
 
             items.forEach(function (item) {
-                var itemTags = item.getAttribute('data-tags').toLowerCase().split(','); // Assuming tags are stored in a data attribute
+                var itemTags = item.querySelector('.item-tag').textContent.toLowerCase();
 
                 if (itemTags.includes(tag.toLowerCase())) {
                     item.style.display = 'flex';
@@ -187,24 +188,41 @@
                 }
             });
 
+            // After filtering, reflow the visible items
+            var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+            var productsContainer = document.getElementById('products');
+            productsContainer.innerHTML = '';
+            filteredItems.forEach(item => productsContainer.appendChild(item));
+
             // Update countable fields
             itemCountField.textContent = visibleItemCount;
             totalQuantityField.textContent = totalQuantity;
             totalValueField.textContent = totalValue.toFixed(2) + ' $';
         }
 
-        // Add event listeners to each tag
-        var tags = document.querySelectorAll('.tag'); // Assuming tags have a class of 'tag'
-        tags.forEach(function (tag) {
-            tag.addEventListener('click', function () {
-                var selectedTag = tag.textContent.trim(); // Get the clicked tag text
-                filterItemsByTag(selectedTag); // Filter items by selected tag
+        // Add click event listeners to the tags
+        var tagElements = document.querySelectorAll('.tag-item');
+        tagElements.forEach(function (tagElement) {
+            tagElement.addEventListener('click', function () {
+                var selectedTag = this.querySelector('.tag-text').textContent;
+
+                // Remove 'active' class from all tag elements first
+                tagElements.forEach(function (el) {
+                    el.classList.remove('active-tag');
+                    el.querySelector('.tag-icon').style.color = '';
+                });
+
+                // Add 'active' class to the clicked tag element
+                this.classList.add('active-tag');
+                this.querySelector('.tag-icon').style.color = 'red'; 
+
+                // Call the filtering function with the selected tag
+                filterItemsByTag(selectedTag);
             });
         });
-
     });
+</script>
 
-</script> *@
 
 <style>
     /* Tag Container */
@@ -235,7 +253,16 @@
     }
     .tag-item:hover {
         background-color: #f1f1f1;
-        transform: translateY(-2px);
         color: #0056b3;
+    }
+
+    /* Active tag */
+    .active-tag {
+        background-color: #f0f0f0;
+        border: 1px solid red;
+        color: red;
+    }
+    .active-tag .tag-icon {
+        color: red;
     }
 </style>
