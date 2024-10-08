@@ -298,15 +298,13 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         //    }
         //}
 
-
-
-
         public IActionResult Tags()
         {
             ViewData["HideNavbar"] = true;
             ViewData["IsSidebarCollapsed"] = true;
 
             var products = _productManagementService.GetAllProducts();
+
 
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
@@ -318,6 +316,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
             return View(products);
         }
+
 
     }
 }

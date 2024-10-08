@@ -16,27 +16,28 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearSelection = document.getElementById('clearSelection');
     const deleteButton = document.querySelector('.show-bs-modal');
 
-    // Show or hide the clear button. Item & Tag page sidebar
-    folderSearch.addEventListener('input', function () {
-        if (folderSearch.value.length > 0) {
-            clearButton.style.display = 'flex'; // Show the clear button
-        } else {
-            clearButton.style.display = 'none'; // Hide the clear button
-        }
-    });
-
-    // Clear the input field when the clear button is clicked
-    clearButton.addEventListener('click', function () {
-        folderSearch.value = ''; // Clear the input
-        clearButton.style.display = 'none'; // Hide the clear button
-    });
-
     // Form submission when Enter key is pressed
     searchInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     });
+
+    // Show or hide the clear button. Item & Tag page sidebar
+    folderSearch.addEventListener('input', function () {
+        if (folderSearch.value.length > 0) {
+            clearButton.style.display = 'flex';
+        } else {
+            clearButton.style.display = 'none';
+        }
+    });
+
+    // Clear the input field when the clear button is clicked
+    clearButton.addEventListener('click', function () {
+        folderSearch.value = '';
+        clearButton.style.display = 'none';
+    });
+
     // Show items serially when search
     searchInput.addEventListener('input', function () {
         const searchValue = searchInput.value.toLowerCase();
@@ -130,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('deleteId').value = selectedIds.join(',');
     });
+
 });
 
 

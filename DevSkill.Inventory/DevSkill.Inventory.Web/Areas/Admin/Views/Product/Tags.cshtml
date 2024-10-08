@@ -27,6 +27,10 @@
                                 </div>
                             </div>
                             <div class="header-border mb-4"></div>
+
+                            <div id="searchTagsContainer" class="form-group">
+                                <!-- Serialized tags will be appended here dynamically -->
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -129,9 +133,61 @@
 </div>
 
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const folderSearch = document.getElementById('folderSearch');
+    const items = document.querySelectorAll('.item-box');
+    const itemCountField = document.getElementById('itemCount'); 
+    const totalQuantityField = document.getElementById('totalQuantity');
+    const totalValueField = document.getElementById('totalValue');
 
+    // Form submission when Enter key is pressed
+    folderSearch.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
 
+    folderSearch.addEventListener('input', function () {
+        const searchValue = folderSearch.value.toLowerCase();
+        let visibleItemCount = 0;
+        let totalQuantity = 0;
+        let totalValue = 0;
 
+        items.forEach(function (item) {
+            const tags = item.querySelector('.card-tag').textContent.toLowerCase(); 
+            const title = item.querySelector('.card-title').textContent.toLowerCase(); 
 
+            // Check if title or tags include the search value
+            if (tags.includes(searchValue) || title.includes(searchValue)) {
+                item.style.display = 'flex';
+                item.style.margin = '0px 45px 20px 40px';
+                visibleItemCount++;
 
+                const itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
+                const itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                const itemTotalValue = itemQuantity * itemPrice;
+
+                totalQuantity += itemQuantity;
+                totalValue += itemTotalValue;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // After filtering, reflow the visible items
+        const filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+
+        const productsContainer = document.getElementById('products');
+        productsContainer.innerHTML = '';
+        filteredItems.forEach(item => productsContainer.appendChild(item));
+
+        // Update countable fields
+        itemCountField.textContent = visibleItemCount;
+        totalQuantityField.textContent = totalQuantity;
+        totalValueField.textContent = totalValue.toFixed(2) + ' $';
+    });
+});
+
+</script>
 
