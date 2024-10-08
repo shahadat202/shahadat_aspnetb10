@@ -28,8 +28,28 @@
                             </div>
                             <div class="header-border mb-4"></div>
 
+                            <!-- Tags will be dynamically populated here -->
                             <div id="searchTagsContainer" class="form-group tag-container">
-                                <!-- Serialized tags will be appended here dynamically -->
+                                @if (Model != null && Model.Any())
+                                {
+                                    var allTags = Model
+                                    .Where(p => p.Tags != null)
+                                    .SelectMany(p => p.Tags.Split(','))
+                                    .Distinct()
+                                    .OrderBy(t => t);
+
+                                    foreach (var tag in allTags)
+                                    {
+                                        <div class="tag-item card-tag">
+                                            <i class="fas fa-tag tag-icon"></i>
+                                            <span class="tag-text" data-tag="@tag">@tag</span>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No tags available now.</p>
+                                }
                             </div>
                         </div>
                     </form>
@@ -131,97 +151,80 @@
         </div>
     </div>
 </div>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tagSearchInput = document.getElementById('folderSearch');
-        const searchTagsContainer = document.getElementById('searchTagsContainer');
+    document.addEventListener("DOMContentLoaded", function () {
+        var searchInput = document.getElementById("folderSearch");
+        var tagsContainer = document.getElementById("searchTagsContainer");
+        var clearButton = document.getElementById("clear-button");
 
-        // Load tags from localStorage on page load
-        loadTags();
+        // Listen to input changes
+        searchInput.addEventListener("input", function () {
+            var query = searchInput.value.toLowerCase();
+            var tags = tagsContainer.getElementsByClassName("tag-item");
 
-        // Listen for the Enter key press
-        tagSearchInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter' && tagSearchInput.value.trim() !== '') {
-                event.preventDefault(); 
-                const tagText = tagSearchInput.value.trim();
-                addTag(tagText);
-                tagSearchInput.value = '';
+            // Show or hide the clear button based on input value
+            if (query.length > 0) {
+                clearButton.style.display = "block";
+            } else {
+                clearButton.style.display = "none";
             }
+
+            // Loop through each tag and filter based on the search query
+            Array.from(tags).forEach(function (tag) {
+                var tagText = tag.getElementsByClassName("tag-text")[0].textContent.toLowerCase(); 
+
+                if (tagText.includes(query)) {
+                    tag.style.display = "block";
+                } else {
+                    tag.style.display = "none"; 
+                }
+            });
         });
 
-        // Function to load tags from localStorage
-        function loadTags() {
-            const tags = JSON.parse(localStorage.getItem('tags')) || [];
-            tags.forEach(tag => addTag(tag));
-        }
+        // Handle clear button click
+        clearButton.addEventListener("click", function () {
+            searchInput.value = ''; 
+            clearButton.style.display = "none"; 
 
-        // Function to add a new tag and don't agin if existed
-        function addTag(text) {
-            // Check if the tag already exists
-            const existingTags = Array.from(searchTagsContainer.children).map(tagItem => tagItem.firstChild.textContent.trim());
-            if (existingTags.includes(text)) {
-                return;
-            }
-
-            const tagItem = document.createElement('div');
-            tagItem.classList.add('tag-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mt-2', 'border', 'p-2', 'rounded', 'cursor-pointer');
-
-            // Create the text node
-            const textNode = document.createElement('span');
-            textNode.textContent = text;
-            tagItem.appendChild(textNode);
-
-            // Create the delete icon
-            const deleteIcon = document.createElement('span');
-            deleteIcon.innerHTML = '&times;';
-            deleteIcon.classList.add('delete-icon', 'text-danger', 'ml-2', 'cursor-pointer');
-            deleteIcon.addEventListener('click', function(event) {
-                event.stopPropagation(); 
-                searchTagsContainer.removeChild(tagItem); 
-                removeTag(text); 
+            var tags = tagsContainer.getElementsByClassName("tag-item");
+            Array.from(tags).forEach(function (tag) {
+                tag.style.display = "block"; 
             });
-            tagItem.appendChild(deleteIcon);
-
-            // Make the entire tag box clickable
-            tagItem.addEventListener('click', function() {
-                tagSearchInput.value = text;
-                tagSearchInput.focus();
-            });
-
-            searchTagsContainer.appendChild(tagItem); 
-
-            // Store the tag in localStorage
-            storeTag(text);
-        }
-
-        // Function to store tag in localStorage
-        function storeTag(text) {
-            const tags = JSON.parse(localStorage.getItem('tags')) || [];
-            if (!tags.includes(text)) {
-                tags.push(text);
-                localStorage.setItem('tags', JSON.stringify(tags));
-            }
-        }
-
-        // Function to remove tag from localStorage
-        function removeTag(text) {
-            let tags = JSON.parse(localStorage.getItem('tags')) || [];
-            tags = tags.filter(tag => tag !== text);
-            localStorage.setItem('tags', JSON.stringify(tags));
-        }
+        });
     });
 </script>
 
 
-
 <style>
-    .cursor-pointer {
-        cursor: pointer;
-        background: #f4f6f9;
+    /* Tag Container */
+    .tag-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
-    .delete-icon {
-        font-size: 1.5em; 
-        line-height: 1;
+    .tag-item {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .tag-icon {
+        margin-right: 8px;
+        color: #888888;
+        font-size: 1.2em;
+    }
+    .tag-text {
+        font-size: 16px;
+        color: #333;
+        transition: color 0.3s ease;
+        font-size: 1.2em;
+    }
+    .tag-item:hover {
+        background-color: #f1f1f1;
+        transform: translateY(-2px);
+        color: #0056b3;
     }
 </style>
