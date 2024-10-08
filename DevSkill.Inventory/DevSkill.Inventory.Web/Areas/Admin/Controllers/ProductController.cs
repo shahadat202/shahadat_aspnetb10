@@ -298,6 +298,25 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         //    }
         //}
 
+        public IActionResult Search()
+        {
+            ViewData["HideNavbar"] = true;
+            ViewData["IsSidebarCollapsed"] = true;
+
+            var products = _productManagementService.GetAllProducts();
+
+
+            var itemCount = products.Count();
+            var totalQuantity = products.Sum(p => p.Quantity);
+            var totalValue = products.Sum(p => p.TotalValue);
+
+            ViewBag.ItemCount = itemCount;
+            ViewBag.TotalQuantity = totalQuantity;
+            ViewBag.TotalValue = totalValue;
+
+            return View(products);
+        }
+
         public IActionResult Tags()
         {
             ViewData["HideNavbar"] = true;

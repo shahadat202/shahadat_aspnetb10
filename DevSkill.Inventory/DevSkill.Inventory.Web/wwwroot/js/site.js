@@ -17,38 +17,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const deleteButton = document.querySelector('.show-bs-modal');
 
     // Form submission when Enter key is pressed
-    searchInput.addEventListener('keydown', function (event) {
+    function preventFormSubmit(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
-    });
-
-    // Show or hide the clear button. Item & Tag page sidebar
-    folderSearch.addEventListener('input', function () {
-        if (folderSearch.value.length > 0) {
-            clearButton.style.display = 'flex';
-        } else {
-            clearButton.style.display = 'none';
-        }
-    });
-
-    // Clear the input field when the clear button is clicked
-    clearButton.addEventListener('click', function () {
-        folderSearch.value = '';
-        clearButton.style.display = 'none';
-    });
-
-    // Show items serially when search
-    searchInput.addEventListener('input', function () {
-        const searchValue = searchInput.value.toLowerCase();
-        const searchTerm = searchInput.value.toLowerCase();
+    }
+    
+    // Search items based on input
+    function searchItems(inputValue) {
+        const searchValue = inputValue.toLowerCase();
         let visibleItemCount = 0;
         let totalQuantity = 0;
         let totalValue = 0;
+
         items.forEach(function (item) {
             const title = item.querySelector('.card-title').textContent.toLowerCase();
+            const tags = item.querySelector('.card-tag').textContent.toLowerCase();
 
-            if (title.includes(searchValue)) {
+            // Check if title or tags include the search value
+            if (title.includes(searchValue) || tags.includes(searchValue)) {
                 item.style.display = 'flex';
                 item.style.margin = '0px 45px 20px 40px';
                 visibleItemCount++;
@@ -63,6 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 item.style.display = 'none';
             }
         });
+
         // After filtering, reflow the visible items
         const filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
 
@@ -74,8 +62,34 @@ document.addEventListener('DOMContentLoaded', function () {
         itemCountField.textContent = visibleItemCount;
         totalQuantityField.textContent = totalQuantity;
         totalValueField.textContent = totalValue.toFixed(2) + ' $';
+    }
+
+    // Show items serially when search
+    searchInput.addEventListener('input', function () {
+        searchItems(searchInput.value);
     });
-   
+
+    // Prevent default form submission on keydown
+    searchInput.addEventListener('keydown', preventFormSubmit);
+
+    // Show or hide the clear button. Item & Tag page sidebar
+    folderSearch.addEventListener('input', function () {
+        if (folderSearch.value.length > 0) {
+            clearButton.style.display = 'flex';
+        } else {
+            clearButton.style.display = 'none';
+        }
+
+        searchItems(folderSearch.value);
+    });
+
+    // Clear the input field when the clear button is clicked
+    clearButton.addEventListener('click', function () {
+        folderSearch.value = '';
+        clearButton.style.display = 'none';
+        searchItems('');
+    });
+
     let selectedCount = 0;
 
     // Add event listeners to each checkbox
@@ -86,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     cb.style.display = 'block';
                 });
             }
+            updateSelectedItemsDisplay();
         });
     });
 
@@ -100,11 +115,6 @@ document.addEventListener('DOMContentLoaded', function () {
             selectedItemsDiv.style.display = 'none';
         }
     }
-
-    // Add event listeners to each checkbox
-    checkboxes.forEach(function (checkbox) {
-        checkbox.addEventListener('click', updateSelectedItemsDisplay);
-    });
 
     // Event listener for "All" selection
     selectAllItems.addEventListener('click', function () {
@@ -131,11 +141,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('deleteId').value = selectedIds.join(',');
     });
-
 });
-
-
-
-
-
-

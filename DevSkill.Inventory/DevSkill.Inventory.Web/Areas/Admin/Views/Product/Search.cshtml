@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Product>
 @using DevSkill.Inventory.Domain.Entities
 @{
-    ViewData["Title"] = "Items";
+    ViewData["Title"] = "Search";
     var newItemId = ViewBag.NewItemId as Guid?;
 }
 
@@ -28,7 +28,7 @@
                             </div>
                             <div class="header-border mb-4"></div>
 
-                            <div id="searchTagsContainer" class="form-group tag-container">
+                            <div id="searchTagsContainer" class="form-group">
                                 <!-- Serialized tags will be appended here dynamically -->
                             </div>
                         </div>
@@ -41,7 +41,7 @@
         <div class="col-md-9">
             <div class="fixed-header">
                 <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
-                    <h1 class="items-title">Tags</h1>
+                    <h1 class="items-title">Advance Search</h1>
                 </div>
                 <div class="header-border mb-4"></div>
                 <partial name="_ResponsePartial"></partial>
@@ -131,97 +131,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const tagSearchInput = document.getElementById('folderSearch');
-        const searchTagsContainer = document.getElementById('searchTagsContainer');
-
-        // Load tags from localStorage on page load
-        loadTags();
-
-        // Listen for the Enter key press
-        tagSearchInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter' && tagSearchInput.value.trim() !== '') {
-                event.preventDefault(); 
-                const tagText = tagSearchInput.value.trim();
-                addTag(tagText);
-                tagSearchInput.value = '';
-            }
-        });
-
-        // Function to load tags from localStorage
-        function loadTags() {
-            const tags = JSON.parse(localStorage.getItem('tags')) || [];
-            tags.forEach(tag => addTag(tag));
-        }
-
-        // Function to add a new tag and don't agin if existed
-        function addTag(text) {
-            // Check if the tag already exists
-            const existingTags = Array.from(searchTagsContainer.children).map(tagItem => tagItem.firstChild.textContent.trim());
-            if (existingTags.includes(text)) {
-                return;
-            }
-
-            const tagItem = document.createElement('div');
-            tagItem.classList.add('tag-item', 'd-flex', 'justify-content-between', 'align-items-center', 'mt-2', 'border', 'p-2', 'rounded', 'cursor-pointer');
-
-            // Create the text node
-            const textNode = document.createElement('span');
-            textNode.textContent = text;
-            tagItem.appendChild(textNode);
-
-            // Create the delete icon
-            const deleteIcon = document.createElement('span');
-            deleteIcon.innerHTML = '&times;';
-            deleteIcon.classList.add('delete-icon', 'text-danger', 'ml-2', 'cursor-pointer');
-            deleteIcon.addEventListener('click', function(event) {
-                event.stopPropagation(); 
-                searchTagsContainer.removeChild(tagItem); 
-                removeTag(text); 
-            });
-            tagItem.appendChild(deleteIcon);
-
-            // Make the entire tag box clickable
-            tagItem.addEventListener('click', function() {
-                tagSearchInput.value = text;
-                tagSearchInput.focus();
-            });
-
-            searchTagsContainer.appendChild(tagItem); 
-
-            // Store the tag in localStorage
-            storeTag(text);
-        }
-
-        // Function to store tag in localStorage
-        function storeTag(text) {
-            const tags = JSON.parse(localStorage.getItem('tags')) || [];
-            if (!tags.includes(text)) {
-                tags.push(text);
-                localStorage.setItem('tags', JSON.stringify(tags));
-            }
-        }
-
-        // Function to remove tag from localStorage
-        function removeTag(text) {
-            let tags = JSON.parse(localStorage.getItem('tags')) || [];
-            tags = tags.filter(tag => tag !== text);
-            localStorage.setItem('tags', JSON.stringify(tags));
-        }
-    });
-</script>
-
-
-
-<style>
-    .cursor-pointer {
-        cursor: pointer;
-        background: #f4f6f9;
-    }
-    .delete-icon {
-        font-size: 1.5em; 
-        line-height: 1;
-    }
-</style>
