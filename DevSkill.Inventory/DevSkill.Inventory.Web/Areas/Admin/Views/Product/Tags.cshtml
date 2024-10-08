@@ -151,49 +151,60 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var searchInput = document.getElementById("folderSearch");
-        var tagsContainer = document.getElementById("searchTagsContainer");
-        var clearButton = document.getElementById("clear-button");
+@* <script>
+    //-- Tag page content ---
+    document.addEventListener('DOMContentLoaded', function () {
+        var folderSearch = document.getElementById('folderSearch');
 
-        // Listen to input changes
-        searchInput.addEventListener("input", function () {
-            var query = searchInput.value.toLowerCase();
-            var tags = tagsContainer.getElementsByClassName("tag-item");
+        var searchInput = document.getElementById('searchAllItems');
+        var items = document.querySelectorAll('.item-box');
+        var itemCountField = document.getElementById('itemCount');
+        var totalQuantityField = document.getElementById('totalQuantity');
+        var totalValueField = document.getElementById('totalValue');
 
-            // Show or hide the clear button based on input value
-            if (query.length > 0) {
-                clearButton.style.display = "block";
-            } else {
-                clearButton.style.display = "none";
-            }
+        // Function to filter items by tag
+        function filterItemsByTag(tag) {
+            let visibleItemCount = 0;
+            let totalQuantity = 0;
+            let totalValue = 0;
 
-            // Loop through each tag and filter based on the search query
-            Array.from(tags).forEach(function (tag) {
-                var tagText = tag.getElementsByClassName("tag-text")[0].textContent.toLowerCase(); 
+            items.forEach(function (item) {
+                var itemTags = item.getAttribute('data-tags').toLowerCase().split(','); // Assuming tags are stored in a data attribute
 
-                if (tagText.includes(query)) {
-                    tag.style.display = "block";
+                if (itemTags.includes(tag.toLowerCase())) {
+                    item.style.display = 'flex';
+                    item.style.margin = '0px 45px 20px 40px';
+                    visibleItemCount++;
+
+                    var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
+                    var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                    var itemTotalValue = itemQuantity * itemPrice;
+
+                    totalQuantity += itemQuantity;
+                    totalValue += itemTotalValue;
                 } else {
-                    tag.style.display = "none"; 
+                    item.style.display = 'none';
                 }
             });
-        });
 
-        // Handle clear button click
-        clearButton.addEventListener("click", function () {
-            searchInput.value = ''; 
-            clearButton.style.display = "none"; 
+            // Update countable fields
+            itemCountField.textContent = visibleItemCount;
+            totalQuantityField.textContent = totalQuantity;
+            totalValueField.textContent = totalValue.toFixed(2) + ' $';
+        }
 
-            var tags = tagsContainer.getElementsByClassName("tag-item");
-            Array.from(tags).forEach(function (tag) {
-                tag.style.display = "block"; 
+        // Add event listeners to each tag
+        var tags = document.querySelectorAll('.tag'); // Assuming tags have a class of 'tag'
+        tags.forEach(function (tag) {
+            tag.addEventListener('click', function () {
+                var selectedTag = tag.textContent.trim(); // Get the clicked tag text
+                filterItemsByTag(selectedTag); // Filter items by selected tag
             });
         });
-    });
-</script>
 
+    });
+
+</script> *@
 
 <style>
     /* Tag Container */

@@ -1,7 +1,8 @@
 ﻿//-- Item page content ---
 document.addEventListener('DOMContentLoaded', function () {
-    var folderSearch = document.getElementById('folderSearch');
-    var clearButton = document.getElementById('clear-button');
+    var folderSearch = document.getElementById("folderSearch");
+    var tagsContainer = document.getElementById("searchTagsContainer");
+    var clearButton = document.getElementById("clear-button");
 
     var searchInput = document.getElementById('searchAllItems');
     var items = document.querySelectorAll('.item-box');
@@ -16,27 +17,37 @@ document.addEventListener('DOMContentLoaded', function () {
     var clearSelection = document.getElementById('clearSelection');
     var deleteButton = document.querySelector('.show-bs-modal');
 
-    // Show or hide the clear button. Item & Tag page sidebar
-    folderSearch.addEventListener('input', function () {
-        if (folderSearch.value.length > 0) {
-            clearButton.style.display = 'flex'; // Show the clear button
-        } else {
-            clearButton.style.display = 'none'; // Hide the clear button
-        }
-    });
-
-    // Clear the input field when the clear button is clicked
-    clearButton.addEventListener('click', function () {
-        folderSearch.value = ''; // Clear the input
-        clearButton.style.display = 'none'; // Hide the clear button
-    });
-
     // Form submission when Enter key is pressed
     searchInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     });
+
+    // Input changes when search
+    folderSearch.addEventListener("input", function () {
+        var query = folderSearch.value.toLowerCase();
+        var tags = tagsContainer.getElementsByClassName("tag-item");
+
+        // Show or hide the clear button based on input value
+        if (query.length > 0) {
+            clearButton.style.display = "block";
+        } else {
+            clearButton.style.display = "none";
+        }
+
+        // Loop through each tag and filter based on the search query
+        Array.from(tags).forEach(function (tag) {
+            var tagText = tag.getElementsByClassName("tag-text")[0].textContent.toLowerCase();
+
+            if (tagText.includes(query)) {
+                tag.style.display = "block";
+            } else {
+                tag.style.display = "none";
+            }
+        });
+    });
+
     // Show items serially when search
     searchInput.addEventListener('input', function () {
         var searchValue = searchInput.value.toLowerCase();
@@ -119,6 +130,17 @@ document.addEventListener('DOMContentLoaded', function () {
             checkbox.checked = false;
         });
         updateSelectedItemsDisplay();
+    });
+
+    // Handle clear button click
+    clearButton.addEventListener("click", function () {
+        folderSearch.value = '';
+        clearButton.style.display = "none";
+
+        var tags = tagsContainer.getElementsByClassName("tag-item");
+        Array.from(tags).forEach(function (tag) {
+            tag.style.display = "block";
+        });
     });
 
     // Event listener for delete button click
