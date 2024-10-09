@@ -8,14 +8,8 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 dashboard-title" style="padding-left:60px">Dashboard</h1>
+                <h1 class="m-0 dashboard-title" style="padding:10px 0px 10px 70px;">Dashboard</h1>
             </div><!-- /.col -->
-            <!-- Right Navbar for SET FOLDERS Button -->
-            <div class="col-sm-6 d-flex justify-content-end align-items-center">
-                <a href="#" class="custom-button">
-                    <i class="fas fa-folder"></i> SET FOLDERS
-                </a>
-            </div>
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
     <div class="header-border"></div>
@@ -30,46 +24,37 @@
                 <h3 class="text-center">Inventory Summary</h3>
             </div>
         </div>
-        <div class="row">
+        <div class="d-flex justify-content-center dashboard-container">
             <!-- Item Block -->
-            <div class="col-lg-4 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-white">
-                    <div class="icon">
-                        <i class="fas fa-file-alt"></i>
-                    </div>
-                    <div class="inner">
-                        <h3>@ViewBag.ItemCount</h3>
-                        <p>Items</p>
-                    </div>
+            <div class="dashboard-box text-white">
+                <div class="icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="inner">
+                    <h3>@ViewBag.ItemCount</h3>
+                    <p>Items</p>
                 </div>
             </div>
 
             <!-- Total Quantity Block -->
-            <div class="col-lg-4 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-dark">
-                    <div class="icon">
-                        <i class="fas fa-box"></i>
-                    </div>
-                    <div class="inner">
-                        <h3>@ViewBag.TotalQuantity</h3>
-                        <p>Total Quantity</p>
-                    </div>
+            <div class="dashboard-box text-dark">
+                <div class="icon">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="inner">
+                    <h3>@ViewBag.TotalQuantity</h3>
+                    <p>Total Quantity</p>
                 </div>
             </div>
 
             <!-- Total Value Block -->
-            <div class="col-lg-4 col-6 mb-3">
-                <!-- Reduced margin-bottom -->
-                <div class="dashboard-box text-white">
-                    <div class="icon">
-                        <i class="fas fa-calculator"></i>
-                    </div>
-                    <div class="inner">
-                        <h5 style="color: black;"><strong>@ViewBag.TotalValue,$</strong></h5>
-                        <p>Total Value</p>
-                    </div>
+            <div class="dashboard-box text-white">
+                <div class="icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="inner">
+                    <h5 style="color: black;"><strong>@ViewBag.TotalValue,$</strong></h5>
+                    <p>Total Value</p>
                 </div>
             </div>
         </div>
@@ -83,14 +68,20 @@
         margin-top: 10px;
         margin-bottom: 30px;
     }
+
     .dashboard-title {
-        font-family: 'Helvetica Neue', sans-serif; 
-        font-size: 2.5rem; 
-        font-weight: 700; 
-        color: #333; 
-        margin-bottom: 15px; 
+        font-family: 'Helvetica Neue', sans-serif;
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 15px;
         display: inline-block;
     }
+
+    .dashboard-container {
+        gap: 30px; 
+    }
+
     .dashboard-box {
         display: flex;
         background-color: white;
@@ -100,10 +91,10 @@
         border-radius: 8px;
         padding: 25px;
         text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        width: 180px;
-        height: 160px;
-        margin: 0 auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 190px;
+        height: 170px;
+        margin: 0;
     }
 
         .dashboard-box .icon {
@@ -125,25 +116,4 @@
             margin: 0;
         }
 
-    .custom-button {
-        background-color: rgba(224,53,69,255);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        font-weight: 550;
-    }
-
-        .custom-button:hover {
-            color: white;
-        }
-
-        .custom-button i {
-            margin-right: 8px;
-            font-size: 18px;
-            color: white;
-        }
-
 </style>
-
