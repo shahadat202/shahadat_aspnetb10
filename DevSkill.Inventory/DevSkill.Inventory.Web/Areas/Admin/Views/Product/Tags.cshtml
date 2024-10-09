@@ -155,9 +155,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var folderSearch = document.getElementById("folderSearch");
         var tagsContainer = document.getElementById("searchTagsContainer");
-        var clearButton = document.getElementById("clear-button");
 
-        var searchInput = document.getElementById('searchAllItems');
         var items = document.querySelectorAll('.item-box');
         var itemCountField = document.getElementById('itemCount');
         var totalQuantityField = document.getElementById('totalQuantity');
@@ -220,10 +218,8 @@
                 filterItemsByTag(selectedTag);
             });
         });
-    });
+    }); 
 </script>
-
-
 <style>
     /* Tag Container */
     .tag-container {

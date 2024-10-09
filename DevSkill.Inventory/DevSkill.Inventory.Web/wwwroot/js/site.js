@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 tag.style.display = "none";
             }
         });
+
     });
 
     // Show items serially when search
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
         totalQuantityField.textContent = totalQuantity;
         totalValueField.textContent = totalValue.toFixed(2) + ' $';
     });
-   
+
     let selectedCount = 0;
 
     // Add event listeners to each checkbox
@@ -152,8 +153,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('deleteId').value = selectedIds.join(',');
     });
-});
 
+});
 
 
 

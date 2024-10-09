@@ -19,7 +19,7 @@
                                         <i class="fas fa-search"></i>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control" id="folderSearch" placeholder="Search folders" aria-label="Search folders">
+                                <input type="text" class="form-control" id="folderSearch" placeholder="Search title" aria-label="Search titles">
                                 <div class="input-group-append" id="clear-button" style="cursor: pointer; display: none;">
                                     <span class="input-group-text">
                                         <i class="fas fa-times"></i>
@@ -27,17 +27,32 @@
                                 </div>
                             </div>
                             <div class="header-border mb-4"></div>
+
+                            <!-- Tags will be dynamically populated here -->
+                            <div id="searchTitlesContainer" class="form-group title-container">
+                                @if (Model != null && Model.Any())
+                                {
+                                    var allTitles = Model
+                                    .Where(p => p.Title != null)
+                                    .SelectMany(p => p.Title.Split(','))
+                                    .Distinct()
+                                    .OrderBy(t => t);
+
+                                    foreach (var title in allTitles)
+                                    {
+                                        <div class="title-item card-tag">
+                                            <i class="fas fa-file-alt title-icon"></i>
+                                            <span class="title-text" data-tag="@title">@title</span>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <p>No title available now.</p>
+                                }
+                            </div>
                         </div>
                     </form>
-                    <!-- All Items Section -->
-                    <div class="all-items">
-                        <h5 class="all-items-title" style="cursor: pointer; padding: 10px;">
-                            <i class="fas fa-box" style="margin-right: 8px; padding: 5px;"></i> All Items
-                        </h5>
-                        <div class="sub-folders" style="display: none;">
-                            <!-- Initially hidden -->
-                        </div>
-                    </div>
                 </div>
             </div>
         </aside>
@@ -49,7 +64,6 @@
                     <h1 class="items-title">All Items</h1>
                     <div class="button-group">
                         <a asp-area="Admin" asp-controller="Product" asp-action="Insert" class="custom-button" style="margin-right: 10px;"> ADD ITEM </a>
-                        <a href="#" class="custom-button"> ADD FOLDER </a>
                     </div>
                 </div>
                 <div class="header-border mb-4"></div>
@@ -141,7 +155,122 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var folderSearch = document.getElementById("folderSearch");
+        var titlesContainer = document.getElementById("searchTitlesContainer");
 
+        var items = document.querySelectorAll('.item-box');
+        var itemCountField = document.getElementById('itemCount');
+        var totalQuantityField = document.getElementById('totalQuantity');
+        var totalValueField = document.getElementById('totalValue');
+
+        // Function to filter items by title
+        function filterItemsByTitle(title) {
+            let visibleItemCount = 0;
+            let totalQuantity = 0;
+            let totalValue = 0;
+
+            items.forEach(function (item) {
+                var itemTitles = item.querySelector('.card-title').textContent.toLowerCase();
+
+                if (itemTitles.includes(title.toLowerCase())) {
+                    item.style.display = 'flex';
+                    item.style.margin = '0px 45px 20px 40px';
+                    visibleItemCount++;
+
+                    var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
+                    var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                    var itemTotalValue = itemQuantity * itemPrice;
+
+                    totalQuantity += itemQuantity;
+                    totalValue += itemTotalValue;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            // After filtering, reflow the visible items
+            var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+            var productsContainer = document.getElementById('products');
+            productsContainer.innerHTML = '';
+            filteredItems.forEach(item => productsContainer.appendChild(item));
+
+            // Update countable fields
+            itemCountField.textContent = visibleItemCount;
+            totalQuantityField.textContent = totalQuantity;
+            totalValueField.textContent = totalValue.toFixed(2) + ' $';
+        }
+
+        // Add click event listeners to the tags
+        var titleElements = document.querySelectorAll('.title-item');
+        titleElements.forEach(function (titleElement) {
+            titleElement.addEventListener('click', function () {
+                var selectedTitle = this.querySelector('.title-text').textContent;
+
+                // Remove 'active' class from all tag elements first
+                titleElements.forEach(function (el) {
+                    el.classList.remove('active-title');
+                    el.querySelector('.title-icon').style.color = '';
+                });
+
+                // Add 'active' class to the clicked tag element
+                this.classList.add('active-title');
+                this.querySelector('.title-icon').style.color = 'red';
+
+                // Call the filtering function with the selected tag
+                filterItemsByTitle(selectedTitle);
+            });
+        });
+    });
+</script>
+<style>
+    /* Tag Container */
+    .title-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .title-item {
+        display: flex;
+        align-items: center;
+        padding: 8px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .title-icon {
+        margin-right: 8px;
+        color: #888888;
+        font-size: 1.2em;
+    }
+
+    .title-text {
+        font-size: 16px;
+        color: #333;
+        transition: color 0.3s ease;
+        font-size: 1.2em;
+    }
+
+    .title-item:hover {
+        background-color: #f1f1f1;
+        color: #0056b3;
+    }
+
+    /* Active tag */
+    .active-title {
+        background-color: #f0f0f0;
+        border: 1px solid red;
+        color: red;
+    }
+
+        .active-title .title-icon {
+            color: red;
+        }
+</style>
 
 
 
