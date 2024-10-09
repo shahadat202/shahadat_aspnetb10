@@ -97,16 +97,13 @@
                 <!-- Closer Value Fields -->
                 <div class="value-fields" style="padding: 10px 0;">
                     <div class="row" style="margin: 0;">
-                        <div class="col-md-3 no-padding">
-                            <strong>Folders:</strong> <span id="folderCount">0</span>
+                        <div class="col-md-4 no-padding">
+                            <strong>Total Items:</strong> <span id="itemCount">@ViewBag.ItemCount</span>
                         </div>
-                        <div class="col-md-3 no-padding">
-                            <strong>Items:</strong> <span id="itemCount">@ViewBag.ItemCount</span>
-                        </div>
-                        <div class="col-md-3 no-padding">
+                        <div class="col-md-4 no-padding">
                             <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
                         </div>
-                        <div class="col-md-3 no-padding">
+                        <div class="col-md-4 no-padding">
                             <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
                         </div>
                     </div>
@@ -151,75 +148,7 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var folderSearch = document.getElementById("folderSearch");
-        var tagsContainer = document.getElementById("searchTagsContainer");
 
-        var items = document.querySelectorAll('.item-box');
-        var itemCountField = document.getElementById('itemCount');
-        var totalQuantityField = document.getElementById('totalQuantity');
-        var totalValueField = document.getElementById('totalValue');
-
-        // Function to filter items by tag
-        function filterItemsByTag(tag) {
-            let visibleItemCount = 0;
-            let totalQuantity = 0;
-            let totalValue = 0;
-
-            items.forEach(function (item) {
-                var itemTags = item.querySelector('.item-tag').textContent.toLowerCase();
-
-                if (itemTags.includes(tag.toLowerCase())) {
-                    item.style.display = 'flex';
-                    item.style.margin = '0px 45px 20px 40px';
-                    visibleItemCount++;
-
-                    var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
-                    var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
-                    var itemTotalValue = itemQuantity * itemPrice;
-
-                    totalQuantity += itemQuantity;
-                    totalValue += itemTotalValue;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            // After filtering, reflow the visible items
-            var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
-            var productsContainer = document.getElementById('products');
-            productsContainer.innerHTML = '';
-            filteredItems.forEach(item => productsContainer.appendChild(item));
-
-            // Update countable fields
-            itemCountField.textContent = visibleItemCount;
-            totalQuantityField.textContent = totalQuantity;
-            totalValueField.textContent = totalValue.toFixed(2) + ' $';
-        }
-
-        // Add click event listeners to the tags
-        var tagElements = document.querySelectorAll('.tag-item');
-        tagElements.forEach(function (tagElement) {
-            tagElement.addEventListener('click', function () {
-                var selectedTag = this.querySelector('.tag-text').textContent;
-
-                // Remove 'active' class from all tag elements first
-                tagElements.forEach(function (el) {
-                    el.classList.remove('active-tag');
-                    el.querySelector('.tag-icon').style.color = '';
-                });
-
-                // Add 'active' class to the clicked tag element
-                this.classList.add('active-tag');
-                this.querySelector('.tag-icon').style.color = 'red'; 
-
-                // Call the filtering function with the selected tag
-                filterItemsByTag(selectedTag);
-            });
-        });
-    }); 
-</script>
 <style>
     /* Tag Container */
     .tag-container {

@@ -1,7 +1,8 @@
-﻿//-- Item page content ---
+﻿//-- Item page & Tag page content ---
 document.addEventListener('DOMContentLoaded', function () {
     var folderSearch = document.getElementById("folderSearch");
     var tagsContainer = document.getElementById("searchTagsContainer");
+    var titlesContainer = document.getElementById("searchTitlesContainer");
     var clearButton = document.getElementById("clear-button");
 
     var searchInput = document.getElementById('searchAllItems');
@@ -25,31 +26,37 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Input changes when search
-    folderSearch.addEventListener("input", function () {
-        var query = folderSearch.value.toLowerCase();
-        var tags = tagsContainer.getElementsByClassName("tag-item");
+    function setupSearch(inputElement, containerElement, itemClass, textClass, clearButton) {
+        inputElement.addEventListener("input", function () {
+            var query = inputElement.value.toLowerCase();
+            var items = containerElement.getElementsByClassName(itemClass);
 
-        // Show or hide the clear button based on input value
-        if (query.length > 0) {
-            clearButton.style.display = "block";
-        } else {
-            clearButton.style.display = "none";
-        }
+            // Show or hide the clear button based on input value
+            clearButton.style.display = query.length > 0 ? "block" : "none";
 
-        // Loop through each tag and filter based on the search query
-        Array.from(tags).forEach(function (tag) {
-            var tagText = tag.getElementsByClassName("tag-text")[0].textContent.toLowerCase();
-
-            if (tagText.includes(query)) {
-                tag.style.display = "block";
-            } else {
-                tag.style.display = "none";
-            }
+            // Loop through each item and filter based on the search query
+            Array.from(items).forEach(function (item) {
+                var itemText = item.getElementsByClassName(textClass)[0].textContent.toLowerCase();
+                item.style.display = itemText.includes(query) ? "block" : "none";
+            });
         });
+        // Add click event listener for clearing the search
+        clearButton.addEventListener("click", function () {
+            inputElement.value = '';
+            clearButton.style.display = "none";
 
-    });
+            // Restore all items (show them)
+            var items = containerElement.getElementsByClassName(itemClass);
+            Array.from(items).forEach(function (item) {
+                item.style.display = "block";
+            });
+        });
+    }
+    setupSearch(folderSearch, tagsContainer, "tag-item", "tag-text", clearButton);
+    setupSearch(folderSearch, titlesContainer, "title-item", "title-text", clearButton);
+    
 
-    // Show items serially when search
+    // Show items serially when search (search all items section)
     searchInput.addEventListener('input', function () {
         var searchValue = searchInput.value.toLowerCase();
         var searchTerm = searchInput.value.toLowerCase();
@@ -133,18 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSelectedItemsDisplay();
     });
 
-    // Handle clear button click
-    clearButton.addEventListener("click", function () {
-        folderSearch.value = '';
-        clearButton.style.display = "none";
-
-        var tags = tagsContainer.getElementsByClassName("tag-item");
-        Array.from(tags).forEach(function (tag) {
-            tag.style.display = "block";
-        });
-    });
-
-    // Event listener for delete button click
+    // Modal Delete Button
     deleteButton.addEventListener('click', function () {
         $('#modal-default').modal('show');
         var selectedIds = Array.from(checkboxes)
@@ -153,6 +149,76 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById('deleteId').value = selectedIds.join(',');
     });
+
+    // Function to filter items based on specified criteria
+    function filterItems(criteria, isTag) {
+        let visibleItemCount = 0;
+        let totalQuantity = 0;
+        let totalValue = 0;
+
+        items.forEach(function (item) {
+            // Determine which class to use based on the filter type (tag or title)
+            var itemContent = isTag
+                ? item.querySelector('.item-tag').textContent.toLowerCase()
+                : item.querySelector('.card-title').textContent.toLowerCase();
+
+            if (itemContent.includes(criteria.toLowerCase())) {
+                item.style.display = 'flex';
+                item.style.margin = '0px 45px 20px 40px';
+                visibleItemCount++;
+
+                var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
+                var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                var itemTotalValue = itemQuantity * itemPrice;
+
+                totalQuantity += itemQuantity;
+                totalValue += itemTotalValue;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // After filtering, reflow the visible items
+        var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+        var productsContainer = document.getElementById('products');
+        productsContainer.innerHTML = '';
+        filteredItems.forEach(item => productsContainer.appendChild(item));
+
+        // Update countable fields
+        itemCountField.textContent = visibleItemCount;
+        totalQuantityField.textContent = totalQuantity;
+        totalValueField.textContent = totalValue.toFixed(2) + ' $';
+    }
+
+    // Reusable function to set up click event listeners for items
+    function setupClickEvents(elements, activeClass, iconClass, filterFunction, isTag) {
+        elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                var selectedText = this.querySelector('.' + iconClass).textContent;
+
+                // Remove 'active' class from all elements first
+                elements.forEach(function (el) {
+                    el.classList.remove(activeClass);
+                    el.querySelector('.' + iconClass).style.color = '';
+                });
+
+                // Add 'active' class to the clicked element
+                this.classList.add(activeClass);
+                this.querySelector('.' + iconClass).style.color = 'red';
+
+                // Call the filtering function with the selected item
+                filterFunction(selectedText, isTag);
+            });
+        });
+    }
+
+    // Add click event listeners for tag elements
+    var tagElements = document.querySelectorAll('.tag-item');
+    setupClickEvents(tagElements, 'active-tag', 'tag-text', filterItems, true);
+
+    // Add click event listeners for title elements
+    var titleElements = document.querySelectorAll('.title-item');
+    setupClickEvents(titleElements, 'active-title', 'title-text', filterItems, false);
 
 });
 
