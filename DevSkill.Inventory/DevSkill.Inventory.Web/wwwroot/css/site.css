@@ -131,9 +131,9 @@ body {
 .value-fields strong {
     color: #333;
 }
-/*.value-fields span {
+.value-fields span {
     font-weight: 600;
-}*/
+}
 .button-group {
     margin-left: 10px;
 }
