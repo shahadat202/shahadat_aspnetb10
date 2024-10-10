@@ -130,8 +130,10 @@ body {
 }
 .value-fields strong {
     color: #333;
+    font-size: 20px;
 }
 .value-fields span {
+    font-size: 20px;
     font-weight: 600;
 }
 .button-group {
