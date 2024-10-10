@@ -29,9 +29,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Index() //dashboard
         {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
-
             var products = _productManagementService.GetAllProducts();
 
             var itemCount = products.Count();
@@ -46,9 +43,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
         public IActionResult Items() 
         {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
-
             var products = _productManagementService.GetAllProducts();
 
             var itemCount = products.Count();
@@ -65,8 +59,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Insert()
         {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
             return View();
         }
 
@@ -130,9 +122,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Update(Guid id)
         {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
-
             Product product = _productManagementService.GetProduct(id);
             
             var model = new ProductUpdateModel
@@ -203,7 +192,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
             return View(model);
         }
-
 
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -300,11 +288,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
         public IActionResult Search()
         {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
-
             var products = _productManagementService.GetAllProducts();
-
 
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
@@ -319,11 +303,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
         public IActionResult Tags()
         {
-            ViewData["HideNavbar"] = true;
-            ViewData["IsSidebarCollapsed"] = true;
-
             var products = _productManagementService.GetAllProducts();
-
 
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
