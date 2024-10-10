@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Input changes when search
+    // Input changes when search (mainly it's clickable function for title and tag search)
     function setupSearch(inputElement, containerElement, itemClass, textClass, clearButton) {
         inputElement.addEventListener("input", function () {
             var query = inputElement.value.toLowerCase();

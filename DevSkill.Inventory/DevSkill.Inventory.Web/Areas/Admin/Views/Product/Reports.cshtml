@@ -1,0 +1,118 @@
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
+@{
+    ViewData["Title"] = "Reports";
+    var newItemId = ViewBag.NewItemId as Guid?;
+}
+
+<div class="content-wrapper">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-md-3" style="position: sticky; top: 0; height: 100vh;">
+            <div class="card" style="height: 100vh;">
+                <div class="card-body" style="overflow-y: auto;">
+                    <!-- Search bar -->
+                    <form class="search-container mb-4">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="search-icon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" id="folderSearch" placeholder="Search reports" aria-label="Search titles">
+                                <div class="input-group-append" id="clear-button" style="cursor: pointer; display: none;">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-times"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="header-border mb-3"></div>
+                        </div>
+                    </form>
+
+                    <!-- Sidebar Menu Items -->
+                    <div class="menu-items">
+                        <div class="menu-item hoverable-item">
+                            <i class="fas fa-history icon"></i>
+                            <span class="menu-text">Activity History</span>
+                        </div>
+
+                        <div class="menu-item hoverable-item">
+                            <i class="fas fa-boxes icon"></i>
+                            <span class="menu-text">Inventory Summary</span>
+                        </div>
+
+                        <div class="menu-item hoverable-item">
+                            <i class="fas fa-exchange-alt icon"></i>
+                            <span class="menu-text">Transactions</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="fixed-header">
+                <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
+                    <h1 class="items-title">Activity Hsitory</h1>
+                </div>
+                <div class="header-border mb-4"></div>
+                <partial name="_ResponsePartial"></partial>
+            </div>
+
+            <!-- Search Bar and Value Fields -->
+            <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
+                <form id="searchForm">
+                    <div class="input-group" style="max-width: 300px;">
+                        <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;">
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<style>
+    .menu-items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .menu-item {
+        display: flex;
+        align-items: center; 
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .menu-item .icon {
+        font-size: 20px;
+        color: #5a5a5a;
+        margin-right: 10px;
+    }
+    .menu-item .menu-text {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+    }
+    .menu-item:hover {
+        background-color: #e6e6f0;
+        color: #fff;
+    }
+    .search-container {
+        margin-bottom: 20px;
+    }
+    .header-border {
+        border-bottom: 2px solid #ddd;
+        margin-bottom: 15px;
+    }
+</style>
+
+
+
