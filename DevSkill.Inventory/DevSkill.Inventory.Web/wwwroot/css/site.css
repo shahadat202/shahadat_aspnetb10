@@ -236,7 +236,46 @@ body {
     margin-top: 7px;
 }
 
+/*  Styel for Reports page  */
+.menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .menu-item .icon {
+        font-size: 20px;
+        color: #5a5a5a;
+        margin-right: 10px;
+    }
+
+    .menu-item .menu-text {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .menu-item:hover {
+        background-color: #e6e6f0;
+        color: #fff;
+    }
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.header-border {
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 15px;
+}
 
 
 

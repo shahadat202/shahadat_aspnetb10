@@ -41,6 +41,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
             return View(products);
         }
+
         public IActionResult Items() 
         {
             var products = _productManagementService.GetAllProducts();
@@ -263,9 +264,19 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products);
         }
 
-        public IActionResult Reports()
+        public IActionResult Reports() 
         {
             return View();
+        }
+
+        public IActionResult InventorySummary()
+        {
+            return PartialView("_InventorySummary");
+        }
+
+        public IActionResult Transactions()
+        {
+            return PartialView("_Transactions");
         }
     }
 }
