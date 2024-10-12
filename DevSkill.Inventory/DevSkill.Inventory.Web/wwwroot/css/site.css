@@ -55,7 +55,7 @@ body {
     color: white;
 }
 
-/* Style for _Items.cshtml page   */
+/*   Style for Items.cshtml page    */
 .row {
     margin-left: -80px;
 }
@@ -66,7 +66,7 @@ body {
     overflow-y: auto; 
 }
 
-/*  Search(Search Folders) bar section  */
+/*  Search(Search Title) bar section  */
 .input-group {
     width: 100%;
 }
@@ -81,6 +81,51 @@ body {
 #folderSearch:focus {
     outline: none;
 }
+.title-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+/*  When dynamically add title in sidebar  */
+.title-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.title-icon {
+    margin-right: 8px;
+    color: #888888;
+    font-size: 1.2em;
+}
+
+.title-text {
+    font-size: 16px;
+    color: #333;
+    transition: color 0.3s ease;
+    font-size: 1.2em;
+}
+
+.title-item:hover {
+    background-color: #f1f1f1;
+    color: #0056b3;
+    border-radius: 3px;
+}
+
+/* Active title */
+.active-title {
+    background-color: #f0f0f0;
+    border: 1px solid red;
+    color: red;
+}
+
+    .active-title .title-icon {
+        color: red;
+    }
 
 /*  All Items, Add Item, Add folder section  */
 .fixed-header {
@@ -236,7 +281,51 @@ body {
     margin-top: 7px;
 }
 
-/*  Styel for Reports page  */
+/*   Style for Tags page sidebar   */
+.tag-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tag-icon {
+    font-size: 20px;
+    color: #5a5a5a;
+    margin-right: 10px;
+}
+
+.tag-text {
+    font-size: 20px;
+    font-weight: 500;
+    color: #333;
+}
+
+.tag-item:hover {
+    background-color: #e6e6f0;
+    color: #fff;
+    border-radius: 3px;
+}
+
+/* Active tag */
+.active-tag {
+    background-color: #f0f0f0;
+    border: 1px solid red;
+    color: red;
+}
+
+    .active-tag .tag-icon {
+        color: red;
+    }
+
+/*  Styel for Reports page   */
 .menu-items {
     display: flex;
     flex-direction: column;
@@ -266,16 +355,13 @@ body {
     .menu-item:hover {
         background-color: #e6e6f0;
         color: #fff;
+        border-radius: 3px;
     }
-
-.search-container {
-    margin-bottom: 20px;
+.selected {
+    background-color: #cce5ff; 
+    color: #004085;
 }
 
-.header-border {
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 15px;
-}
 
 
 

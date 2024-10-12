@@ -268,12 +268,14 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             return View();
         }
-
+        public IActionResult ActivityHistory()
+        {
+            return PartialView("_ActivityHistory");
+        }
         public IActionResult InventorySummary()
         {
             return PartialView("_InventorySummary");
         }
-
         public IActionResult Transactions()
         {
             return PartialView("_Transactions");

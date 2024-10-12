@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var folderSearch = document.getElementById("folderSearch");
     var tagsContainer = document.getElementById("searchTagsContainer");
     var titlesContainer = document.getElementById("searchTitlesContainer");
+    var reportsContainer = document.getElementById("searchReportsContainer");
     var clearButton = document.getElementById("clear-button");
 
     var searchInput = document.getElementById('searchAllItems');
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     setupSearch(folderSearch, tagsContainer, "tag-item", "tag-text", clearButton);
     setupSearch(folderSearch, titlesContainer, "title-item", "title-text", clearButton);
-    
+    setupSearch(folderSearch, reportsContainer, "menu-item", "menu-text", clearButton);
 
     // Show items serially when search (search all items section)
     searchInput.addEventListener('input', function () {
