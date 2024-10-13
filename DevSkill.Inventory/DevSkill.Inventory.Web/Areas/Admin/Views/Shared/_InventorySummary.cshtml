@@ -1,8 +1,74 @@
-﻿@{
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
+@{
     ViewData["Title"] = "_InventorySummary";
+    var newItemId = ViewBag.NewItemId as Guid?;
 }
 
-<div>
-    <p>This section will contain the inventory summary details.</p>
+<div class="value-fields" style="padding: 10px 0;">
+    <div class="row" style="margin: 0;">
+        <div class="col-md-4 no-padding">
+            <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
+        </div>
+        <div class="col-md-4 no-padding">
+            <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
+        </div>
+    </div>
 </div>
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Full inventory summary here.</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>NAME</th>
+                        <th>QUANTITY</th>
+                        <th>MIN LEVEL</th>
+                        <th>PRICE</th>
+                        <th>VALUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>NAME</th>
+                        <th>QUANTITY</th>
+                        <th>MIN LEVEL</th>
+                        <th>PRICE</th>
+                        <th>VALUE</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
 

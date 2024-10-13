@@ -274,6 +274,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
         public IActionResult InventorySummary()
         {
+
             return PartialView("_InventorySummary");
         }
         public IActionResult Transactions()
