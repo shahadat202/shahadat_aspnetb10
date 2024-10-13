@@ -375,13 +375,65 @@ body {
     color: #004085;
 }
 
+/*  Reports page content area  */
+.info-box {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    height: 180px;
+    cursor: pointer;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
 
+    .info-box:hover {
+        background-color: #e3e3e3;
+        transition: background-color 0.3s ease;
+    }
 
+.info-box-icon {
+    font-size: 40px;
+    color: #4b6cb7;
+    margin-right: 15px;
+}
 
+.info-box-content {
+    flex: 1;
+}
 
+.info-box-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
 
+.info-box-text {
+    font-size: 14px;
+    color: #6c757d;
+}
 
+.hoverable-item {
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
 
+    .hoverable-item:hover {
+        background-color: #f0f0f0;
+    }
 
+.menu-items {
+    margin-top: 20px;
+}
 
+.menu-item .icon {
+    margin-right: 10px;
+}
 
+.menu-text {
+    font-size: 16px;
+}
