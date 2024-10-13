@@ -30,16 +30,16 @@
                         </div>
                     </form>
                     <div class="menu-items">
-                        <div class="menu-item hoverable-item">
+                        <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("ActivityHistory", "Product", new { area = "Admin" })', 'Activity History', this)">
                             <i class="fas fa-history icon"></i>
-                            <a asp-area="Admin" asp-controller="Product" asp-action="Reports" class="menu-text">Activity History</a>
+                            <span class="menu-text">Activity History</span>
                         </div>
-                        <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("InventorySummary", "Product", new { area = "Admin" })', 'Inventory Summary')">
+                        <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("InventorySummary", "Product", new { area = "Admin" })', 'Inventory Summary', this)">
                             <i class="fas fa-boxes icon"></i>
                             <span class="menu-text">Inventory Summary</span>
                         </div>
 
-                        <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("Transactions", "Product", new { area = "Admin" })', 'Transactions')">
+                        <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("Transactions", "Product", new { area = "Admin" })', 'Transactions', this)">
                             <i class="fas fa-exchange-alt icon"></i>
                             <span class="menu-text">Transactions</span>
                         </div>
@@ -52,12 +52,12 @@
         <div class="col-md-9">
             <div class="fixed-header">
                 <div id="content-are" class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
-                    <h1 class="items-title" id="page-title">Activity History</h1>
+                    <h1 class="items-title" id="page-title">Reports</h1>
                 </div>
                 <div class="header-border mb-4"></div>
 
                 <div id="content-area">
-                    <p>activity history content</p>
+                    
                 </div>
             </div>
         </div>
@@ -66,7 +66,7 @@
 
 @section Scripts {
     <script type="text/javascript">
-        function loadContent(url, title) {
+        function loadContent(url, title, element) {
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -81,8 +81,16 @@
                     alert('Error loading content');
                 }
             });
+
+            $('.hoverable-item').removeClass('active-item');
+
+            $(element).addClass('active-item');
         }
     </script>
 }
 
-
+<style>
+    .active-item {
+        background-color: rgba(228,230,229,255);
+    }
+</style>
