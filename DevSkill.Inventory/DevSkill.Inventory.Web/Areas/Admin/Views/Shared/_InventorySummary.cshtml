@@ -32,12 +32,12 @@
     <table class="table table-bordered table-hover table-striped custom-table" style="margin-top: 20px; font-size: 16px;">
         <thead class="thead-light">
             <tr>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th>Min Level</th>
-                <th>Price</th>
-                <th>Value</th>
-                <th>Tags</th>
+                <th onclick="sortTable(0)">Name <span class="sort-icon">&#8597;</span></th>
+                <th onclick="sortTable(1)">Quantity <span class="sort-icon">&#8597;</span></th>
+                <th onclick="sortTable(2)">Min Level <span class="sort-icon">&#8597;</span></th>
+                <th onclick="sortTable(3)">Price <span class="sort-icon">&#8597;</span></th>
+                <th onclick="sortTable(4)">Value <span class="sort-icon">&#8597;</span></th>
+                <th onclick="sortTable(5)">Tags <span class="sort-icon">&#8597;</span></th>
             </tr>
         </thead>
         <tbody id="products">
@@ -69,6 +69,7 @@
         </tbody>
     </table>
 </div>
+
 <style>
     .custom-table tbody tr td a:hover img {
         transform: scale(1.1);
@@ -77,9 +78,17 @@
     #td {
         align-items: center;
     }
+
+    .custom-table thead th {
+        cursor: pointer;
+        user-select: none;
+    }
+    .sort-icon {
+        margin-left: 5px;
+        transition: transform 0.2s; 
+    }
 </style>
 <script>
-
     function filterItems() {
         var searchTerm = document.getElementById("searchAllItems").value.toLowerCase();
         var rows = document.querySelectorAll("#products tr"); // Select all rows in the product table
@@ -88,10 +97,10 @@
         var totalValue = 0;
 
         rows.forEach(row => {
-            var itemTitle = row.querySelector(".item-title").textContent.toLowerCase(); // Get the item title
-            var itemQuantity = parseInt(row.querySelector(".item-quantity").textContent) || 0; // Get the item quantity
-            var itemPrice = parseFloat(row.querySelector(".item-price").textContent.replace(',', '').trim()) || 0; // Get the item price
-            var itemValue = parseFloat(row.querySelector(".item-value").textContent.replace(',', '').trim()) || 0; // Get the item total value
+            var itemTitle = row.querySelector(".item-title").textContent.toLowerCase(); 
+            var itemQuantity = parseInt(row.querySelector(".item-quantity").textContent) || 0; 
+            var itemPrice = parseFloat(row.querySelector(".item-price").textContent.replace(',', '').trim()) || 0; 
+            var itemValue = parseFloat(row.querySelector(".item-value").textContent.replace(',', '').trim()) || 0;
 
             // Check if the title contains the search term
             if (itemTitle.includes(searchTerm)) {
@@ -106,6 +115,43 @@
 
         document.getElementById("itemCount").textContent = visibleItemCount;
         document.getElementById("totalQuantity").textContent = totalQuantity;
-        document.getElementById("totalValue").textContent = totalValue.toFixed(2) + " $"; // Format total value as currency
+        document.getElementById("totalValue").textContent = totalValue.toFixed(2) + " $"; 
+    }
+
+    let sortDirection = true; 
+
+    function sortTable(columnIndex) {
+        const table = document.getElementById("products");
+        const rows = Array.from(table.rows).slice(0); 
+        const isNumericColumn = (columnIndex === 1 || columnIndex === 3 || columnIndex === 4); 
+
+        // Sort the rows based on the column index
+        rows.sort((a, b) => {
+            const cellA = a.cells[columnIndex].textContent.trim();
+            const cellB = b.cells[columnIndex].textContent.trim();
+
+            let comparison = 0;
+
+            if (isNumericColumn) {
+                // Convert to number for numeric comparison
+                const valueA = parseFloat(cellA.replace(',', '').replace('$', ''));
+                const valueB = parseFloat(cellB.replace(',', '').replace('$', ''));
+                comparison = valueA - valueB;
+            } else {
+                // Compare as strings for non-numeric columns
+                comparison = cellA.localeCompare(cellB);
+            }
+
+            return sortDirection ? comparison : -comparison; // Ascending or descending based on sortDirection
+        });
+
+        // Clear the table body and append the sorted rows
+        while (table.rows.length > 1) {
+            table.deleteRow(1);
+        }
+        rows.forEach(row => table.appendChild(row));
+
+        // Toggle sort direction for next click
+        sortDirection = !sortDirection;
     }
 </script>
