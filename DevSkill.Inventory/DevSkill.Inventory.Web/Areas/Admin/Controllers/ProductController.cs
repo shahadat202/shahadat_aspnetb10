@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using DevSkill.Inventory.Infrastructure;
 using AutoMapper;
+using MailKit.Search;
 
 namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 {
@@ -272,10 +273,24 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             return PartialView("_ActivityHistory");
         }
-        public IActionResult InventorySummary()
+        public IActionResult InventorySummary(string searchTerm)
         {
+            var products = _productManagementService.GetAllProducts();
 
-            return PartialView("_InventorySummary");
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                products = products.Where(p => p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            var itemCount = products.Count();
+            var totalQuantity = products.Sum(p => p.Quantity);
+            var totalValue = products.Sum(p => p.TotalValue);
+
+            ViewBag.ItemCount = itemCount;
+            ViewBag.TotalQuantity = totalQuantity;
+            ViewBag.TotalValue = totalValue;
+
+            return PartialView("_InventorySummary", products);
         }
         public IActionResult Transactions()
         {

@@ -4,71 +4,108 @@
     ViewData["Title"] = "_InventorySummary";
     var newItemId = ViewBag.NewItemId as Guid?;
 }
+<!-- Search Bar and Value Fields -->
+<div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
+    <form id="searchForm" onsubmit="return false;">
+        <div class="input-group" style="max-width: 300px;">
+            <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;" oninput="filterItems()">
+        </div>
+    </form>
+    <!-- Value Fields -->
+    <div class="value-fields" style="padding: 10px 0;">
+        <div class="row" style="margin: 0;">
+            <div class="col-md-4 no-padding">
+                <strong style="font-size: 20px;">Total Items:</strong> <span id="itemCount">@ViewBag.ItemCount</span>
+            </div>
+            <div class="col-md-4 no-padding">
+                <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
+            </div>
+            <div class="col-md-4 no-padding">
+                <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
+            </div>
+        </div>
+    </div>
+</div>
 
-<div class="value-fields" style="padding: 10px 0;">
-    <div class="row" style="margin: 0;">
-        <div class="col-md-4 no-padding">
-            <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
-        </div>
-        <div class="col-md-4 no-padding">
-            <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
-        </div>
-    </div>
-</div>
-<div class="col-12">
-    <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Full inventory summary here.</h3>
-        </div>
-        <!-- /.card-header -->
-        <div class="card-body">
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>NAME</th>
-                        <th>QUANTITY</th>
-                        <th>MIN LEVEL</th>
-                        <th>PRICE</th>
-                        <th>VALUE</th>
+<!-- Inventory Summary Data Table -->
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped custom-table" style="margin-top: 20px; font-size: 16px;">
+        <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Min Level</th>
+                <th>Price</th>
+                <th>Value</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+        <tbody id="products">
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="card-box">
+                        <td>
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" style="display: flex;">
+                                <img src="@item.Image" alt="@item.Title" style="width: 50px; height: 50px; margin-right: 10px; border-radius: 8px;" />
+                                <span class="item-title" style="color: black;">@item.Title</span>
+                            </a>
+                        </td>
+                        <td class="item-quantity">@item.Quantity</td>
+                        <td>@item.MinLevel</td>
+                        <td class="item-price">@item.Price, $</td>
+                        <td class="item-value">@item.TotalValue, $</td>
+                        <td>@item.Tags</td>
                     </tr>
-                </thead>
-                <tbody>
-                    
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>NAME</th>
-                        <th>QUANTITY</th>
-                        <th>MIN LEVEL</th>
-                        <th>PRICE</th>
-                        <th>VALUE</th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">No items available right now.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+<style>
+    .custom-table tbody tr td a:hover img {
+        transform: scale(1.1);
+        transition: transform 0.4s ease-in-out;
+    }
+    #td {
+        align-items: center;
+    }
+</style>
 <script>
-    $(function () {
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+
+    function filterItems() {
+        var searchTerm = document.getElementById("searchAllItems").value.toLowerCase();
+        var rows = document.querySelectorAll("#products tr"); // Select all rows in the product table
+        var visibleItemCount = 0;
+        var totalQuantity = 0;
+        var totalValue = 0;
+
+        rows.forEach(row => {
+            var itemTitle = row.querySelector(".item-title").textContent.toLowerCase(); // Get the item title
+            var itemQuantity = parseInt(row.querySelector(".item-quantity").textContent) || 0; // Get the item quantity
+            var itemPrice = parseFloat(row.querySelector(".item-price").textContent.replace(',', '').trim()) || 0; // Get the item price
+            var itemValue = parseFloat(row.querySelector(".item-value").textContent.replace(',', '').trim()) || 0; // Get the item total value
+
+            // Check if the title contains the search term
+            if (itemTitle.includes(searchTerm)) {
+                row.style.display = "";
+                visibleItemCount++; 
+                totalQuantity += itemQuantity; 
+                totalValue += itemValue;
+            } else {
+                row.style.display = "none"; 
+            }
         });
-    });
+
+        document.getElementById("itemCount").textContent = visibleItemCount;
+        document.getElementById("totalQuantity").textContent = totalQuantity;
+        document.getElementById("totalValue").textContent = totalValue.toFixed(2) + " $"; // Format total value as currency
+    }
 </script>
-
-
-
-
-
-
-
-
-
-
-

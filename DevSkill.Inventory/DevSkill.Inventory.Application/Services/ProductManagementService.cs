@@ -25,7 +25,6 @@ namespace DevSkill.Inventory.Application.Services
         {
             return _InventoryUnitOfWork.ProductRepository.GetById(id);
         }
-
         public void UpdateProduct(Product product)
         {
             if (!_InventoryUnitOfWork.ProductRepository.IsTitleDuplicate(product.Title, product.Id))
