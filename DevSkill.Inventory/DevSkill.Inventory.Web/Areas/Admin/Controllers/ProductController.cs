@@ -208,7 +208,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                         Message = "Product not found",
                         Type = ResponseTypes.Warning
                     });
-                    return RedirectToAction("Items"); 
+                    return RedirectToAction("Items");
                 }
 
                 _productManagementService.DeleteProduct(id);
@@ -233,6 +233,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 return RedirectToAction("Items");
             }
         }
+
 
         public IActionResult Search()
         {

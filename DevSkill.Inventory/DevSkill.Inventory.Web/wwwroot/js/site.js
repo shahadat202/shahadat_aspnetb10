@@ -134,12 +134,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Event listener for "Clear Selection"
-    clearSelection.addEventListener('click', function () {
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = false;
-        });
-        updateSelectedItemsDisplay();
-    });
+    //clearSelection.addEventListener('click', function () {
+    //    checkboxes.forEach(function (checkbox) {
+    //        checkbox.checked = false;
+    //    });
+    //    updateSelectedItemsDisplay();
+    //});
 
     // Modal Delete Button
     deleteButton.addEventListener('click', function () {
