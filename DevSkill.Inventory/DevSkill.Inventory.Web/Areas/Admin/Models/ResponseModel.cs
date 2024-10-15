@@ -3,7 +3,8 @@
     public enum ResponseTypes
     {
         Success,
-        Danger
+        Danger,
+        Warning
     }
 
     public class ResponseModel

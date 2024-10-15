@@ -38,8 +38,15 @@ namespace DevSkill.Inventory.Application.Services
 
         public void DeleteProduct(Guid id)
         {
+            var product = _InventoryUnitOfWork.ProductRepository.GetById(id);
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product not found");
+            }
+
+            // Remove the product
             _InventoryUnitOfWork.ProductRepository.Remove(id);
-            _InventoryUnitOfWork.Save();  
+            _InventoryUnitOfWork.Save();
         }
     }
 }
