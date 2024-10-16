@@ -52,7 +52,14 @@
                                 <span class="item-title" style="color: black;">@item.Title</span>
                             </a>
                         </td>
-                        <td class="item-quantity">@item.Quantity</td>
+                        @* <td class="item-quantity">@item.Quantity</td> *@
+                        <td class="item-quantity">
+                            @item.Quantity
+                            @if (item.Quantity < item.MinLevel)
+                            {
+                                <span class="badge bg-danger" style="margin: 5px; padding: 5px;">LOW STOCK</span>
+                            }
+                        </td>
                         <td>@item.MinLevel</td>
                         <td class="item-price">@item.Price, $</td>
                         <td class="item-value">@item.TotalValue, $</td>
