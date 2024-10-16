@@ -195,6 +195,45 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        //[HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
+        //public IActionResult Delete(Guid id)
+        //{
+        //    try
+        //    {
+        //        var product = _productManagementService.GetProduct(id);
+        //        if (product == null)
+        //        {
+        //            TempData.Put("ResponseMessage", new ResponseModel
+        //            {
+        //                Message = "Product not found",
+        //                Type = ResponseTypes.Warning
+        //            });
+        //            return RedirectToAction("Items");
+        //        }
+
+        //        _productManagementService.DeleteProduct(id);
+
+        //        TempData.Put("ResponseMessage", new ResponseModel
+        //        {
+        //            Message = "Product deleted successfully",
+        //            Type = ResponseTypes.Success
+        //        });
+
+        //        return RedirectToAction("Items");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData.Put("ResponseMessage", new ResponseModel
+        //        {
+        //            Message = "Product deletion failed",
+        //            Type = ResponseTypes.Danger
+        //        });
+        //        _logger.LogError(ex, "Product deletion failed for Id: {ProductId}", id);
+
+        //        return RedirectToAction("Items");
+        //    }
+        //}
+
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public IActionResult Delete(Guid id)
         {
@@ -203,37 +242,18 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 var product = _productManagementService.GetProduct(id);
                 if (product == null)
                 {
-                    TempData.Put("ResponseMessage", new ResponseModel
-                    {
-                        Message = "Product not found",
-                        Type = ResponseTypes.Warning
-                    });
-                    return RedirectToAction("Items");
+                    return Json(new { success = false, message = "Product not found" });
                 }
 
                 _productManagementService.DeleteProduct(id);
 
-                TempData.Put("ResponseMessage", new ResponseModel
-                {
-                    Message = "Product deleted successfully",
-                    Type = ResponseTypes.Success
-                });
-
-                return RedirectToAction("Items");
+                return Json(new { success = true, message = "Item deleted successfully!" });
             }
             catch (Exception ex)
             {
-                TempData.Put("ResponseMessage", new ResponseModel
-                {
-                    Message = "Product deletion failed",
-                    Type = ResponseTypes.Danger
-                });
-                _logger.LogError(ex, "Product deletion failed for Id: {ProductId}", id);
-
-                return RedirectToAction("Items");
+                return Json(new { success = false, message = "Error deleting item: " + ex.Message });
             }
         }
-
 
         public IActionResult Search()
         {
