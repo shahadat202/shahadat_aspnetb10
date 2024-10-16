@@ -7,6 +7,18 @@
 
 <div class="content-wrapper">
     <div class="row">
+        <!-- Response message after item delete -->
+        @if (TempData["ResponseMessage"] != null)
+        {
+            var responseMessage = TempData["ResponseMessage"] as ResponseModel;
+
+            if (responseMessage != null)
+            {
+                <div class="alert alert-@responseMessage.Type.ToString().ToLower()" role="alert">
+                    @responseMessage.Message
+                </div>
+            }
+        }
         <!-- Sidebar -->
         <aside class="col-md-3" style="position: sticky; top: 0; height: 100vh;">
             <div class="card" style="height: 100vh;">
@@ -131,13 +143,27 @@
                 {
                     @foreach (var item in Model)
                     {
-                        <!-- Begin merged _ItemBoxPartial content -->
                         <div class="col-md-4 d-flex justify-content-center">
-                            <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id" class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
+                            <div class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
                                 <span class="item-serial"></span>
-                                <img src="@item.Image" alt="@item.Title" class="card-img-top" />
-                                <h5 class="card-title">@item.Title</h5>
+                                <div class="image-container" style="position: relative;">
+                                    <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id">
+                                        <img src="@item.Image" alt="@item.Title" class="card-img-top" />
+                                        @if (item.Quantity < item.MinLevel)
+                                        {
+                                            <span class="badge badge-danger" style="position: absolute; padding: 5px; left: 10px; bottom: 10px; font-size: 12px;">LOW STOCK</span>
+                                        }
+                                    </a>
+                                </div>
                                 <div class="card-body">
+                                    <!-- First Line: Title and Delete Button -->
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title" style="margin-left: 0px;">@item.Title</h5>
+                                        <button style="margin-right: 0px;" data-id="@item.Id" type="button" class="btn btn-danger btn-sm show-bs-modal delete-icon" onclick="confirmDelete('@item.Id')">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+
                                     <!-- Second Line: Quantity and Price -->
                                     <div class="item-info">
                                         <span class="item-quantity">Quantity: @item.Quantity</span>
@@ -152,8 +178,8 @@
                                         <span class="item-price" id="totalValue">Total: @item.TotalValue,$</span>
                                     </div>
                                 </div>
-                                <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" value="@item.Id" />
-                            </a>
+                                @* <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" value="@item.Id" /> *@
+                            </div>
                         </div>
                     }
                 }
@@ -168,3 +194,97 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var searchInput = document.getElementById('searchAllItems');
+        var items = document.querySelectorAll('.item-box');
+        var itemCountField = document.getElementById('itemCount');
+        var totalQuantityField = document.getElementById('totalQuantity');
+        var totalValueField = document.getElementById('totalValue');
+
+        // Form submission when Enter key is pressed
+        searchInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+
+        // Show items serially when search (search all items section)
+        searchInput.addEventListener('input', function () {
+            var searchValue = searchInput.value.toLowerCase();
+            var searchTerm = searchInput.value.toLowerCase();
+            let visibleItemCount = 0;
+            let totalQuantity = 0;
+            let totalValue = 0;
+            items.forEach(function (item) {
+                var title = item.querySelector('.card-title').textContent.toLowerCase();
+
+                if (title.includes(searchValue)) {
+                    item.style.display = 'flex';
+                    item.style.margin = '0px 45px 20px 40px';
+                    visibleItemCount++;
+
+                    var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
+                    var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                    var itemTotalValue = itemQuantity * itemPrice;
+
+                    totalQuantity += itemQuantity;
+                    totalValue += itemTotalValue;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+            // After filtering, reflow the visible items
+            var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
+
+            var productsContainer = document.getElementById('products');
+            productsContainer.innerHTML = '';
+            filteredItems.forEach(item => productsContainer.appendChild(item));
+
+            // Update countable fields
+            itemCountField.textContent = visibleItemCount;
+            totalQuantityField.textContent = totalQuantity;
+            totalValueField.textContent = totalValue.toFixed(2) + ' $';
+        });
+    });
+    // Item delete functionality
+    function confirmDelete(itemId) {
+        if (confirm("Are you sure you want to delete this item?")) {
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            $.ajax({
+                url: '/Admin/Product/Delete',
+                type: 'POST',
+                data: {
+                    id: itemId,
+                    __RequestVerificationToken: token
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        window.location.href = '/Admin/Product/Items';
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function (err) {
+                    alert('Error deleting item');
+                }
+            });
+        }
+    }
+</script>
+<style>
+    .delete-icon {
+        background-color: transparent;
+        color: #dd2a3b;
+        cursor: pointer;
+        border: none;
+    }
+
+        .delete-icon:hover {
+            background-color: #dd2a3b;
+            color: white;
+            transition: 0.5s;
+        }
+</style>

@@ -6,6 +6,7 @@
 }
 <div class="content-wrapper">
     <div class="row">
+        <!-- Response message after item delete -->
         @if (TempData["ResponseMessage"] != null)
         {
             var responseMessage = TempData["ResponseMessage"] as ResponseModel;
@@ -132,9 +133,15 @@
                         <div class="col-md-4 d-flex justify-content-center">
                             <div class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
                                 <span class="item-serial"></span>
-                                <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id">
-                                    <img src="@item.Image" alt="@item.Title" class="card-img-top" />
-                                </a>
+                                <div class="image-container" style="position: relative;">
+                                    <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id">
+                                        <img src="@item.Image" alt="@item.Title" class="card-img-top" />
+                                        @if (item.Quantity < item.MinLevel)
+                                        {
+                                            <span class="badge badge-danger" style="position: absolute; padding: 5px; left: 10px; bottom: 10px; font-size: 12px;">LOW STOCK</span>
+                                        }
+                                    </a>
+                                </div>
                                 <div class="card-body">
                                     <!-- First Line: Title and Delete Button -->
                                     <div class="d-flex justify-content-between">
@@ -207,10 +214,9 @@
         cursor: pointer;
         border: none;
     }
-
-        .delete-icon:hover {
-            background-color: #dd2a3b;
-            color: white;
-            transition: 0.5s;
-        }
+    .delete-icon:hover {
+        background-color: #dd2a3b;
+        color: white;
+        transition: 0.5s;
+    }
 </style>

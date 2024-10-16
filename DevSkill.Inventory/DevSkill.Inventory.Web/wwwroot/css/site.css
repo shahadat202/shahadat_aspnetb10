@@ -219,10 +219,6 @@ body {
     background-color: #fff;
 }
 
-    .item-box:hover {
-        /*transform: scale(1.05);*/
-    }
-
     .item-box img {
         height: 150px;
         width: 100%;

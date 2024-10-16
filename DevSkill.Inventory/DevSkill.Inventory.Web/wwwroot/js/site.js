@@ -1,5 +1,4 @@
-﻿//-- Item page & Tag page content ---
-document.addEventListener('DOMContentLoaded', function () {
+﻿document.addEventListener('DOMContentLoaded', function () {
     var folderSearch = document.getElementById("folderSearch");
     var tagsContainer = document.getElementById("searchTagsContainer");
     var titlesContainer = document.getElementById("searchTitlesContainer");
