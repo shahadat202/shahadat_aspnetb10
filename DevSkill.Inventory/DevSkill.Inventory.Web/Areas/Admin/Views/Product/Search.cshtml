@@ -33,11 +33,11 @@
                     <div class="header-border mb-4" style="border-bottom: 1px solid #ddd;"></div>
 
                     <!-- Advanced filtering columns will be added here -->
-                    <form id="advanced-filter-form">
+                    <form id="advanced-filter-form" method="post" action="Admin/Product/Search">
                         <!-- Name and Quantity Row -->
                         <div class="form-group">
-                            <label for="filterName">Name</label>
-                            <input type="text" class="form-control" id="filterName" placeholder="Item name">
+                            <label for="filterTitle">Name</label>
+                            <input type="text" class="form-control" id="filterTitle" placeholder="Item name">
                         </div>
                         <div class="form-group">
                             <label for="filterQuantity">Quantity</label>
@@ -61,11 +61,20 @@
                         </div>
 
                         <!-- Price Row -->
-                        <div class="form-group">
-                            <label for="filterPrice">Price ($)</label>
-                            <input type="number" step="0.01" class="form-control" id="filterPrice" placeholder="Search by value">
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="filterPriceFrom">Price From ($)</label>
+                                    <input type="number" step="0.01" class="form-control" id="filterPriceFrom" placeholder="Search by value">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="filterPriceTo">Price To ($)</label>
+                                    <input type="number" step="0.01" class="form-control" id="filterPriceTo" placeholder="Search by value">
+                                </div>
+                            </div>
                         </div>
-
                         <!-- Inserted Date Rows -->
                         <div class="form-group">
                             <label for="filterDateFrom">Inserted Date From</label>
