@@ -33,29 +33,28 @@
                     <div class="header-border mb-4" style="border-bottom: 1px solid #ddd;"></div>
 
                     <!-- Advanced filtering columns will be added here -->
-                    <form id="advanced-filter-form" method="post" action="Admin/Product/Search">
-                        <!-- Name and Quantity Row -->
+                    <form id="advanced-filter-form" method="post" asp-action="Search">
                         <div class="form-group">
                             <label for="filterTitle">Name</label>
-                            <input type="text" class="form-control" id="filterTitle" placeholder="Item name">
+                            <input type="text" class="form-control" id="filterTitle" name="Name" placeholder="Item name">
                         </div>
                         <div class="form-group">
                             <label for="filterQuantity">Quantity</label>
-                            <input type="number" class="form-control" id="filterQuantity" placeholder="Search by quantity">
+                            <input type="number" class="form-control" id="filterQuantity" name="Quantity" placeholder="Search by quantity">
                         </div>
 
-                        <!-- Min.Level and Tag Row -->
+                        <!-- Min. Level and Tag Row -->
                         <div class="form-row">
                             <div class="col">
                                 <div class="form-group">
                                     <label for="filterMinLevel">Min. Level</label>
-                                    <input type="number" class="form-control" id="filterMinLevel" placeholder="Minimum level">
+                                    <input type="number" class="form-control" id="filterMinLevel" name="MinLevel" placeholder="Minimum level">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="filterTag">Tag</label>
-                                    <input type="text" class="form-control" id="filterTag" placeholder="Search by tag">
+                                    <input type="text" class="form-control" id="filterTag" name="Tag" placeholder="Search by tag">
                                 </div>
                             </div>
                         </div>
@@ -65,27 +64,30 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="filterPriceFrom">Price From ($)</label>
-                                    <input type="number" step="0.01" class="form-control" id="filterPriceFrom" placeholder="Search by value">
+                                    <input type="number" step="0.01" class="form-control" id="filterPriceFrom" name="PriceFrom" placeholder="Search by value">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="filterPriceTo">Price To ($)</label>
-                                    <input type="number" step="0.01" class="form-control" id="filterPriceTo" placeholder="Search by value">
+                                    <input type="number" step="0.01" class="form-control" id="filterPriceTo" name="PriceTo" placeholder="Search by value">
                                 </div>
                             </div>
                         </div>
+
                         <!-- Inserted Date Rows -->
                         <div class="form-group">
                             <label for="filterDateFrom">Inserted Date From</label>
-                            <input class="form-control" id="filterDateFrom" placeholder="YYYY-MM-DD" format="YYYY-MM-DD">
+                            <input class="form-control" id="filterDateFrom" name="DateFrom" placeholder="YYYY-MM-DD">
                         </div>
                         <div class="form-group">
                             <label for="filterDateTo">Inserted Date To</label>
-                            <input class="form-control" id="filterDateTo" placeholder="YYYY-MM-DD" format="YYYY-MM-DD">
-                            @* <input type="date" class="form-control" id="filterDateTo" placeholder="YYYY-MM-DD" format="YYYY-MM-DD"> *@
+                            <input class="form-control" id="filterDateTo" name="DateTo" placeholder="YYYY-MM-DD">
                         </div>
+
+                        <button type="submit" class="btn btn-success btn-block">Apply Filters</button>
                     </form>
+
                 </div>
 
                 <!-- Sticky Footer Button -->
