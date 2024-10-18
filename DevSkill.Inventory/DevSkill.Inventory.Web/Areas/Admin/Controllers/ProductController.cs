@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using DevSkill.Inventory.Infrastructure;
 using AutoMapper;
 using MailKit.Search;
+using DevSkill.Inventory.Domain;
+using System.Web;
 
 namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 {
@@ -253,6 +255,39 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = "Error deleting item: " + ex.Message });
             }
+        }
+
+        [HttpPost, Authorize(Roles = "Member,Admin,Support")]
+        public async Task<JsonResult> GetProductJsonDataSP([FromBody] ProductListModel model)
+        {
+            // Extract the search criteria from the SearchItem property
+            var searchDto = model.SearchItem;
+
+            var result = await _productManagementService.GetProductsSP(
+                model.PageIndex,
+                model.PageSize,
+                searchDto,            
+                model.Order            
+            );
+
+            var productJsonData = new
+            {
+                recordsTotal = result.total,
+                recordsFiltered = result.totalDisplay,
+                data = (from record in result.data
+                        select new string[]
+                        {
+                    HttpUtility.HtmlEncode(record.Title),
+                    record.Quantity.ToString(),
+                    record.Price.ToString("F2"),
+                    record.MinLevel.ToString(),
+                    record.Tags,
+                    record.CreatedDate.ToString("yyyy/MM/dd"),
+                    record.Id.ToString()
+                        }).ToArray()
+            };
+
+            return Json(productJsonData);
         }
 
         public IActionResult Search()

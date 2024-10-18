@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevSkill.Inventory.Web.Migrations.InventoryDb
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20241018050921_CreateGetProductSP")]
+    [Migration("20241018110823_CreateGetProductSP")]
     partial class CreateGetProductSP
     {
         /// <inheritdoc />

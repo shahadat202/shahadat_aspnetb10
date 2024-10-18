@@ -15,7 +15,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                     @PageIndex int,
                     @PageSize int, 
                     @OrderBy nvarchar(50),
-                    @Name nvarchar(max) = '%',
+                    @Title nvarchar(max) = '%',
                     @Quantity int = NULL,
                     @MinLevel int = NULL,
                     @Tag nvarchar(50) = NULL,
@@ -43,8 +43,8 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                         WHERE 1 = 1';
 
                     -- Filters for counting
-                    IF @Name IS NOT NULL
-                        SET @countsql = @countsql + ' AND i.Name LIKE ''%'' + @xName + ''%'' ';
+                    IF @Title IS NOT NULL
+                        SET @countsql = @countsql + ' AND i.Title LIKE ''%'' + @xTitle + ''%'' ';
 
                     IF @Quantity IS NOT NULL
                         SET @countsql = @countsql + ' AND i.Quantity = @xQuantity';
@@ -68,7 +68,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                         SET @countsql = @countsql + ' AND i.InsertedDate <= @xDateTo';
 
                     -- Execute count query
-                    SET @paramList = '@xName nvarchar(max), 
+                    SET @paramList = '@xTitle nvarchar(max), 
                                       @xQuantity int, 
                                       @xMinLevel int, 
                                       @xTag nvarchar(50), 
@@ -79,7 +79,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                                       @TotalDisplay int output';
 
                     EXEC sp_executesql @countsql, @paramList, 
-                        @Name, 
+                        @Title, 
                         @Quantity, 
                         @MinLevel, 
                         @Tag, 
@@ -96,8 +96,8 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                         WHERE 1 = 1 ';
 
                     -- Filters for data
-                    IF @Name IS NOT NULL
-                        SET @sql = @sql + ' AND i.Name LIKE ''%'' + @xName + ''%'' ';
+                    IF @Title IS NOT NULL
+                        SET @sql = @sql + ' AND i.Title LIKE ''%'' + @xTitle + ''%'' ';
 
                     IF @Quantity IS NOT NULL
                         SET @sql = @sql + ' AND i.Quantity = @xQuantity';
@@ -126,7 +126,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                                         FETCH NEXT @PageSize ROWS ONLY';
 
                     -- Execute paginated data query
-                    SET @paramList = '@xName nvarchar(max),
+                    SET @paramList = '@xTitle nvarchar(max),
                                       @xQuantity int, 
                                       @xMinLevel int, 
                                       @xTag nvarchar(50), 
@@ -138,7 +138,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                                       @PageSize int';
 
                     EXEC sp_executesql @sql, @paramList, 
-                        @Name, 
+                        @Title, 
                         @Quantity, 
                         @MinLevel, 
                         @Tag, 
@@ -159,7 +159,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             var sql = "DROP PROCEDURE [dbo].[GetProducts]";
-            migrationBuilder.DropTable(sql);
+            migrationBuilder.Sql(sql);
         }
     }
 }

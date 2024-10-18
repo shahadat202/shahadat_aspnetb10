@@ -1,4 +1,5 @@
-﻿using DevSkill.Inventory.Domain.Entities;
+﻿using DevSkill.Inventory.Domain.Dtos;
+using DevSkill.Inventory.Domain.Entities;
 
 namespace DevSkill.Inventory.Application.Services
 {
@@ -47,6 +48,12 @@ namespace DevSkill.Inventory.Application.Services
             // Remove the product
             _InventoryUnitOfWork.ProductRepository.Remove(id);
             _InventoryUnitOfWork.Save();
+        }
+
+        public async Task<(IList<ProductDto> data, int total, int totalDisplay)> GetProductsSP(int pageIndex, 
+            int pageSize, ProductSearchDto search, string? order)
+        {
+            return await _InventoryUnitOfWork.GetPagedProductsUsingSPAsync(pageIndex, pageSize, search, order);
         }
     }
 }
