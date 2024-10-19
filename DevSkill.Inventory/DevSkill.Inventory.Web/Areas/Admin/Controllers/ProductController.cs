@@ -257,42 +257,43 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost, Authorize(Roles = "Member,Admin,Support")]
-        public async Task<JsonResult> GetProductJsonDataSP([FromBody] ProductListModel model)
-        {
-            // Extract the search criteria from the SearchItem property
-            var searchDto = model.SearchItem;
-
-            var result = await _productManagementService.GetProductsSP(
-                model.PageIndex,
-                model.PageSize,
-                searchDto,            
-                model.Order            
-            );
-
-            var productJsonData = new
-            {
-                recordsTotal = result.total,
-                recordsFiltered = result.totalDisplay,
-                data = (from record in result.data
-                        select new string[]
-                        {
-                    HttpUtility.HtmlEncode(record.Title),
-                    record.Quantity.ToString(),
-                    record.Price.ToString("F2"),
-                    record.MinLevel.ToString(),
-                    record.Tags,
-                    record.CreatedDate.ToString("yyyy/MM/dd"),
-                    record.Id.ToString()
-                        }).ToArray()
-            };
-
-            return Json(productJsonData);
-        }
-
-        public IActionResult Search()
+        public IActionResult Search(string title, int? quantity, int? minLevel, string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
         {
             var products = _productManagementService.GetAllProducts();
+
+            // Apply filters
+            if (!string.IsNullOrEmpty(title))
+            {
+                products = products.Where(p => p.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+            }
+            if (quantity.HasValue)
+            {
+                products = products.Where(p => p.Quantity == quantity.Value);
+            }
+            if (minLevel.HasValue)
+            {
+                products = products.Where(p => p.MinLevel >= minLevel.Value);
+            }
+            if (!string.IsNullOrEmpty(tag))
+            {
+                products = products.Where(p => p.Tags.Contains(tag, StringComparison.OrdinalIgnoreCase));
+            }
+            if (priceFrom.HasValue)
+            {
+                products = products.Where(p => p.Price >= priceFrom.Value);
+            }
+            if (priceTo.HasValue)
+            {
+                products = products.Where(p => p.Price <= priceTo.Value);
+            }
+            if (dateFrom.HasValue)
+            {
+                products = products.Where(p => p.CreatedDate >= dateFrom.Value);
+            }
+            if (dateTo.HasValue)
+            {
+                products = products.Where(p => p.CreatedDate <= dateTo.Value);
+            }
 
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
@@ -302,8 +303,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewBag.TotalQuantity = totalQuantity;
             ViewBag.TotalValue = totalValue;
 
-            return View(products);
+            return View(products.ToList()); 
         }
+
 
         public IActionResult Tags()
         {

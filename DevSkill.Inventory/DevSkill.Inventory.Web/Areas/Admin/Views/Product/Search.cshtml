@@ -26,7 +26,7 @@
                     <!-- Filters title and Clear All button -->
                     <div class="d-flex justify-content-between mb-3">
                         <h5 class="mb-0">Filters</h5>
-                        <button  class="btn btn-outline-danger btn-sm" id="clear-filters">Clear All</button>
+                        <button class="btn btn-outline-danger btn-sm" id="clear-filters">Clear All</button>
                     </div>
 
                     <!-- Border line -->
@@ -78,21 +78,18 @@
                         <!-- Inserted Date Rows -->
                         <div class="form-group">
                             <label for="filterDateFrom">Inserted Date From</label>
-                            <input class="form-control" id="filterDateFrom" name="DateFrom" placeholder="YYYY-MM-DD">
+                            <input class="form-control" id="filterDateFrom" name="DateFrom" type="date">
                         </div>
                         <div class="form-group">
                             <label for="filterDateTo">Inserted Date To</label>
-                            <input class="form-control" id="filterDateTo" name="DateTo" placeholder="YYYY-MM-DD">
+                            <input class="form-control" id="filterDateTo" name="DateTo" type="date">
                         </div>
 
-                        <button type="submit" class="btn btn-success btn-block">Apply Filters</button>
+                        <!-- Sticky Footer Button -->
+                        <div class="card-footer" style="position: sticky; bottom: 0; background-color: white;">
+                            <button id="searchButton" type="submit" class="btn btn-success btn-block">FILTERS APPLIED</button>
+                        </div>
                     </form>
-
-                </div>
-
-                <!-- Sticky Footer Button -->
-                <div class="card-footer" style="position: sticky; bottom: 0; background-color: white;">
-                    <button class="btn btn-success btn-block">FILTERS APPLIED</button>
                 </div>
             </div>
         </aside>
@@ -206,85 +203,12 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var searchInput = document.getElementById('searchAllItems');
-        var items = document.querySelectorAll('.item-box');
-        var itemCountField = document.getElementById('itemCount');
-        var totalQuantityField = document.getElementById('totalQuantity');
-        var totalValueField = document.getElementById('totalValue');
-
-        // Form submission when Enter key is pressed
-        searchInput.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-            }
-        });
-
-        // Show items serially when search (search all items section)
-        searchInput.addEventListener('input', function () {
-            var searchValue = searchInput.value.toLowerCase();
-            var searchTerm = searchInput.value.toLowerCase();
-            let visibleItemCount = 0;
-            let totalQuantity = 0;
-            let totalValue = 0;
-            items.forEach(function (item) {
-                var title = item.querySelector('.card-title').textContent.toLowerCase();
-
-                if (title.includes(searchValue)) {
-                    item.style.display = 'flex';
-                    item.style.margin = '0px 45px 20px 40px';
-                    visibleItemCount++;
-
-                    var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
-                    var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
-                    var itemTotalValue = itemQuantity * itemPrice;
-
-                    totalQuantity += itemQuantity;
-                    totalValue += itemTotalValue;
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-            // After filtering, reflow the visible items
-            var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
-
-            var productsContainer = document.getElementById('products');
-            productsContainer.innerHTML = '';
-            filteredItems.forEach(item => productsContainer.appendChild(item));
-
-            // Update countable fields
-            itemCountField.textContent = visibleItemCount;
-            totalQuantityField.textContent = totalQuantity;
-            totalValueField.textContent = totalValue.toFixed(2) + ' $';
-        });
+    document.getElementById("clear-filters").addEventListener("click", function () {
+        document.getElementById("advanced-filter-form").reset();
+        window.location.href = '@Url.Action("Search", "Product")'; 
     });
-    // Item delete functionality
-    function confirmDelete(itemId) {
-        if (confirm("Are you sure you want to delete this item?")) {
-            var token = $('input[name="__RequestVerificationToken"]').val();
-
-            $.ajax({
-                url: '/Admin/Product/Delete',
-                type: 'POST',
-                data: {
-                    id: itemId,
-                    __RequestVerificationToken: token
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                        window.location.href = '/Admin/Product/Items';
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function (err) {
-                    alert('Error deleting item');
-                }
-            });
-        }
-    }
 </script>
+
 <style>
     .delete-icon {
         background-color: transparent;
