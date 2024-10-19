@@ -30,7 +30,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                     SET NOCOUNT ON;
 
                     -- Collecting Total Count
-                    SELECT @Total = COUNT(*) FROM Items;
+                    SELECT @Total = COUNT(*) FROM Products;
 
                     -- Dynamic SQL for filtering and counting
                     DECLARE @sql nvarchar(MAX);
@@ -39,7 +39,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
 
                     SET @countsql = '
                         SELECT @TotalDisplay = COUNT(*) 
-                        FROM Items i 
+                        FROM Products i 
                         WHERE 1 = 1';
 
                     -- Filters for counting
@@ -92,7 +92,7 @@ namespace DevSkill.Inventory.Web.Migrations.InventoryDb
                     -- Dynamic SQL for paginated data retrieval
                     SET @sql = '
                         SELECT * 
-                        FROM Items i
+                        FROM Products i
                         WHERE 1 = 1 ';
 
                     -- Filters for data
