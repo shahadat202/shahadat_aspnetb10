@@ -299,13 +299,21 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             var totalQuantity = products.Sum(p => p.Quantity);
             var totalValue = products.Sum(p => p.TotalValue);
 
+            ViewBag.FilterTitle = title;
+            ViewBag.FilterQuantity = quantity;
+            ViewBag.FilterMinLevel = minLevel;
+            ViewBag.FilterTag = tag;
+            ViewBag.FilterPriceFrom = priceFrom;
+            ViewBag.FilterPriceTo = priceTo;
+            ViewBag.FilterDateFrom = dateFrom;
+            ViewBag.FilterDateTo = dateTo;
+
             ViewBag.ItemCount = itemCount;
             ViewBag.TotalQuantity = totalQuantity;
             ViewBag.TotalValue = totalValue;
 
             return View(products.ToList()); 
         }
-
 
         public IActionResult Tags()
         {
