@@ -257,7 +257,83 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Search(string title, int? quantity, int? minLevel, string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
+        //public IActionResult Search(string title, int? quantity, int? minLevel,
+        //string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
+        //{
+        //    var products = _productManagementService.GetAllProducts();
+
+        //    // Apply filters
+        //    if (!string.IsNullOrEmpty(title))
+        //    {
+        //        products = products.Where(p => p.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
+        //    }
+        //    if (quantity.HasValue)
+        //    {
+        //        products = products.Where(p => p.Quantity == quantity.Value);
+        //    }
+        //    if (minLevel.HasValue)
+        //    {
+        //        products = products.Where(p => p.MinLevel >= minLevel.Value);
+        //    }
+        //    if (!string.IsNullOrEmpty(tag))
+        //    {
+        //        products = products.Where(p => p.Tags.Contains(tag, StringComparison.OrdinalIgnoreCase));
+        //    }
+        //    if (priceFrom.HasValue)
+        //    {
+        //        products = products.Where(p => p.Price >= priceFrom.Value);
+        //    }
+        //    if (priceTo.HasValue)
+        //    {
+        //        products = products.Where(p => p.Price <= priceTo.Value);
+        //    }
+        //    if (dateFrom.HasValue)
+        //    {
+        //        products = products.Where(p => p.CreatedDate >= dateFrom.Value);
+        //    }
+        //    if (dateTo.HasValue)
+        //    {
+        //        products = products.Where(p => p.CreatedDate <= dateTo.Value);
+        //    }
+
+        //    var itemCount = products.Count();
+        //    var totalQuantity = products.Sum(p => p.Quantity);
+        //    var totalValue = products.Sum(p => p.TotalValue);
+
+        //    ViewBag.FilterTitle = title;
+        //    ViewBag.FilterQuantity = quantity;
+        //    ViewBag.FilterMinLevel = minLevel;
+        //    ViewBag.FilterTag = tag;
+        //    ViewBag.FilterPriceFrom = priceFrom;
+        //    ViewBag.FilterPriceTo = priceTo;
+        //    ViewBag.FilterDateFrom = dateFrom;
+        //    ViewBag.FilterDateTo = dateTo;
+
+        //    ViewBag.ItemCount = itemCount;
+        //    ViewBag.TotalQuantity = totalQuantity;
+        //    ViewBag.TotalValue = totalValue;
+
+        //    return View(products.ToList()); 
+        //}
+
+        [HttpPost]
+        public IActionResult ApplyFilters(string title, int? quantity, int? minLevel, 
+            string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
+        {
+            return RedirectToAction("Search", new
+            {
+                title = title,
+                quantity = quantity,
+                minLevel = minLevel,
+                tag = tag,
+                priceFrom = priceFrom,
+                priceTo = priceTo,
+                dateFrom = dateFrom,
+                dateTo = dateTo
+            });
+        }
+        public IActionResult Search(string title, int? quantity, int? minLevel, 
+            string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
         {
             var products = _productManagementService.GetAllProducts();
 
@@ -295,10 +371,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 products = products.Where(p => p.CreatedDate <= dateTo.Value);
             }
 
-            var itemCount = products.Count();
-            var totalQuantity = products.Sum(p => p.Quantity);
-            var totalValue = products.Sum(p => p.TotalValue);
-
             ViewBag.FilterTitle = title;
             ViewBag.FilterQuantity = quantity;
             ViewBag.FilterMinLevel = minLevel;
@@ -308,11 +380,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewBag.FilterDateFrom = dateFrom;
             ViewBag.FilterDateTo = dateTo;
 
-            ViewBag.ItemCount = itemCount;
-            ViewBag.TotalQuantity = totalQuantity;
-            ViewBag.TotalValue = totalValue;
+            ViewBag.ItemCount = products.Count();
+            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
+            ViewBag.TotalValue = products.Sum(p => p.TotalValue);
 
-            return View(products.ToList()); 
+            return View(products.ToList());
         }
 
         public IActionResult Tags()
