@@ -124,6 +124,31 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        public IActionResult Details(Guid id)
+        {
+            var product = _productManagementService.GetProduct(id);
+
+            if (product == null)
+                return NotFound();
+            
+            var model = new ProductDetailsModel
+            {
+                Id = product.Id,
+                Title = product.Title,
+                Quantity = product.Quantity,
+                Price = product.Price,
+                TotalValue = product.TotalValue,
+                MinLevel = product.MinLevel,
+                Tags = product.Tags,
+                Notes = product.Notes,
+                Image = product.Image,
+                CreatedDate = product.CreatedDate,
+            };
+
+            return View(model);
+        }
+
+        [Authorize(Roles = "Admin")]
         public IActionResult Update(Guid id)
         {
             Product product = _productManagementService.GetProduct(id);
@@ -193,48 +218,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 }
                 return RedirectToAction("Items");
             }
-            //model.SetCategoryValues(_categoryManagementService.GetCategories());
             return View(model);
         }
-
-        //[HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
-        //public IActionResult Delete(Guid id)
-        //{
-        //    try
-        //    {
-        //        var product = _productManagementService.GetProduct(id);
-        //        if (product == null)
-        //        {
-        //            TempData.Put("ResponseMessage", new ResponseModel
-        //            {
-        //                Message = "Product not found",
-        //                Type = ResponseTypes.Warning
-        //            });
-        //            return RedirectToAction("Items");
-        //        }
-
-        //        _productManagementService.DeleteProduct(id);
-
-        //        TempData.Put("ResponseMessage", new ResponseModel
-        //        {
-        //            Message = "Product deleted successfully",
-        //            Type = ResponseTypes.Success
-        //        });
-
-        //        return RedirectToAction("Items");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        TempData.Put("ResponseMessage", new ResponseModel
-        //        {
-        //            Message = "Product deletion failed",
-        //            Type = ResponseTypes.Danger
-        //        });
-        //        _logger.LogError(ex, "Product deletion failed for Id: {ProductId}", id);
-
-        //        return RedirectToAction("Items");
-        //    }
-        //}
 
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public IActionResult Delete(Guid id)

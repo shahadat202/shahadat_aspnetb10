@@ -68,7 +68,7 @@
                 <div class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
                     <span class="item-serial"></span>
                     <div class="image-container" style="position: relative;">
-                        <a asp-area="Admin" asp-controller="Product" asp-action="Update" asp-route-id="@item.Id">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
                             <img src="@item.Image" alt="@item.Title" class="card-img-top" />
                             @if (item.Quantity < item.MinLevel)
                             {
