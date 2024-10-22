@@ -30,7 +30,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Index() //dashboard
+        public IActionResult Index()
         {
             var products = _productManagementService.GetAllProducts();
 
@@ -44,6 +44,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 
             return View(products);
         }
+
 
         public IActionResult Items() 
         {
