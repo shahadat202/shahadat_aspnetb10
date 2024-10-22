@@ -10,11 +10,11 @@ namespace DevSkill.Inventory.Application.Services
 {
     public interface IProductManagementService
     {
-        void InsertProduct(Product product);
+        void InsertProduct(Product product, string username);
         IEnumerable<Product> GetAllProducts();
         Product GetProduct(Guid id);
-        void UpdateProduct(Product product);
-        void DeleteProduct(Guid id);
+        void UpdateProduct(Product product, string username);
+        void DeleteProduct(Guid id, string username);
 
         Task<(IList<ProductDto> data, int total, int totalDisplay)> GetProductsSP(int pageIndex, int pageSize,
             ProductSearchDto search, string? order);

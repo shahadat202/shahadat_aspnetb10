@@ -1,19 +1,30 @@
 ﻿using DevSkill.Inventory.Domain.Dtos;
 using DevSkill.Inventory.Domain.Entities;
+using DevSkill.Inventory.Domain.RepositoryContracts;
 
 namespace DevSkill.Inventory.Application.Services
 {
     public class ProductManagementService : IProductManagementService
     {
         private readonly IInventoryUnitOfWork _InventoryUnitOfWork;
-        public ProductManagementService(IInventoryUnitOfWork InventoryUnitOfWork)
+        private readonly IActivityLogRepository _ActivityLogRepository;
+        public ProductManagementService(IInventoryUnitOfWork InventoryUnitOfWork,
+            IActivityLogRepository activityLogRepository)
         {
             _InventoryUnitOfWork = InventoryUnitOfWork;
+            _ActivityLogRepository = activityLogRepository;
         }
 
-        public void InsertProduct(Product product)
+        public void InsertProduct(Product product, string username)
         {
             _InventoryUnitOfWork.ProductRepository.Add(product);
+            _ActivityLogRepository.Add(new ActivityLog()
+            {
+                Username = username,
+                Action = "Inserted",
+                ItemName = product.Title,
+                ActionDate = DateTime.Now,
+            });
             _InventoryUnitOfWork.Save();
         }
 
@@ -26,18 +37,25 @@ namespace DevSkill.Inventory.Application.Services
         {
             return _InventoryUnitOfWork.ProductRepository.GetById(id);
         }
-        public void UpdateProduct(Product product)
+        public void UpdateProduct(Product product, string username)
         {
             if (!_InventoryUnitOfWork.ProductRepository.IsTitleDuplicate(product.Title, product.Id))
             {
                 _InventoryUnitOfWork.ProductRepository.Edit(product);
+                _ActivityLogRepository.Add(new ActivityLog()
+                {
+                    Username = username,
+                    Action = "Updated",
+                    ItemName = product.Title,
+                    ActionDate = DateTime.Now,
+                });
                 _InventoryUnitOfWork.Save();
             }
             else
                 throw new InvalidOperationException("Title should be unique.");
         }
 
-        public void DeleteProduct(Guid id)
+        public void DeleteProduct(Guid id, string username)
         {
             var product = _InventoryUnitOfWork.ProductRepository.GetById(id);
             if (product == null)
@@ -47,6 +65,13 @@ namespace DevSkill.Inventory.Application.Services
 
             // Remove the product
             _InventoryUnitOfWork.ProductRepository.Remove(id);
+            _ActivityLogRepository.Add(new ActivityLog()
+            {
+                Username = username,
+                Action = "Deleted",
+                ItemName = product.Title,
+                ActionDate = DateTime.Now,
+            });
             _InventoryUnitOfWork.Save();
         }
 

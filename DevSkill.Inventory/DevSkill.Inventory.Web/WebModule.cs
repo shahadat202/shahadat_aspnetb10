@@ -33,6 +33,10 @@ public class WebModule(string connectionString, string migrationAssembly) : Modu
             .As<IProductRepository>()
             .InstancePerLifetimeScope();
 
+        builder.RegisterType<ActivityLogRepository>()
+            .As<IActivityLogRepository>()
+            .InstancePerLifetimeScope();
+
         builder.RegisterType<InventoryUnitOfWork>()
             .As<IInventoryUnitOfWork>()
             .InstancePerLifetimeScope();

@@ -1,9 +1,53 @@
-﻿
+﻿@model IEnumerable<ActivityLog>
+@using DevSkill.Inventory.Domain.Entities
 @{
     ViewData["Title"] = "_ActivityHistory";
 }
-
-<div>
-    <p>Activity history content</p>
+<!-- Search Bar and Value Fields -->
+<div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
+    <form id="searchForm" onsubmit="return false;">
+        <div class="input-group" style="max-width: 300px;">
+            <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;" oninput="filterItems()">
+        </div>
+    </form>
+</div>
+<!-- Activity History -->
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped custom-table" style="margin-top: 20px; font-size: 16px;">
+        <thead class="thead-light">
+            <tr>
+                <th onclick="sortTable(0)" style="cursor: pointer; user-select: none;">Date <span class="sort-icon" style="margin-left: 5px;">&#8597;</span></th>
+                <th onclick="sortTable(1)">Username</th>
+                <th onclick="sortTable(2)">Action</th>
+                <th onclick="sortTable(3)">Item Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in Model)
+            {
+                <tr>
+                    <td>@activity.ActionDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@activity.Username</td>
+                    <td>@activity.Action</td>
+                    <td>@activity.ItemName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("ActivityHistory", "Product")',
+            type: 'GET',
+            success: function (result) {
+                $('#activityHistoryContainer').html(result);
+            },
+            error: function () {
+                alert('Error loading content');
+            }
+        });
+    });
+
+</script>

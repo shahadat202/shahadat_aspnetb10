@@ -11,6 +11,7 @@ using AutoMapper;
 using MailKit.Search;
 using DevSkill.Inventory.Domain;
 using System.Web;
+using DevSkill.Inventory.Domain.RepositoryContracts;
 
 namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 {
@@ -19,13 +20,16 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
     {
         private readonly IProductManagementService _productManagementService;
         private readonly ILogger<ProductController> _logger;
+        private readonly IActivityLogRepository _activityLogRepository;
         //private readonly IMapper _mapper;
         
         public ProductController(ILogger<ProductController> logger,
-            IProductManagementService productManagementService)
+            IProductManagementService productManagementService,
+            IActivityLogRepository activityLogRepository)
         {
             _logger = logger;
             _productManagementService = productManagementService;
+            _activityLogRepository = activityLogRepository;
             //_mapper = mapper;
         }
 
@@ -99,7 +103,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 }
                 try
                 {
-                    _productManagementService.InsertProduct(product);
+                    var username = User.Identity.Name;
+                    _productManagementService.InsertProduct(product, username);
 
                     TempData.Put("ResponseMessage", new ResponseModel
                     {
@@ -117,6 +122,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                         Type = ResponseTypes.Danger
                     });
                     _logger.LogError(ex, "Product insertion failed");
+                    return RedirectToAction("Items");
                 }
             }
             //model.SetCategoryValues(_categoryManagementService.GetCategories());
@@ -199,7 +205,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 }
                 try
                 {
-                    _productManagementService.UpdateProduct(product);
+                    var username = User.Identity.Name;
+                    _productManagementService.UpdateProduct(product, username);
                     TempData.Put("ResponseMessage", new ResponseModel
                     {
                         Message = "Product updated successfully",
@@ -232,8 +239,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 {
                     return Json(new { success = false, message = "Product not found" });
                 }
-
-                _productManagementService.DeleteProduct(id);
+                var username = User.Identity.Name;
+                _productManagementService.DeleteProduct(id, username);
 
                 return Json(new { success = true, message = "Item deleted successfully!" });
             }
@@ -394,7 +401,21 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
         public IActionResult ActivityHistory()
         {
-            return PartialView("_ActivityHistory");
+            try
+            {
+                var logs = _activityLogRepository.GetRecentLogs(20);
+                if (logs == null || !logs.Any())
+                {
+                    _logger.LogWarning("No activity logs found.");
+                }
+
+                return PartialView("_ActivityHistory", logs);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load activity history.");
+                return StatusCode(500, "Internal server error.");
+            }
         }
         public IActionResult InventorySummary(string searchTerm)
         {
