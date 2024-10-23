@@ -18,6 +18,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
     [Area("Admin"), Authorize]
     public class ProductController : Controller
     {
+        const string AgeRestriction = "AgeRestriction";
+
         private readonly IProductManagementService _productManagementService;
         private readonly ILogger<ProductController> _logger;
         private readonly IActivityLogRepository _activityLogRepository;
@@ -67,13 +69,13 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products);
         }
 
-        [Authorize(Policy = "CreatePermission")]
+        [Authorize(Policy = "AgeRestriction")]
         public IActionResult Insert()
         {
             return View();
         }
 
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CreatePermission")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "AgeRestriction")]
         public async Task<IActionResult> Insert(ProductInsertModel model)
         {
             if (ModelState.IsValid)
@@ -161,7 +163,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Authorize(Policy = "CustomAccess")]
+        [Authorize(Policy = "AgeRestriction")]
         public IActionResult Update(Guid id)
         {
             Product product = _productManagementService.GetProduct(id);
@@ -182,7 +184,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CustomAccess")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "AgeRestriction")]
         public async Task<IActionResult> Update(ProductUpdateModel model)
         {
             if (ModelState.IsValid)
