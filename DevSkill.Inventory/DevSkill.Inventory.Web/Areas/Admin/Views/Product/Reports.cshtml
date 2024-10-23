@@ -36,10 +36,6 @@
                                     <i class="fas fa-boxes icon"></i>
                                     <span class="menu-text">Inventory Summary</span>
                                 </div>
-                                <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("Transactions", "Product", new { area = "Admin" })', 'Transactions', this)">
-                                    <i class="fas fa-exchange-alt icon"></i>
-                                    <span class="menu-text">Transactions</span>
-                                </div>
                             </div>
                         </div>
                     </form>
@@ -54,10 +50,9 @@
                     <h1 class="items-title" id="page-title">Reports</h1>
                 </div>
                 <div class="header-border mb-4" ></div>
-
                 <!-- Content Area for Boxes -->
-                <div id="content-area" style="">
-                    <div class="row" style="margin: 0px; padding: 30px 10px;">
+                <div id="content-area">
+                    <div class="row justify-content-center" style="margin: 0px; padding: 30px 10px;">
                         <!-- Activity History Box -->
                         <div class="col-md-4 mb-4">
                             <div class="info-box hoverable-box" onclick="loadContent('@Url.Action("ActivityHistory", "Product", new { area = "Admin" })', 'Activity History')">
@@ -83,22 +78,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Transactions Box -->
-                        <div class="col-md-4 mb-4">
-                            <div class="info-box hoverable-box" onclick="loadContent('@Url.Action("Transactions", "Product", new { area = "Admin" })', 'Transactions')">
-                                <div class="info-box-icon">
-                                    <i class="fas fa-exchange-alt"></i>
-                                </div>
-                                <div class="info-box-content">
-                                    <h5 class="info-box-title">Transactions</h5>
-                                    <p class="info-box-text">Monitor all inventory movements, updates, and deletions for efficient team oversight.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

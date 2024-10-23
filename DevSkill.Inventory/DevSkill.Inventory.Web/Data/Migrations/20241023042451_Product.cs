@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DevSkill.Inventory.Web.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddTotalValue : Migration
+    public partial class Product : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

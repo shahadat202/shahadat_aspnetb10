@@ -3,26 +3,27 @@
 @{
     ViewData["Title"] = "_ActivityHistory";
 }
-<!-- Search Bar and Value Fields -->
+<!-- Search Bar -->
 <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
     <form id="searchForm" onsubmit="return false;">
         <div class="input-group" style="max-width: 300px;">
-            <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;" oninput="filterItems()">
+            <input type="text" class="form-control" id="searchActivity" placeholder="Search by Date, Username, Action, or Item Name" aria-label="Search Activities" style="padding-left: 10px; border-bottom: none;" oninput="filterActivities()">
         </div>
     </form>
 </div>
-<!-- Activity History -->
+
+<!-- Activity History Table -->
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-striped custom-table" style="margin-top: 20px; font-size: 16px;">
         <thead class="thead-light">
             <tr>
-                <th onclick="sortTable(0)" style="cursor: pointer; user-select: none;">Date <span class="sort-icon" style="margin-left: 5px;">&#8597;</span></th>
-                <th onclick="sortTable(1)">Username</th>
-                <th onclick="sortTable(2)">Action</th>
-                <th onclick="sortTable(3)">Item Name</th>
+                <th onclick="sortTable(0)" style="cursor: pointer; user-select: none;">Date <span class="sort-icon">&#8597;</span></th>
+                <th>Username</th>
+                <th>Action</th>
+                <th>Item Name</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="activityHistoryBody">
             @foreach (var activity in Model)
             {
                 <tr>
@@ -36,18 +37,68 @@
     </table>
 </div>
 
+<!-- Styles -->
+<style>
+    .custom-table thead th {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .sort-icon {
+        margin-left: 5px;
+        transition: transform 0.2s;
+    }
+</style>
+
 <script>
-    $(document).ready(function () {
-        $.ajax({
-            url: '@Url.Action("ActivityHistory", "Product")',
-            type: 'GET',
-            success: function (result) {
-                $('#activityHistoryContainer').html(result);
-            },
-            error: function () {
-                alert('Error loading content');
+    let sortDirection = true;
+
+    function filterActivities() {
+        const searchTerm = document.getElementById("searchActivity").value.toLowerCase();
+        const rows = document.querySelectorAll("#activityHistoryBody tr");
+
+        rows.forEach(row => {
+            const dateText = row.cells[0].textContent.toLowerCase();
+            const usernameText = row.cells[1].textContent.toLowerCase();
+            const actionText = row.cells[2].textContent.toLowerCase();
+            const itemNameText = row.cells[3].textContent.toLowerCase();
+
+            if (dateText.includes(searchTerm) || usernameText.includes(searchTerm) || actionText.includes(searchTerm) || itemNameText.includes(searchTerm)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none"; 
             }
         });
-    });
+    }
 
+    function sortTable(columnIndex) {
+        const table = document.getElementById("activityHistoryBody");
+        const rows = Array.from(table.rows);
+        const isDateColumn = (columnIndex === 0);
+
+        rows.sort((a, b) => {
+            const cellA = a.cells[columnIndex].textContent.trim();
+            const cellB = b.cells[columnIndex].textContent.trim();
+
+            let comparison = 0;
+
+            if (isDateColumn) {
+                const dateA = new Date(cellA);
+                const dateB = new Date(cellB);
+                comparison = dateA - dateB;
+            } else {
+                comparison = cellA.localeCompare(cellB);
+            }
+
+            return sortDirection ? comparison : -comparison;
+        });
+
+        // Clear table and append sorted rows
+        table.innerHTML = "";
+        rows.forEach(row => table.appendChild(row));
+
+        // Toggle sort direction for next click
+        sortDirection = !sortDirection;
+    }
 </script>
+

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DevSkill.Inventory.Web.Migrations.ApplicationDb
+namespace DevSkill.Inventory.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240913063220_CreateCustomIdentityObjects")]
-    partial class CreateCustomIdentityObjects
+    [Migration("20241023045044_ApplicationUsers")]
+    partial class ApplicationUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

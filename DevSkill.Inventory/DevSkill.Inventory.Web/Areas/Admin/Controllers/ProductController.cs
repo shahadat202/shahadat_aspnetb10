@@ -37,6 +37,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var products = _productManagementService.GetAllProducts();
+            var logs = _activityLogRepository.GetRecentLogs();
 
             var itemCount = products.Count();
             var totalQuantity = products.Sum(p => p.Quantity);
@@ -45,6 +46,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewBag.ItemCount = itemCount;
             ViewBag.TotalQuantity = totalQuantity;
             ViewBag.TotalValue = totalValue;
+            ViewBag.LatestActivities = logs;
 
             return View(products);
         }
@@ -88,18 +90,22 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     Notes = model.Notes,
                     CreatedDate = DateTime.UtcNow
                 };
-
-                // Image upload logic
                 if (model.Image != null && model.Image.Length > 0)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", model.Image.FileName);
+                    var guid = Guid.NewGuid();
+
+                    var fileExtension = Path.GetExtension(model.Image.FileName);
+                    var uniqueFileName = $"{guid}{fileExtension}";
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", uniqueFileName);
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await model.Image.CopyToAsync(stream);
                     }
-                    product.Image = $"/uploadedImages/{model.Image.FileName}";
+
+                    product.Image = $"/uploadedImages/{uniqueFileName}";
                 }
                 try
                 {
@@ -195,13 +201,20 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 // Image upload logic
                 if (model.Image != null && model.Image.Length > 0)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", model.Image.FileName);
+                    var guid = Guid.NewGuid();
+
+                    var fileExtension = Path.GetExtension(model.Image.FileName);
+                    var uniqueFileName = $"{guid}{fileExtension}";
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", uniqueFileName);
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await model.Image.CopyToAsync(stream);
                     }
-                    product.Image = $"/uploadedImages/{model.Image.FileName}";
+
+                    product.Image = $"/uploadedImages/{uniqueFileName}";
                 }
                 try
                 {
@@ -403,7 +416,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             try
             {
-                var logs = _activityLogRepository.GetRecentLogs(20);
+                var logs = _activityLogRepository.GetRecentLogs();
                 if (logs == null || !logs.Any())
                 {
                     _logger.LogWarning("No activity logs found.");

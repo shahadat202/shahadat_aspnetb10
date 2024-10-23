@@ -17,9 +17,9 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
             _context = context;
         }
 
-        public IEnumerable<ActivityLog> GetRecentLogs(int count)
+        public IEnumerable<ActivityLog> GetRecentLogs()
         {
-            return _context.ActivityLogs.OrderByDescending(log => log.ActionDate).Take(count).ToList();
+            return _context.ActivityLogs.OrderByDescending(log => log.ActionDate).ToList();
         }
     }
 }
