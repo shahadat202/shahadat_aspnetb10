@@ -51,7 +51,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products);
         }
 
-
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Items() 
         {
             var products = _productManagementService.GetAllProducts();
@@ -67,13 +67,13 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "CreatePermission")]
         public IActionResult Insert()
         {
             return View();
         }
 
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CreatePermission")]
         public async Task<IActionResult> Insert(ProductInsertModel model)
         {
             if (ModelState.IsValid)
@@ -136,7 +136,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Details(Guid id)
         {
             var product = _productManagementService.GetProduct(id);
@@ -161,7 +161,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "CustomAccess")]
         public IActionResult Update(Guid id)
         {
             Product product = _productManagementService.GetProduct(id);
@@ -182,7 +182,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
+        [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "CustomAccess")]
         public async Task<IActionResult> Update(ProductUpdateModel model)
         {
             if (ModelState.IsValid)
@@ -338,6 +338,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 dateTo = dateTo
             });
         }
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Search(string title, int? quantity, int? minLevel, 
             string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
         {
@@ -393,6 +394,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products.ToList());
         }
 
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Tags()
         {
             var products = _productManagementService.GetAllProducts();
@@ -408,10 +410,13 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products);
         }
 
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Reports() 
         {
             return View();
         }
+
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult ActivityHistory()
         {
             try
@@ -430,6 +435,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
+
+        [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult InventorySummary(string searchTerm)
         {
             var products = _productManagementService.GetAllProducts();
@@ -448,10 +455,6 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewBag.TotalValue = totalValue;
 
             return PartialView("_InventorySummary", products);
-        }
-        public IActionResult Transactions()
-        {
-            return PartialView("_Transactions");
         }
     }
 }

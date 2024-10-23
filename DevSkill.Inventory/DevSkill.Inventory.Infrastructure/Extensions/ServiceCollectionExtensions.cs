@@ -40,6 +40,23 @@ namespace DevSkill.Inventory.Infrastructure.Extensions
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CustomAccess", policy =>
+                {
+                    policy.RequireRole("Admin");
+                    policy.RequireRole("Support");
+                });
+                options.AddPolicy("CreatePermission", policy =>
+                {
+                    policy.RequireClaim("create", "true");
+                });
+                //options.AddPolicy("AgeRestriction", policy =>
+                //{
+                //    policy.Requirements.Add(new AgeRequirement());
+                //});
+            });
         }
     }
 }
