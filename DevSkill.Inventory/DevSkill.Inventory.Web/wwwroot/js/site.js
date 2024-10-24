@@ -16,7 +16,7 @@
     var selectedItemsText = document.getElementById('selectedItemsText');
     var selectAllItems = document.getElementById('selectAllItems');
     var clearSelection = document.getElementById('clearSelection');
-    var deleteButton = document.querySelector('.show-bs-modal');
+    //var deleteButton = document.querySelector('.show-bs-modal');
 
     // Input changes when search (mainly it's clickable function for title and tag search)
     function setupSearch(inputElement, containerElement, itemClass, textClass, clearButton) {
@@ -92,14 +92,14 @@
     });
 
     // Modal Delete Button
-    deleteButton.addEventListener('click', function () {
-        $('#modal-default').modal('show');
-        var selectedIds = Array.from(checkboxes)
-            .filter(cb => cb.checked)
-            .map(cb => cb.value);
+    //deleteButton.addEventListener('click', function () {
+    //    $('#modal-default').modal('show');
+    //    var selectedIds = Array.from(checkboxes)
+    //        .filter(cb => cb.checked)
+    //        .map(cb => cb.value);
 
-        document.getElementById('deleteId').value = selectedIds.join(',');
-    });
+    //    document.getElementById('deleteId').value = selectedIds.join(',');
+    //});
 
     // Function to filter items based on specified criteria
     function filterItems(criteria, isTag) {

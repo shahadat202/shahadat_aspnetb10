@@ -41,13 +41,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             var products = _productManagementService.GetAllProducts();
             var logs = _activityLogRepository.GetRecentLogs();
 
-            var itemCount = products.Count();
-            var totalQuantity = products.Sum(p => p.Quantity);
-            var totalValue = products.Sum(p => p.TotalValue);
-
-            ViewBag.ItemCount = itemCount;
-            ViewBag.TotalQuantity = totalQuantity;
-            ViewBag.TotalValue = totalValue;
+            SetProductStatistics(products);
             ViewBag.LatestActivities = logs;
 
             return View(products);
@@ -57,15 +51,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         public IActionResult Items() 
         {
             var products = _productManagementService.GetAllProducts();
-
-            var itemCount = products.Count();
-            var totalQuantity = products.Sum(p => p.Quantity);
-            var totalValue = products.Sum(p => p.TotalValue);
-
-            ViewBag.ItemCount = itemCount;
-            ViewBag.TotalQuantity = totalQuantity;
-            ViewBag.TotalValue = totalValue;
-
+            SetProductStatistics(products);
             return View(products);
         }
 
@@ -92,23 +78,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     Notes = model.Notes,
                     CreatedDate = DateTime.UtcNow
                 };
-                if (model.Image != null && model.Image.Length > 0)
-                {
-                    var guid = Guid.NewGuid();
-
-                    var fileExtension = Path.GetExtension(model.Image.FileName);
-                    var uniqueFileName = $"{guid}{fileExtension}";
-
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", uniqueFileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.Image.CopyToAsync(stream);
-                    }
-
-                    product.Image = $"/uploadedImages/{uniqueFileName}";
-                }
+                // Image upload logic
+                product.Image = await HandleImageUpload(model.Image);
                 try
                 {
                     var username = User.Identity.Name;
@@ -201,23 +172,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                     Notes = model.Notes,
                 };
                 // Image upload logic
-                if (model.Image != null && model.Image.Length > 0)
-                {
-                    var guid = Guid.NewGuid();
-
-                    var fileExtension = Path.GetExtension(model.Image.FileName);
-                    var uniqueFileName = $"{guid}{fileExtension}";
-
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", uniqueFileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await model.Image.CopyToAsync(stream);
-                    }
-
-                    product.Image = $"/uploadedImages/{uniqueFileName}";
-                }
+                product.Image = await HandleImageUpload(model.Image);
                 try
                 {
                     var username = User.Identity.Name;
@@ -265,84 +220,8 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
-        //public IActionResult Search(string title, int? quantity, int? minLevel,
-        //string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
-        //{
-        //    var products = _productManagementService.GetAllProducts();
-
-        //    // Apply filters
-        //    if (!string.IsNullOrEmpty(title))
-        //    {
-        //        products = products.Where(p => p.Title.Contains(title, StringComparison.OrdinalIgnoreCase));
-        //    }
-        //    if (quantity.HasValue)
-        //    {
-        //        products = products.Where(p => p.Quantity == quantity.Value);
-        //    }
-        //    if (minLevel.HasValue)
-        //    {
-        //        products = products.Where(p => p.MinLevel >= minLevel.Value);
-        //    }
-        //    if (!string.IsNullOrEmpty(tag))
-        //    {
-        //        products = products.Where(p => p.Tags.Contains(tag, StringComparison.OrdinalIgnoreCase));
-        //    }
-        //    if (priceFrom.HasValue)
-        //    {
-        //        products = products.Where(p => p.Price >= priceFrom.Value);
-        //    }
-        //    if (priceTo.HasValue)
-        //    {
-        //        products = products.Where(p => p.Price <= priceTo.Value);
-        //    }
-        //    if (dateFrom.HasValue)
-        //    {
-        //        products = products.Where(p => p.CreatedDate >= dateFrom.Value);
-        //    }
-        //    if (dateTo.HasValue)
-        //    {
-        //        products = products.Where(p => p.CreatedDate <= dateTo.Value);
-        //    }
-
-        //    var itemCount = products.Count();
-        //    var totalQuantity = products.Sum(p => p.Quantity);
-        //    var totalValue = products.Sum(p => p.TotalValue);
-
-        //    ViewBag.FilterTitle = title;
-        //    ViewBag.FilterQuantity = quantity;
-        //    ViewBag.FilterMinLevel = minLevel;
-        //    ViewBag.FilterTag = tag;
-        //    ViewBag.FilterPriceFrom = priceFrom;
-        //    ViewBag.FilterPriceTo = priceTo;
-        //    ViewBag.FilterDateFrom = dateFrom;
-        //    ViewBag.FilterDateTo = dateTo;
-
-        //    ViewBag.ItemCount = itemCount;
-        //    ViewBag.TotalQuantity = totalQuantity;
-        //    ViewBag.TotalValue = totalValue;
-
-        //    return View(products.ToList()); 
-        //}
-
-        [HttpPost]
-        public IActionResult ApplyFilters(string title, int? quantity, int? minLevel, 
-            string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
-        {
-            return RedirectToAction("Search", new
-            {
-                title = title,
-                quantity = quantity,
-                minLevel = minLevel,
-                tag = tag,
-                priceFrom = priceFrom,
-                priceTo = priceTo,
-                dateFrom = dateFrom,
-                dateTo = dateTo
-            });
-        }
-        [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Search(string title, int? quantity, int? minLevel, 
-            string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
+        public IActionResult Search(string title, int? quantity, int? minLevel,
+        string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
         {
             var products = _productManagementService.GetAllProducts();
 
@@ -380,6 +259,10 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 products = products.Where(p => p.CreatedDate <= dateTo.Value);
             }
 
+            var itemCount = products.Count();
+            var totalQuantity = products.Sum(p => p.Quantity);
+            var totalValue = products.Sum(p => p.TotalValue);
+
             ViewBag.FilterTitle = title;
             ViewBag.FilterQuantity = quantity;
             ViewBag.FilterMinLevel = minLevel;
@@ -389,26 +272,19 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewBag.FilterDateFrom = dateFrom;
             ViewBag.FilterDateTo = dateTo;
 
-            ViewBag.ItemCount = products.Count();
-            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
-            ViewBag.TotalValue = products.Sum(p => p.TotalValue);
+            ViewBag.ItemCount = itemCount;
+            ViewBag.TotalQuantity = totalQuantity;
+            ViewBag.TotalValue = totalValue;
 
             return View(products.ToList());
         }
+
 
         [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult Tags()
         {
             var products = _productManagementService.GetAllProducts();
-
-            var itemCount = products.Count();
-            var totalQuantity = products.Sum(p => p.Quantity);
-            var totalValue = products.Sum(p => p.TotalValue);
-
-            ViewBag.ItemCount = itemCount;
-            ViewBag.TotalQuantity = totalQuantity;
-            ViewBag.TotalValue = totalValue;
-
+            SetProductStatistics(products);
             return View(products);
         }
 
@@ -417,6 +293,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         {
             return View();
         }
+
 
         [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult ActivityHistory()
@@ -438,6 +315,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
+
         [Authorize(Roles = "Member,Admin,Support")]
         public IActionResult InventorySummary(string searchTerm)
         {
@@ -447,16 +325,38 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             {
                 products = products.Where(p => p.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
             }
-
-            var itemCount = products.Count();
-            var totalQuantity = products.Sum(p => p.Quantity);
-            var totalValue = products.Sum(p => p.TotalValue);
-
-            ViewBag.ItemCount = itemCount;
-            ViewBag.TotalQuantity = totalQuantity;
-            ViewBag.TotalValue = totalValue;
+            SetProductStatistics(products);
 
             return PartialView("_InventorySummary", products);
+        }
+
+        // Countable value
+        private void SetProductStatistics(IEnumerable<Product> products)
+        {
+            ViewBag.ItemCount = products.Count();
+            ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
+            ViewBag.TotalValue = products.Sum(p => p.TotalValue);
+        }
+        // Image upload logic
+        private async Task<string> HandleImageUpload(IFormFile image)
+        {
+            if (image != null && image.Length > 0)
+            {
+                var guid = Guid.NewGuid();
+                var fileExtension = Path.GetExtension(image.FileName);
+                var uniqueFileName = $"{guid}{fileExtension}";
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", uniqueFileName);
+                Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                return $"/uploadedImages/{uniqueFileName}";
+            }
+            return null;
         }
     }
 }
