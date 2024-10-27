@@ -11,13 +11,6 @@
     var totalQuantityField = document.getElementById('totalQuantity');
     var totalValueField = document.getElementById('totalValue');
 
-    var checkboxes = document.querySelectorAll('.checkbox-delete');
-    var selectedItemsDiv = document.getElementById('selectedItemsDiv');
-    var selectedItemsText = document.getElementById('selectedItemsText');
-    var selectAllItems = document.getElementById('selectAllItems');
-    var clearSelection = document.getElementById('clearSelection');
-    //var deleteButton = document.querySelector('.show-bs-modal');
-
     // Input changes when search (mainly it's clickable function for title and tag search)
     function setupSearch(inputElement, containerElement, itemClass, textClass, clearButton) {
         inputElement.addEventListener("input", function () {
@@ -44,62 +37,6 @@
     setupSearch(folderSearch, tagsContainer, "tag-item", "tag-text", clearButton);
     setupSearch(folderSearch, titlesContainer, "title-item", "title-text", clearButton);
     setupSearch(folderSearch, reportsContainer, "menu-item", "menu-text", clearButton);
-
-    let selectedCount = 0;
-
-    // Add event listeners to each checkbox
-    checkboxes.forEach(function (checkbox) {
-        checkbox.addEventListener('click', function () {
-            if (checkbox.checked) {
-                checkboxes.forEach(function (cb) {
-                    cb.style.display = 'block';
-                });
-            }
-        });
-    });
-
-    // Function to update the selected items display
-    function updateSelectedItemsDisplay() {
-        selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
-        if (selectedCount > 0) {
-            selectedItemsText.textContent = `${selectedCount} item${selectedCount > 1 ? 's' : ''} selected`;
-            selectedItemsDiv.style.display = 'block';
-        } else {
-            selectedItemsText.textContent = `0 items selected`;
-            selectedItemsDiv.style.display = 'none';
-        }
-    }
-
-    // Add event listeners to each checkbox
-    checkboxes.forEach(function (checkbox) {
-        checkbox.addEventListener('click', updateSelectedItemsDisplay);
-    });
-
-    // Event listener for "All" selection
-    selectAllItems.addEventListener('click', function () {
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = true;
-        });
-        updateSelectedItemsDisplay();
-    });
-
-    // Event listener for "Clear Selection"
-    clearSelection.addEventListener('click', function () {
-        checkboxes.forEach(function (checkbox) {
-            checkbox.checked = false;
-        });
-        updateSelectedItemsDisplay();
-    });
-
-    // Modal Delete Button
-    //deleteButton.addEventListener('click', function () {
-    //    $('#modal-default').modal('show');
-    //    var selectedIds = Array.from(checkboxes)
-    //        .filter(cb => cb.checked)
-    //        .map(cb => cb.value);
-
-    //    document.getElementById('deleteId').value = selectedIds.join(',');
-    //});
 
     // Function to filter items based on specified criteria
     function filterItems(criteria, isTag) {

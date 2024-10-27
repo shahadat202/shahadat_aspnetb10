@@ -9,6 +9,6 @@ namespace DevSkill.Inventory.Domain.RepositoryContracts
 {
     public interface IActivityLogRepository : IRepositoryBase<ActivityLog, Guid>
     {
-        IEnumerable<ActivityLog> GetRecentLogs();
+        Task<IEnumerable<ActivityLog>> GetRecentLogAsync();
     }
 }

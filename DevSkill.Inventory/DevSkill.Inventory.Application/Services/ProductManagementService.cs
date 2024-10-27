@@ -28,14 +28,13 @@ namespace DevSkill.Inventory.Application.Services
             _InventoryUnitOfWork.Save();
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return _InventoryUnitOfWork.ProductRepository.GetAllProducts();
+            return await _InventoryUnitOfWork.ProductRepository.GetAllProductsAsync();
         }
-
-        public Product GetProduct(Guid id)
+        public async Task<Product> GetProductAsync(Guid id)
         {
-            return _InventoryUnitOfWork.ProductRepository.GetById(id);
+            return await _InventoryUnitOfWork.ProductRepository.GetByIdAsync(id);
         }
         public void UpdateProduct(Product product, string username)
         {

@@ -28,13 +28,13 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
                 return GetCount(x => x.Title == title) > 0;
             }
         }
-        public IEnumerable<Product> GetAllProducts()
+        public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return _context.Products.ToList();
+            return await _context.Products.ToListAsync();
         }
-        public Product GetById(Guid id)
+        public async  Task<Product> GetByIdAsync(Guid id)
         {
-            return _context.Products.FirstOrDefault(x => x.Id == id);
+            return await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
         }
 
     }

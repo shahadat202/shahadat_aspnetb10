@@ -1,6 +1,7 @@
 ﻿using Blog.Infrastructure.Repositories;
 using DevSkill.Inventory.Domain.Entities;
 using DevSkill.Inventory.Domain.RepositoryContracts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,9 @@ namespace DevSkill.Inventory.Infrastructure.Repositories
         {
             _context = context;
         }
-
-        public IEnumerable<ActivityLog> GetRecentLogs()
+        public async Task<IEnumerable<ActivityLog>> GetRecentLogAsync()
         {
-            return _context.ActivityLogs.OrderByDescending(log => log.ActionDate).ToList();
+            return await _context.ActivityLogs.OrderByDescending(log => log.ActionDate).ToListAsync();
         }
     }
 }

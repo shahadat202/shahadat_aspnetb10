@@ -11,8 +11,8 @@ namespace DevSkill.Inventory.Application.Services
     public interface IProductManagementService
     {
         void InsertProduct(Product product, string username);
-        IEnumerable<Product> GetAllProducts();
-        Product GetProduct(Guid id);
+        Task<IEnumerable<Product>> GetAllProductsAsync();
+        Task<Product> GetProductAsync(Guid id);
         void UpdateProduct(Product product, string username);
         void DeleteProduct(Guid id, string username);
 

@@ -36,10 +36,10 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productManagementService.GetAllProducts();
-            var logs = _activityLogRepository.GetRecentLogs();
+            var products =  await _productManagementService.GetAllProductsAsync();
+            var logs = await _activityLogRepository.GetRecentLogAsync();
 
             SetProductStatistics(products);
             ViewBag.LatestActivities = logs;
@@ -48,9 +48,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Items() 
+        public async Task<IActionResult> Items() 
         {
-            var products = _productManagementService.GetAllProducts();
+            var products = await _productManagementService.GetAllProductsAsync();
             SetProductStatistics(products);
             return View(products);
         }
@@ -110,9 +110,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var product = _productManagementService.GetProduct(id);
+            var product = await _productManagementService.GetProductAsync(id);
 
             if (product == null)
                 return NotFound();
@@ -135,9 +135,9 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [Authorize(Policy = "AgeRestriction")]
-        public IActionResult Update(Guid id)
+        public async Task<IActionResult> Update(Guid id)
         {
-            Product product = _productManagementService.GetProduct(id);
+            Product product = await _productManagementService.GetProductAsync(id);
             
             var model = new ProductUpdateModel
             {
@@ -200,11 +200,11 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var product = _productManagementService.GetProduct(id);
+                var product = await _productManagementService.GetProductAsync(id);
                 if (product == null)
                 {
                     return Json(new { success = false, message = "Product not found" });
@@ -220,10 +220,10 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult Search(string title, int? quantity, int? minLevel,
+        public async Task<IActionResult> Search(string title, int? quantity, int? minLevel,
         string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
         {
-            var products = _productManagementService.GetAllProducts();
+            var products = await _productManagementService.GetAllProductsAsync();
 
             // Apply filters
             if (!string.IsNullOrEmpty(title))
@@ -279,11 +279,10 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View(products.ToList());
         }
 
-
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult Tags()
+        public async Task<IActionResult> Tags()
         {
-            var products = _productManagementService.GetAllProducts();
+            var products = await _productManagementService.GetAllProductsAsync();
             SetProductStatistics(products);
             return View(products);
         }
@@ -294,13 +293,12 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             return View();
         }
 
-
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult ActivityHistory()
+        public async Task<IActionResult> ActivityHistory()
         {
             try
             {
-                var logs = _activityLogRepository.GetRecentLogs();
+                var logs = await _activityLogRepository.GetRecentLogAsync();
                 if (logs == null || !logs.Any())
                 {
                     _logger.LogWarning("No activity logs found.");
@@ -315,11 +313,10 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
-
         [Authorize(Roles = "Member,Admin,Support")]
-        public IActionResult InventorySummary(string searchTerm)
+        public async Task<IActionResult> InventorySummary(string searchTerm)
         {
-            var products = _productManagementService.GetAllProducts();
+            var products = await _productManagementService.GetAllProductsAsync();
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
