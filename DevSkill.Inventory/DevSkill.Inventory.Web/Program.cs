@@ -57,7 +57,7 @@ try
     });
     #endregion
 
-    builder.WebHost.UseUrls("http://*:80");
+    //builder.WebHost.UseUrls("http://*:80");
 
     builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
