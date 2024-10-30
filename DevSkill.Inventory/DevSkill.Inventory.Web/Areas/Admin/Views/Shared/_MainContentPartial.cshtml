@@ -4,18 +4,6 @@
     ViewData["Title"] = "_MainContentPartial";
     var newItemId = ViewBag.NewItemId as Guid?;
 }
-<!-- Response message after item delete -->
-@if (TempData["ResponseMessage"] != null)
-{
-    var responseMessage = TempData["ResponseMessage"] as ResponseModel;
-
-    if (responseMessage != null)
-    {
-        <div class="alert alert-@responseMessage.Type.ToString().ToLower()" role="alert">
-            @responseMessage.Message
-        </div>
-    }
-}
 <!-- Div for Selected Items -->
 <div id="selectedItemsDiv" class="selected-items" style="display: none; margin-bottom: 10px;">
     <div class="d-flex align-items-center">
@@ -79,7 +67,7 @@
                         <!-- First Line: Title and Delete Button -->
                         <div class="d-flex justify-content-between">
                             <h5 class="card-title" style="margin-left: 0px;">@item.Title</h5>
-                            <button style="margin-right: 0px;" data-id="@item.Id" type="button" class="btn btn-danger btn-sm show-bs-modal delete-icon" onclick="confirmDelete('@item.Id')">
+                            <button data-id="@item.Id" type="button" class="btn btn-danger btn-sm delete-icon" onclick="confirmDelete('@item.Id')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -110,29 +98,57 @@
         </div>
     }
 </div>
-
+<partial name="_ModalPartial" />
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var deleteModal = $('#deleteModal');
+        var deleteButton = $('#confirmDeleteButton');
+        var deleteIdInput = $('#deleteId');
+
         var searchInput = document.getElementById('searchAllItems');
         var items = document.querySelectorAll('.item-box');
         var itemCountField = document.getElementById('itemCount');
         var totalQuantityField = document.getElementById('totalQuantity');
         var totalValueField = document.getElementById('totalValue');
+        
+        window.confirmDelete = function (itemId) {
+            deleteIdInput.val(itemId);  
+            deleteModal.modal('show');  
+        };
 
-        // Form submission when Enter key is pressed
+        deleteButton.on('click', function () {
+            var itemId = deleteIdInput.val();
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            $.ajax({
+                url: '/Admin/Product/Delete',
+                type: 'POST',
+                data: {
+                    id: itemId,
+                    __RequestVerificationToken: token
+                },
+                success: function () {
+                    window.location.reload();  
+                },
+                error: function () {
+                    deleteModal.modal('hide');
+                    console.error('Error deleting item'); 
+                }
+            });
+        });
+
         searchInput.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 event.preventDefault();
             }
         });
 
-        // Show items serially when search (search all items section)
         searchInput.addEventListener('input', function () {
             var searchValue = searchInput.value.toLowerCase();
-            var searchTerm = searchInput.value.toLowerCase();
             let visibleItemCount = 0;
             let totalQuantity = 0;
             let totalValue = 0;
+
             items.forEach(function (item) {
                 var title = item.querySelector('.card-title').textContent.toLowerCase();
 
@@ -143,53 +159,24 @@
 
                     var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
                     var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
-                    var itemTotalValue = itemQuantity * itemPrice;
-
                     totalQuantity += itemQuantity;
-                    totalValue += itemTotalValue;
+                    totalValue += itemQuantity * itemPrice;
                 } else {
                     item.style.display = 'none';
                 }
             });
-            // After filtering, reflow the visible items
-            var filteredItems = Array.from(items).filter(item => item.style.display === 'flex');
 
             var productsContainer = document.getElementById('products');
             productsContainer.innerHTML = '';
-            filteredItems.forEach(item => productsContainer.appendChild(item));
+            Array.from(items)
+                .filter(item => item.style.display === 'flex')
+                .forEach(item => productsContainer.appendChild(item));
 
-            // Update countable fields
             itemCountField.textContent = visibleItemCount;
             totalQuantityField.textContent = totalQuantity;
             totalValueField.textContent = totalValue.toFixed(2) + ' $';
         });
     });
-    // Item delete functionality
-    function confirmDelete(itemId) {
-        if (confirm("Are you sure you want to delete this item?")) {
-            var token = $('input[name="__RequestVerificationToken"]').val();
-
-            $.ajax({
-                url: '/Admin/Product/Delete',
-                type: 'POST',
-                data: {
-                    id: itemId,
-                    __RequestVerificationToken: token
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                        window.location.href = '/Admin/Product/Items';
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function (err) {
-                    alert('Error deleting item');
-                }
-            });
-        }
-    } 
 </script>
 <style>
     .delete-icon {

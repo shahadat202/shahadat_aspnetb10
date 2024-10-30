@@ -207,16 +207,33 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
                 var product = await _productManagementService.GetProductAsync(id);
                 if (product == null)
                 {
-                    return Json(new { success = false, message = "Product not found" });
+                    TempData.Put("ResponseMessage", new ResponseModel
+                    {
+                        Message = "Product not found",
+                        Type = ResponseTypes.Danger
+                    });
+                    return RedirectToAction("Index");
                 }
+
                 var username = User.Identity.Name;
                 _productManagementService.DeleteProduct(id, username);
 
-                return Json(new { success = true, message = "Item deleted successfully!" });
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "Item deleted successfully!",
+                    Type = ResponseTypes.Success
+                });
+
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Error deleting item: " + ex.Message });
+                TempData.Put("ResponseMessage", new ResponseModel
+                {
+                    Message = "Error deleting item: " + ex.Message,
+                    Type = ResponseTypes.Danger
+                });
+                return RedirectToAction("Index");
             }
         }
 
