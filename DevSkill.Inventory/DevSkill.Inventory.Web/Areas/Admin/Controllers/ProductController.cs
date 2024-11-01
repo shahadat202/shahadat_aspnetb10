@@ -237,6 +237,58 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
         }
 
+        //[HttpPost, Authorize(Roles = "Member,Admin,Support")]
+        //public async Task<JsonResult> GetProductJsonDataSP([FromBody] ProductListModel model)
+        //{
+        //    var searchDto = model.SearchItem;
+
+        //    var result = await _productManagementService.GetProductsSP(
+        //        model.PageIndex,
+        //        model.PageSize,
+        //        searchDto,
+        //        model.Order
+        //    );
+
+        //    var productJsonData = new
+        //    {
+        //        recordsTotal = result.total,
+        //        recordsFiltered = result.totalDisplay,
+        //        data = (from record in result.data
+        //                select new string[]
+        //                {
+        //    HttpUtility.HtmlEncode(record.Title),
+        //    record.Quantity.ToString(),
+        //    record.Price.ToString("F2"),
+        //    record.MinLevel.ToString(),
+        //    record.Tags,
+        //    record.CreatedDate.ToString("yyyy/MM/dd"),
+        //    record.Id.ToString()
+        //                }).ToArray()
+        //    };
+
+        //    return Json(productJsonData);
+        //}
+        //public async Task<IActionResult> Search()
+        //{
+        //    var products = await _productManagementService.GetAllProductsAsync(); 
+
+        //    var itemCount = products.Count();
+        //    var totalQuantity = products.Sum(p => p.Quantity);
+        //    var totalValue = products.Sum(p => p.TotalValue);
+
+        //    var viewModel = new ProductSearchViewModel
+        //    {
+        //        Products = products,
+        //        ProductListModel = new ProductListModel()
+        //    };
+
+        //    ViewBag.ItemCount = itemCount;
+        //    ViewBag.TotalQuantity = totalQuantity;
+        //    ViewBag.TotalValue = totalValue;
+
+        //    return View(viewModel);
+        //}
+
         public async Task<IActionResult> Search(string title, int? quantity, int? minLevel,
         string tag, decimal? priceFrom, decimal? priceTo, DateTime? dateFrom, DateTime? dateTo)
         {

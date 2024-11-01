@@ -95,10 +95,69 @@
         </div>
     </div>
 </div>
-
 <script>
     document.getElementById("clear-filters").addEventListener("click", function () {
         document.getElementById("advanced-filter-form").reset();
         window.location.href = '@Url.Action("Search", "Product")'; 
     });
 </script>
+@* 
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#searchButton").click(function (event) {
+                event.preventDefault();
+
+                var searchCriteria = {
+                    Title: $("#filterTitle").val(),
+                    Quantity: $("#filterQuantity").val(),
+                    MinLevel: $("#filterMinLevel").val(),
+                    Tag: $("#filterTag").val(),
+                    PriceFrom: $("#filterPriceFrom").val(),
+                    PriceTo: $("#filterPriceTo").val(),
+                    DateFrom: $("#filterDateFrom").val(),
+                    DateTo: $("#filterDateTo").val()
+                };
+
+                $.ajax({
+                    url: "/Admin/Product/GetProductJsonDataSP",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(searchCriteria),
+                    success: function (response) {
+                        if (response && response.data) {
+                            updateProductList(response.data);
+                        } else {
+                            console.error("Invalid data structure:", response);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        showAlert("An error occurred while processing your request. Please try again later.", "danger");
+                    }
+                });
+            });
+        });
+        function updateProductList(data) {
+            console.log("Updating product list with data:", data);
+            $("#products").empty();
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                console.log("Processing item:", item);
+                var productItem = $('<li class="product-item"></li>');
+
+                if (item.Title && item.Price !== undefined) {
+                    productItem.append(`<span class="product-title">${item.Title}</span>`);
+                    productItem.append(`<span class="product-price">$${item.Price.toFixed(2)}</span>`);
+                    $("#products").append(productItem);
+                } else {
+                    console.warn("Item does not have expected properties:", item);
+                }
+            }
+        }
+    </script>
+}
+*@
