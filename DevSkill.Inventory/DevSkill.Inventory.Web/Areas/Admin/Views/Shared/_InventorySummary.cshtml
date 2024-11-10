@@ -4,6 +4,10 @@
     ViewData["Title"] = "InventorySummary";
     var newItemId = ViewBag.NewItemId as Guid?;
 }
+<link rel="stylesheet" href="~/adminlte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="~/adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="~/adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
 <!-- Search Bar and Value Fields -->
 <div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
     <form id="searchForm" onsubmit="return false;">
@@ -29,15 +33,15 @@
 
 <!-- Inventory Summary Data Table -->
 <div class="table-responsive">
-    <table class="table table-bordered table-hover table-striped custom-table" style="margin-top: 20px; font-size: 16px;">
+    <table id="example1" class="table table-bordered table-hover table-striped custom-table" style="margin-top: 20px; font-size: 16px;">
         <thead class="thead-light">
             <tr>
-                <th onclick="sortTable(0)">Name <span class="sort-icon">&#8597;</span></th>
-                <th onclick="sortTable(1)">Quantity <span class="sort-icon">&#8597;</span></th>
-                <th onclick="sortTable(2)">Min Level <span class="sort-icon">&#8597;</span></th>
-                <th onclick="sortTable(3)">Price <span class="sort-icon">&#8597;</span></th>
-                <th onclick="sortTable(4)">Value <span class="sort-icon">&#8597;</span></th>
-                <th onclick="sortTable(5)">Tags <span class="sort-icon">&#8597;</span></th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Min Level</th>
+                <th>Price</th>
+                <th>Value</th>
+                <th>Tags</th>
             </tr>
         </thead>
         <tbody id="products">
@@ -74,6 +78,16 @@
                 </tr>
             }
         </tbody>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Min Level</th>
+                <th>Price</th>
+                <th>Value</th>
+                <th>Tags</th>
+            </tr>
+        </tfoot>
     </table>
 </div>
 
@@ -90,12 +104,38 @@
         cursor: pointer;
         user-select: none;
     }
-    .sort-icon {
-        margin-left: 5px;
-        transition: transform 0.2s; 
+
+    #example1 thead tr th {
+        background-color: #dd3242;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
     }
 </style>
 
+<script src="~/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="~/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="~/adminlte/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="~/adminlte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="~/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="~/adminlte/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="~/adminlte/plugins/jszip/jszip.min.js"></script>
+<script src="~/adminlte/plugins/pdfmake/pdfmake.min.js"></script>
+<script src="~/adminlte/plugins/pdfmake/vfs_fonts.js"></script>
+<script src="~/adminlte/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="~/adminlte/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="~/adminlte/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "searching": false,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    });
+</script>
 <script>
     function filterItems() {
         var searchTerm = document.getElementById("searchAllItems").value.toLowerCase();
@@ -124,42 +164,5 @@
         document.getElementById("itemCount").textContent = visibleItemCount;
         document.getElementById("totalQuantity").textContent = totalQuantity;
         document.getElementById("totalValue").textContent = totalValue.toFixed(2) + " $"; 
-    }
-
-    let sortDirection = true; 
-
-    function sortTable(columnIndex) {
-        const table = document.getElementById("products");
-        const rows = Array.from(table.rows).slice(0); 
-        const isNumericColumn = (columnIndex === 1 || columnIndex === 3 || columnIndex === 4); 
-
-        // Sort the rows based on the column index
-        rows.sort((a, b) => {
-            const cellA = a.cells[columnIndex].textContent.trim();
-            const cellB = b.cells[columnIndex].textContent.trim();
-
-            let comparison = 0;
-
-            if (isNumericColumn) {
-                // Convert to number for numeric comparison
-                const valueA = parseFloat(cellA.replace(',', '').replace('$', ''));
-                const valueB = parseFloat(cellB.replace(',', '').replace('$', ''));
-                comparison = valueA - valueB;
-            } else {
-                // Compare as strings for non-numeric columns
-                comparison = cellA.localeCompare(cellB);
-            }
-
-            return sortDirection ? comparison : -comparison; // Ascending or descending based on sortDirection
-        });
-
-        // Clear the table body and append the sorted rows
-        while (table.rows.length > 1) {
-            table.deleteRow(1);
-        }
-        rows.forEach(row => table.appendChild(row));
-
-        // Toggle sort direction for next click
-        sortDirection = !sortDirection;
     }
 </script>
