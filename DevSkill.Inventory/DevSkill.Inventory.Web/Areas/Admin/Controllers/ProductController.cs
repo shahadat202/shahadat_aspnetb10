@@ -256,13 +256,13 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         //        data = (from record in result.data
         //                select new string[]
         //                {
-        //    HttpUtility.HtmlEncode(record.Title),
-        //    record.Quantity.ToString(),
-        //    record.Price.ToString("F2"),
-        //    record.MinLevel.ToString(),
-        //    record.Tags,
-        //    record.CreatedDate.ToString("yyyy/MM/dd"),
-        //    record.Id.ToString()
+        //                    HttpUtility.HtmlEncode(record.Title),
+        //                    record.Quantity.ToString(),
+        //                    record.Price.ToString("F2"),
+        //                    record.MinLevel.ToString(),
+        //                    record.Tags,
+        //                    record.CreatedDate.ToString("yyyy/MM/dd"),
+        //                    record.Id.ToString()
         //                }).ToArray()
         //    };
 
@@ -270,7 +270,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
         //}
         //public async Task<IActionResult> Search()
         //{
-        //    var products = await _productManagementService.GetAllProductsAsync(); 
+        //    var products = await _productManagementService.GetAllProductsAsync();
 
         //    var itemCount = products.Count();
         //    var totalQuantity = products.Sum(p => p.Quantity);
