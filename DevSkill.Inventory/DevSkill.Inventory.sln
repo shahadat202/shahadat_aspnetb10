@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevSkill.Inventory.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevSkill.Inventory.Application", "DevSkill.Inventory.Application\DevSkill.Inventory.Application.csproj", "{5F49231C-0920-4570-87EF-7F96C5DE24F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevSkill.Inventory.Infrastructure", "DevSkill.Inventory.Infrastructure\DevSkill.Inventory.Infrastructure.csproj", "{1D1A3838-85A7-4D3F-9879-DA2E173CB989}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevSkill.Inventory.Infrastructure", "DevSkill.Inventory.Infrastructure\DevSkill.Inventory.Infrastructure.csproj", "{1D1A3838-85A7-4D3F-9879-DA2E173CB989}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DevSkill.Inventory.Worker", "DevSkill.Inventory.Worker\DevSkill.Inventory.Worker.csproj", "{8D39DA94-1F3B-4315-8EAA-C34DC114CCB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1D1A3838-85A7-4D3F-9879-DA2E173CB989}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D1A3838-85A7-4D3F-9879-DA2E173CB989}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D1A3838-85A7-4D3F-9879-DA2E173CB989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D39DA94-1F3B-4315-8EAA-C34DC114CCB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D39DA94-1F3B-4315-8EAA-C34DC114CCB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D39DA94-1F3B-4315-8EAA-C34DC114CCB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D39DA94-1F3B-4315-8EAA-C34DC114CCB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
