@@ -13,6 +13,7 @@ namespace DevSkill.Inventory.Application.Services
         {
             _InventoryUnitOfWork = InventoryUnitOfWork;
             _ActivityLogRepository = activityLogRepository;
+
         }
 
         public void InsertProduct(Product product, string username)
