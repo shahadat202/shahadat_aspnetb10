@@ -78,5 +78,49 @@ namespace DevSkill.Inventory.Application.Tests
             _activityLogRepositoryMock.Verify(x => x.Add(It.Is<ActivityLog>(log => log.ItemName == product.Title && log.Action == "Inserted")), Times.Once);
             _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Once);
         }
+
+        [Test]
+        public void UpdateProduct_DuplicateTitle_ThrowsExecption()
+        {
+            // Arrange
+            var product = new Product
+            {
+                Id = Guid.NewGuid(),
+                Title = "Football",
+                Price = 20,
+                Quantity = 5,
+                MinLevel = 1,
+                Notes = "New product",
+                CreatedDate = new DateTime(2024, 11, 15)
+            };
+
+            _inventoryUnitOfWorkMock.Setup(x => x.ProductRepository).Returns(_productRepositoryMock.Object);    
+            _productRepositoryMock.Setup(x => x.IsTitleDuplicate(product.Title, product.Id)).Returns(true);
+
+            // Act
+            var ex = Assert.Throws<InvalidOperationException>(() => _productManagementService.UpdateProduct(product, "admin"));
+
+            // Assert
+            Assert.AreEqual("Title should be unique.", ex?.Message);
+        }
+
+        [Test]
+        public void DeleteProduct_ConfirmDelete_SuccessfullyDeleted()
+        {
+            // Arrange
+            var productId = Guid.NewGuid();
+            var product = new Product { Id = productId, Title = "Test Product" };
+            var username = "test_user";
+
+            _productRepositoryMock.Setup(x => x.GetById(productId)).Returns(product);   
+            
+            // Act
+            _productManagementService.DeleteProduct(productId, username);
+
+            // Assert
+            _productRepositoryMock.Verify(x => x.GetById(productId), Times.Once()); 
+            _productRepositoryMock.Verify(x => x.Remove(productId), Times.Once());
+            _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Once());
+        }
     }
 }

@@ -33,10 +33,12 @@ namespace DevSkill.Inventory.Application.Services
         {
             return await _InventoryUnitOfWork.ProductRepository.GetAllProductsAsync();
         }
+
         public async Task<Product> GetProductAsync(Guid id)
         {
             return await _InventoryUnitOfWork.ProductRepository.GetByIdAsync(id);
         }
+
         public void UpdateProduct(Product product, string username)
         {
             if (!_InventoryUnitOfWork.ProductRepository.IsTitleDuplicate(product.Title, product.Id))
