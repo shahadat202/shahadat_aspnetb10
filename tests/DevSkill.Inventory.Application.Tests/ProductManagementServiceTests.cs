@@ -53,6 +53,31 @@ namespace DevSkill.Inventory.Application.Tests
         }
 
         [Test]
+        public void InsertProduct_ValidProduct_ShouldAddProductAndLogActivity()
+        {
+            // Arrange
+            var product = new Product()
+            {
+                Id = Guid.NewGuid(),
+                Title = "Test Product",
+                Price = 100
+            };
+            var username = "test_user";
+
+            // Act
+            _productManagementService.InsertProduct(product, username);
+
+            // Assert
+            _productRepositoryMock.
+                Verify(x => x.Add(It.Is<Product>(y => y == product)), Times.Once);
+            _activityLogRepositoryMock.Verify(x => x.Add(It.Is<ActivityLog>(log =>
+                log.Username == username &&
+                log.Action == "Inserted" &&
+                log.ItemName == product.Title)), Times.Once);
+            _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Once);
+        }
+
+        [Test]
         public void InsertProduct_TitleNotDuplicate_InsertSuccessfully()
         {
             // Arrange
@@ -77,6 +102,28 @@ namespace DevSkill.Inventory.Application.Tests
             _productRepositoryMock.Verify(x => x.Add(It.Is<Product>(p => p.Title == product.Title)), Times.Once);
             _activityLogRepositoryMock.Verify(x => x.Add(It.Is<ActivityLog>(log => log.ItemName == product.Title && log.Action == "Inserted")), Times.Once);
             _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Once);
+        }
+
+        [Test]
+        public void InsertProduct_InvalidProduct_ThrowsExeption()
+        {
+            // Arrange
+            var product = new Product()
+            {
+                Id = Guid.NewGuid(),
+                Title = null, 
+                Price = 100
+            };
+            var username = "test_user";
+
+            // Act & Assert
+            Should.Throw<ArgumentNullException>(() =>
+                _productManagementService.InsertProduct(product, username));
+
+            // Verify
+            _productRepositoryMock.Verify(x => x.Add(It.IsAny<Product>()), Times.Never);
+            _activityLogRepositoryMock.Verify(x => x.Add(It.IsAny<ActivityLog>()), Times.Never);
+            _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Never);
         }
 
         [Test]
@@ -121,6 +168,25 @@ namespace DevSkill.Inventory.Application.Tests
             _productRepositoryMock.Verify(x => x.GetById(productId), Times.Once()); 
             _productRepositoryMock.Verify(x => x.Remove(productId), Times.Once());
             _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Once());
+        }
+
+        [Test]
+        public void DeleteProduct_ProductDoesNotExist_ThrowsException()
+        {
+            // Arrange 
+            var productId = Guid.NewGuid();
+            var username = "test_user";
+
+            _productRepositoryMock.Setup(x => x.GetById(productId)).Returns((Product)null);
+
+            // Act
+
+            // Assert
+            Assert.Throws<InvalidOperationException>(() => _productManagementService.DeleteProduct(productId, username));
+
+            _productRepositoryMock.Verify(x => x.GetById(productId), Times.Once);
+            _productRepositoryMock.Verify(x => x.Remove(It.IsAny<Guid>()), Times.Never);
+            _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Never);
         }
     }
 }

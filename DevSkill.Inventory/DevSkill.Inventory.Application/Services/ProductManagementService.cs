@@ -18,6 +18,12 @@ namespace DevSkill.Inventory.Application.Services
 
         public void InsertProduct(Product product, string username)
         {
+            if (product == null)
+                throw new ArgumentNullException(nameof(product), "Product cannot be null.");
+
+            if (string.IsNullOrWhiteSpace(product.Title))
+                throw new ArgumentNullException(nameof(product.Title), "Product title cannot be null or empty.");
+
             _InventoryUnitOfWork.ProductRepository.Add(product);
             _ActivityLogRepository.Add(new ActivityLog()
             {
