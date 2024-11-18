@@ -53,7 +53,7 @@ namespace DevSkill.Inventory.Application.Tests
         }
 
         [Test]
-        public void InsertProduct_ValidProduct_ShouldAddProductAndLogActivity()
+        public void InsertProduct_ValidProduct_AddProductAndLogActivity()
         {
             // Arrange
             var product = new Product()
@@ -127,6 +127,33 @@ namespace DevSkill.Inventory.Application.Tests
         }
 
         [Test]
+        public void UpdateProduct_ValidProduct_UpdateProductAndLogActivity()
+        {
+            // Arrange
+            var product = new Product
+            {
+                Id = Guid.NewGuid(),
+                Title = "Valid Product",
+                Price = 120
+            };
+            var username = "test_user";
+
+            _productRepositoryMock.Setup(x => x.
+                IsTitleDuplicate(product.Title, product.Id)).Returns(false);
+
+            // Act
+            _productManagementService.UpdateProduct(product, username);
+
+            // Assert
+            _productRepositoryMock.Verify(x => x.Edit(It.Is<Product>(p => p == product)), Times.Once);
+            _activityLogRepositoryMock.Verify(x => x.Add(It.Is<ActivityLog>(log =>
+                log.Username == username &&
+                log.Action == "Updated" &&
+                log.ItemName == product.Title)), Times.Once);
+            _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Once);
+        }
+
+        [Test]
         public void UpdateProduct_DuplicateTitle_ThrowsExecption()
         {
             // Arrange
@@ -187,6 +214,77 @@ namespace DevSkill.Inventory.Application.Tests
             _productRepositoryMock.Verify(x => x.GetById(productId), Times.Once);
             _productRepositoryMock.Verify(x => x.Remove(It.IsAny<Guid>()), Times.Never);
             _inventoryUnitOfWorkMock.Verify(x => x.Save(), Times.Never);
+        }
+
+        [Test]
+        public async Task GetAllProductsAsync_ShouldReturnAllProducts()
+        {
+            // Arrange
+            var products = new List<Product>
+            {
+                new Product { Id = Guid.NewGuid(), Title = "Product1", Price = 100 },
+                new Product { Id = Guid.NewGuid(), Title = "Product2", Price = 200 }
+            };
+
+            _productRepositoryMock.Setup(x => x.GetAllProductsAsync()).ReturnsAsync(products);
+
+            // Act
+            var result = await _productManagementService.GetAllProductsAsync();
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Count().ShouldBe(2);
+            result.ShouldBe(products);
+            _productRepositoryMock.Verify(x => x.GetAllProductsAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task GetAllProductsAsync_NoProducts_ShouldReturnEmpty()
+        {
+            // Arrange
+            _productRepositoryMock.Setup(x => x.GetAllProductsAsync()).ReturnsAsync(Enumerable.Empty<Product>());
+
+            // Act
+            var result = await _productManagementService.GetAllProductsAsync();
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.ShouldBeEmpty();
+            _productRepositoryMock.Verify(x => x.GetAllProductsAsync(), Times.Once);
+        }
+
+        [Test]
+        public async Task GetProductAsync_ValidId_ShouldReturnProduct()
+        {
+            // Arrange
+            var productId = Guid.NewGuid();
+            var product = new Product { Id = productId, Title = "Valid Product", Price = 150 };
+
+            _productRepositoryMock.Setup(x => x.GetByIdAsync(productId)).ReturnsAsync(product);
+
+            // Act
+            var result = await _productManagementService.GetProductAsync(productId);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.ShouldBe(product);
+            _productRepositoryMock.Verify(x => x.GetByIdAsync(productId), Times.Once);
+        }
+
+        [Test]
+        public async Task GetProductAsync_InvalidId_ShouldReturnNull()
+        {
+            // Arrange
+            var invalidId = Guid.NewGuid();
+
+            _productRepositoryMock.Setup(x => x.GetByIdAsync(invalidId)).ReturnsAsync((Product)null);
+
+            // Act
+            var result = await _productManagementService.GetProductAsync(invalidId);
+
+            // Assert
+            result.ShouldBeNull();
+            _productRepositoryMock.Verify(x => x.GetByIdAsync(invalidId), Times.Once);
         }
     }
 }
