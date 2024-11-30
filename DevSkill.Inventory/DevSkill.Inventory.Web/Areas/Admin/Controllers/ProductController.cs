@@ -12,6 +12,9 @@ using MailKit.Search;
 using DevSkill.Inventory.Domain;
 using System.Web;
 using DevSkill.Inventory.Domain.RepositoryContracts;
+using Newtonsoft.Json;
+using Amazon.SQS;
+using Amazon.SQS.Model;
 
 namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
 {
@@ -403,6 +406,7 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             ViewBag.TotalQuantity = products.Sum(p => p.Quantity);
             ViewBag.TotalValue = products.Sum(p => p.TotalValue);
         }
+
         // Image upload logic
         private async Task<string> HandleImageUpload(IFormFile image)
         {
@@ -424,5 +428,45 @@ namespace DevSkill.Inventory.Web.Areas.Admin.Controllers
             }
             return null;
         }
+
+        // AWS Image upload logic
+        //private async Task<string> HandleImageUpload(IFormFile image)
+        //{
+        //    if (image != null && image.Length > 0)
+        //    {
+        //        var guid = Guid.NewGuid();
+        //        var fileExtension = Path.GetExtension(image.FileName);
+        //        var uniqueFileName = $"{guid}{fileExtension}";
+
+        //        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploadedImages", uniqueFileName);
+        //        Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await image.CopyToAsync(stream);
+        //        }
+
+        //        // Send message to SQS queue
+        //        var sqsClient = new AmazonSQSClient(Amazon.RegionEndpoint.USEast1);
+        //        var queueUrl = "https://sqs.us-east-1.amazonaws.com/847888492411/shahadat_queue";
+
+        //        var message = new
+        //        {
+        //            FilePath = filePath,
+        //            FileName = uniqueFileName
+        //        };
+
+        //        await sqsClient.SendMessageAsync(new SendMessageRequest
+        //        {
+        //            QueueUrl = queueUrl,
+        //            MessageBody = JsonConvert.SerializeObject(message)
+        //        });
+
+        //        return $"/uploadedImages/{uniqueFileName}";
+        //    }
+
+        //    return null;
+        //}
+
     }
 }
