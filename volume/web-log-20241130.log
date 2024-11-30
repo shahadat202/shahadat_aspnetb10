@@ -1,0 +1,8 @@
+2024-11-30 03:58:09.099 +00:00 [INF] Application Started...
+2024-11-30 03:58:11.220 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2024-11-30 03:58:11.612 +00:00 [WRN] No XML encryptor configured. Key {b133c849-465d-451d-aad8-1f5b44fee351} may be persisted to storage in unencrypted form.
+2024-11-30 03:58:11.628 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://*:80'.
+2024-11-30 03:58:44.176 +00:00 [WRN] Failed to determine the https port for redirect.
+2024-11-30 03:59:44.306 +00:00 [WRN] No activity logs found.
+2024-11-30 03:59:50.452 +00:00 [WRN] No activity logs found.
+2024-11-30 04:09:00.732 +00:00 [WRN] No activity logs found.
