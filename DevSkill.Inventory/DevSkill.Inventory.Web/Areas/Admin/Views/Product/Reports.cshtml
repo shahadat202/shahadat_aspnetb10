@@ -1,0 +1,163 @@
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
+@{
+    ViewData["Title"] = "Reports";
+}
+<div class="content-wrapper">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-md-3" style="position: sticky; top: 0; height: 100vh;">
+            <div class="card" style="height: 100vh;">
+                <div class="card-body" style="overflow-y: auto;">
+                    <form class="search-container">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="search-icon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                </div>
+                                <input type="text" class="form-control" id="folderSearch" placeholder="Search reports" aria-label="Search reports">
+                                <div class="input-group-append" id="clear-button" style="cursor: pointer; display: none;">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-times"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="header-border mb-4"></div>
+
+                            <!-- Tags will be dynamically populated here -->
+                            <div id="searchReportsContainer" class="form-group title-container">
+                                <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("ActivityHistory", "Product", new { area = "Admin" })', 'Activity History', this)">
+                                    <i class="fas fa-history icon"></i>
+                                    <span class="menu-text">Activity History</span>
+                                </div>
+                                <div class="menu-item hoverable-item" onclick="loadContent('@Url.Action("InventorySummary", "Product", new { area = "Admin" })', 'Inventory Summary', this)">
+                                    <i class="fas fa-boxes icon"></i>
+                                    <span class="menu-text">Inventory Summary</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="fixed-header">
+                <div id="content-are" class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
+                    <h1 class="items-title" id="page-title">Reports</h1>
+                </div>
+                <div class="header-border mb-4" ></div>
+                <!-- Content Area for Boxes -->
+                <div id="content-area">
+                    <div class="row justify-content-center" style="margin: 0px; padding: 30px 10px;">
+                        <!-- Activity History Box -->
+                        <div class="col-md-4 mb-4">
+                            <div class="info-box hoverable-box" onclick="loadContent('@Url.Action("ActivityHistory", "Product", new { area = "Admin" })', 'Activity History')">
+                                <div class="info-box-icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
+                                <div class="info-box-content">
+                                    <h5 class="info-box-title">Activity History</h5>
+                                    <p class="info-box-text">Keep tabs on all users changes to items, users, and more.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inventory Summary Box -->
+                        <div class="col-md-4 mb-4">
+                            <div class="info-box hoverable-box" onclick="loadContent('@Url.Action("InventorySummary", "Product", new { area = "Admin" })', 'Inventory Summary')">
+                                <div class="info-box-icon">
+                                    <i class="fas fa-boxes"></i>
+                                </div>
+                                <div class="info-box-content">
+                                    <h5 class="info-box-title">Inventory Summary</h5>
+                                    <p class="info-box-text">Review your inventory's quantity, value & location at a glance.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function loadContent(url, title, element) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    $('#content-area').html(data);
+                    $('#page-title').text(title);
+
+                    var newUrl = window.location.origin + '/Admin/Product/Reports/' + title.replace(' ', '');
+                    history.pushState(null, '', newUrl);
+                },
+                error: function () {
+                    alert('Error loading content');
+                }
+            });
+
+            $('.hoverable-item').removeClass('active-item');
+
+            $(element).addClass('active-item');
+        }
+    </script>
+}
+
+<style>
+    .active-item {
+        background-color: rgba(228,230,229,255);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var folderSearch = document.getElementById("folderSearch"); // Correct variable usage
+        var reportsContainer = document.getElementById("searchReportsContainer"); // Correct ID
+        var clearButton = document.getElementById("clear-button");
+
+        // Ensure 'folderSearch' is being used correctly
+        folderSearch.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+
+        function setupSearch(inputElement, containerElement, itemClass, textClass, clearButton) {
+            inputElement.addEventListener("input", function () {
+                var query = inputElement.value.toLowerCase();
+                var items = containerElement.getElementsByClassName(itemClass);
+
+                // Show or hide the clear button based on input value
+                clearButton.style.display = query.length > 0 ? "block" : "none";
+
+                // Loop through each item and filter based on the search query
+                Array.from(items).forEach(function (item) {
+                    var itemText = item.getElementsByClassName(textClass)[0].textContent.toLowerCase();
+                    item.style.display = itemText.includes(query) ? "block" : "none";
+                });
+            });
+
+            // Add click event listener for clearing the search
+            clearButton.addEventListener("click", function () {
+                inputElement.value = '';
+                clearButton.style.display = "none";
+
+                // Restore all items (show them)
+                var items = containerElement.getElementsByClassName(itemClass);
+                Array.from(items).forEach(function (item) {
+                    item.style.display = "block";
+                });
+            });
+        }
+
+        // Setup search functionality with correct elements
+        setupSearch(folderSearch, reportsContainer, "menu-item", "menu-text", clearButton);
+    });
+</script>

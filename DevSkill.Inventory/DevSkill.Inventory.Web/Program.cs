@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using DevSkill.Inventory.Infrastructure;
+using DevSkill.Inventory.Infrastructure.Identity;
 using DevSkill.Inventory.Web;
 using DevSkill.Inventory.Web.Data;
 using Microsoft.AspNetCore.Identity;
@@ -8,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
 using System.Reflection;
+using DevSkill.Inventory.Domain;
+using DevSkill.Inventory.Infrastructure.Extensions;
 
 #region Bootstrap Logger
 var configuration = new ConfigurationBuilder()
@@ -54,9 +57,12 @@ try
     });
     #endregion
 
-    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
+    builder.WebHost.UseUrls("http://*:80");
+
+    builder.Services.AddIdentity();
     builder.Services.AddControllersWithViews();
+
+    builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
 
     var app = builder.Build();
 
@@ -86,7 +92,8 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
-    app.MapRazorPages();
+    
+    //app.MapRazorPages();
 
     app.Run();
 }

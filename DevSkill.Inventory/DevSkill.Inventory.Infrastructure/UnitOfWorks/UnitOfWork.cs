@@ -13,12 +13,12 @@ namespace DevSkill.Inventory.Infrastructure.UnitOfWorks
     public abstract class UnitOfWork : IUnitOfWork
     {
         private readonly DbContext _dbContext;
-        //protected IAdoNetUtility AdoNetUtility { get; private set; }
+        protected ISqlUtility SqlUtility { get; private set; }
 
         public UnitOfWork(DbContext dbContext)
         {
             _dbContext = dbContext;
-            //AdoNetUtility = new AdoNetUtility(_dbContext.Database.GetDbConnection());
+            SqlUtility = new SqlUtility(_dbContext.Database.GetDbConnection());
         }
 
         public void Dispose() => _dbContext?.Dispose();

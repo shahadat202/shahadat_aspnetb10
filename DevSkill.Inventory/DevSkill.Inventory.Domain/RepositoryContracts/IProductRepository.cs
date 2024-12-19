@@ -9,6 +9,8 @@ namespace DevSkill.Inventory.Domain.RepositoryContracts
 {
     public interface IProductRepository : IRepositoryBase<Product, Guid>
     {
-
+        Task<IEnumerable<Product>> GetAllProductsAsync();
+        bool IsTitleDuplicate(string title, Guid? id = null);
+        Task<Product> GetByIdAsync(Guid productId);
     }
 }

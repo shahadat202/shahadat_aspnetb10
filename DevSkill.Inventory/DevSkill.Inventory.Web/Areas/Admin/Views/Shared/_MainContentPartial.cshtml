@@ -1,0 +1,194 @@
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
+@{
+    ViewData["Title"] = "_MainContentPartial";
+    var newItemId = ViewBag.NewItemId as Guid?;
+}
+<!-- Div for Selected Items -->
+<div id="selectedItemsDiv" class="selected-items" style="display: none; margin-bottom: 10px;">
+    <div class="d-flex align-items-center">
+        <span id="selectedItemsText">0 items selected</span>
+        <div class="dropdown" style="padding-left: 3px;">
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="padding: 2px;">
+                <a class="dropdown-item" href="#" id="selectAllItems">All</a>
+                <a class="dropdown-item" href="#" id="clearSelection">Clear Selection</a>
+            </div>
+        </div>
+        <div class="ml-auto">
+            <button type="button" class="btn btn-danger btn-sm show-bs-modal" data-id='${data}' value='${data}'>
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Search Bar and Value Fields -->
+<div class="search-and-values" style="margin-bottom: 20px; padding-right: 15px; text-align: left;">
+    <form id="searchForm">
+        <div class="input-group" style="max-width: 300px;">
+            <input type="text" class="form-control" id="searchAllItems" placeholder="Search All Items" aria-label="Search All Items" style="padding-left: 10px; border-bottom: none;">
+        </div>
+    </form>
+    <!-- Closer Value Fields -->
+    <div class="value-fields" style="padding: 10px 0;">
+        <div class="row" style="margin: 0;">
+            <div class="col-md-4 no-padding">
+                <strong>Total Items:</strong> <span id="itemCount">@ViewBag.ItemCount</span>
+            </div>
+            <div class="col-md-4 no-padding">
+                <strong>Total Quantity:</strong> <span id="totalQuantity">@ViewBag.TotalQuantity</span>
+            </div>
+            <div class="col-md-4 no-padding">
+                <strong>Total Value:</strong> <span id="totalValue">@ViewBag.TotalValue, $</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="products" class="row" style="margin: 0;">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 d-flex justify-content-center">
+                <div class="card item-box @(ViewBag.IsNewItem == true ? "new-item-highlight" : "")">
+                    <span class="item-serial"></span>
+                    <div class="image-container" style="position: relative;">
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
+                            <img src="@item.Image" alt="@item.Title" class="card-img-top" />
+                            @if (item.Quantity < item.MinLevel)
+                            {
+                                <span class="badge badge-danger" style="position: absolute; padding: 5px; left: 10px; bottom: 10px; font-size: 12px;">LOW STOCK</span>
+                            }
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <!-- First Line: Title and Delete Button -->
+                        <div class="d-flex justify-content-between">
+                            <h5 class="card-title" style="margin-left: 0px;">@item.Title</h5>
+                            <button data-id="@item.Id" type="button" class="btn btn-danger btn-sm delete-icon" onclick="confirmDelete('@item.Id')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+
+                        <!-- Second Line: Quantity and Price -->
+                        <div class="item-info">
+                            <span class="item-quantity">Quantity: @item.Quantity</span>
+                            <span class="divider">|</span>
+                            <span class="item-price">Price: @item.Price, $</span>
+                        </div>
+
+                        <!-- Third Line: Tag Icon and Tag -->
+                        <div class="item-tag">
+                            <i class="fas fa-tag card-tag"></i> @item.Tags
+                            <span class="divider">|</span>
+                            <span class="item-price" id="totalValue">Total: @item.TotalValue,$</span>
+                        </div>
+                    </div>
+                    @* <input type="checkbox" class="checkbox-delete" id="deleteCheckbox" value="@item.Id" /> *@
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="no-items-message">
+            <p>No items available right now.</p>
+        </div>
+    }
+</div>
+<partial name="_ModalPartial" />
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteModal = $('#deleteModal');
+        var deleteButton = $('#confirmDeleteButton');
+        var deleteIdInput = $('#deleteId');
+
+        var searchInput = document.getElementById('searchAllItems');
+        var items = document.querySelectorAll('.item-box');
+        var itemCountField = document.getElementById('itemCount');
+        var totalQuantityField = document.getElementById('totalQuantity');
+        var totalValueField = document.getElementById('totalValue');
+        
+        window.confirmDelete = function (itemId) {
+            deleteIdInput.val(itemId);  
+            deleteModal.modal('show');  
+        };
+
+        deleteButton.on('click', function () {
+            var itemId = deleteIdInput.val();
+            var token = $('input[name="__RequestVerificationToken"]').val();
+
+            $.ajax({
+                url: '/Admin/Product/Delete',
+                type: 'POST',
+                data: {
+                    id: itemId,
+                    __RequestVerificationToken: token
+                },
+                success: function () {
+                    window.location.reload();  
+                },
+                error: function () {
+                    deleteModal.modal('hide');
+                    console.error('Error deleting item'); 
+                }
+            });
+        });
+
+        searchInput.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+            }
+        });
+
+        searchInput.addEventListener('input', function () {
+            var searchValue = searchInput.value.toLowerCase();
+            let visibleItemCount = 0;
+            let totalQuantity = 0;
+            let totalValue = 0;
+
+            items.forEach(function (item) {
+                var title = item.querySelector('.card-title').textContent.toLowerCase();
+
+                if (title.includes(searchValue)) {
+                    item.style.display = 'flex';
+                    item.style.margin = '0px 45px 20px 40px';
+                    visibleItemCount++;
+
+                    var itemQuantity = parseInt(item.querySelector('.item-quantity').textContent.replace('Quantity: ', '')) || 0;
+                    var itemPrice = parseFloat(item.querySelector('.item-price').textContent.replace('Price: ', '').replace('$', '')) || 0;
+                    totalQuantity += itemQuantity;
+                    totalValue += itemQuantity * itemPrice;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            var productsContainer = document.getElementById('products');
+            productsContainer.innerHTML = '';
+            Array.from(items)
+                .filter(item => item.style.display === 'flex')
+                .forEach(item => productsContainer.appendChild(item));
+
+            itemCountField.textContent = visibleItemCount;
+            totalQuantityField.textContent = totalQuantity;
+            totalValueField.textContent = totalValue.toFixed(2) + ' $';
+        });
+    });
+</script>
+<style>
+    .delete-icon {
+        background-color: transparent;
+        color: #dd2a3b;
+        cursor: pointer;
+        border: none;
+    }
+
+        .delete-icon:hover {
+            background-color: #dd2a3b;
+            color: white;
+            transition: 0.5s;
+        }
+</style>

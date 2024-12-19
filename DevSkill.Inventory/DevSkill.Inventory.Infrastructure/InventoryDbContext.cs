@@ -30,5 +30,6 @@ namespace DevSkill.Inventory.Infrastructure
             base.OnConfiguring(optionsBuilder);
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
     }
 }

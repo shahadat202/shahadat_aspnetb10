@@ -1,0 +1,163 @@
+﻿@model IEnumerable<Product>
+@using DevSkill.Inventory.Domain.Entities
+@{
+    ViewData["Title"] = "Search";
+    var newItemId = ViewBag.NewItemId as Guid?;
+}
+
+<div class="content-wrapper">
+    <div class="row">
+        <!-- Sidebar -->
+        <aside class="col-md-3" style="position: sticky; top: 0; height: 100vh;">
+            <div class="card" style="height: 100vh;">
+                <div class="card-body" style="overflow-y: auto;">
+                    <!-- Filters title and Clear All button -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5 class="mb-0">Filters</h5>
+                        <button class="btn btn-outline-danger btn-sm" id="clear-filters">Clear All</button>
+                    </div>
+
+                    <!-- Border line -->
+                    <div class="header-border mb-4" style="border-bottom: 1px solid #ddd;"></div>
+
+                    <!-- Advanced filtering columns will be added here -->
+                    <form id="advanced-filter-form" method="post" asp-action="Search">
+                        <div class="form-group">
+                            <label for="filterTitle">Title</label>
+                            <input value="@ViewBag.FilterTitle" type="text" class="form-control" id="filterTitle" name="Title" placeholder="Item title">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterQuantity">Quantity</label>
+                            <input value="@ViewBag.FilterQuantity" type="number" class="form-control" id="filterQuantity" name="Quantity" placeholder="Search by quantity">
+                        </div>
+
+                        <!-- Min. Level and Tag Row -->
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="filterMinLevel">Min. Level</label>
+                                    <input value="@ViewBag.FilterMinLevel" type="number" class="form-control" id="filterMinLevel" name="MinLevel" placeholder="Minimum level">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="filterTag">Tag</label>
+                                    <input value="@ViewBag.FilterTag" type="text" class="form-control" id="filterTag" name="Tag" placeholder="Search by tag">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Row -->
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="filterPriceFrom">Price From ($)</label>
+                                    <input value="@ViewBag.FilterPriceFrom" type="number" step="0.01" class="form-control" id="filterPriceFrom" name="PriceFrom" placeholder="Search by value">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="filterPriceTo">Price To ($)</label>
+                                    <input value="@ViewBag.FilterPriceTo" type="number" step="0.01" class="form-control" id="filterPriceTo" name="PriceTo" placeholder="Search by value">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inserted Date Rows -->
+                        <div class="form-group">
+                            <label for="filterDateFrom">Inserted Date From</label>
+                            <input value="@ViewBag.FilterDateFrom" class="form-control" id="filterDateFrom" name="DateFrom" type="date">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterDateTo">Inserted Date To</label>
+                            <input value="@ViewBag.FilterDateTo" class="form-control" id="filterDateTo" name="DateTo" type="date">
+                        </div>
+
+                        <!-- Sticky Footer Button -->
+                        <div class="card-footer" style="position: sticky; bottom: 0; background-color: white;">
+                            <button id="searchButton" type="submit" class="btn btn-success btn-block">FILTERS APPLIED</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </aside>
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <div class="fixed-header">
+                <div class="d-flex justify-content-between align-items-center mb-4" style="margin-top: 30px;">
+                    <h1 class="items-title">Advanced Search</h1>
+                </div>
+                <div class="header-border mb-4"></div>
+                <partial name="_ResponsePartial"></partial>
+            </div>
+
+            <partial name="_MainContentPartial" />
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById("clear-filters").addEventListener("click", function () {
+        document.getElementById("advanced-filter-form").reset();
+        window.location.href = '@Url.Action("Search", "Product")';
+    });
+</script>
+@*
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#searchButton").click(function (event) {
+                event.preventDefault();
+
+                var searchCriteria = {
+                    Title: $("#filterTitle").val(),
+                    Quantity: $("#filterQuantity").val(),
+                    MinLevel: $("#filterMinLevel").val(),
+                    Tag: $("#filterTag").val(),
+                    PriceFrom: $("#filterPriceFrom").val(),
+                    PriceTo: $("#filterPriceTo").val(),
+                    DateFrom: $("#filterDateFrom").val(),
+                    DateTo: $("#filterDateTo").val()
+                };
+
+                $.ajax({
+                    url: "/Admin/Product/GetProductJsonDataSP",
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify(searchCriteria),
+                    success: function (response) {
+                        if (response && response.data) {
+                            updateProductList(response.data);
+                        } else {
+                            console.error("Invalid data structure:", response);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX Error:", status, error);
+                        showAlert("An error occurred while processing your request. Please try again later.", "danger");
+                    }
+                });
+            });
+        });
+        function updateProductList(data) {
+            console.log("Updating product list with data:", data);
+            $("#products").empty();
+
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                console.log("Processing item:", item);
+                var productItem = $('<li class="product-item"></li>');
+
+                if (item.Title && item.Price !== undefined) {
+                    productItem.append(`<span class="product-title">${item.Title}</span>`);
+                    productItem.append(`<span class="product-price">$${item.Price.toFixed(2)}</span>`);
+                    $("#products").append(productItem);
+                } else {
+                    console.warn("Item does not have expected properties:", item);
+                }
+            }
+        }
+    </script>
+}
+*@

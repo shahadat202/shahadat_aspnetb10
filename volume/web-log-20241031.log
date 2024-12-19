@@ -1,0 +1,32 @@
+2024-10-31 02:40:15.176 +00:00 [INF] Application Started...
+2024-10-31 02:40:16.288 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2024-10-31 02:40:16.360 +00:00 [WRN] No XML encryptor configured. Key {c8948c36-f3af-4954-ae6a-afb08e2346ec} may be persisted to storage in unencrypted form.
+2024-10-31 02:41:43.479 +00:00 [INF] Application Started...
+2024-10-31 02:41:44.449 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2024-10-31 02:41:44.515 +00:00 [WRN] No XML encryptor configured. Key {0bf561bc-18c8-4c40-8f65-17034cfcfeb3} may be persisted to storage in unencrypted form.
+2024-10-31 02:43:21.000 +00:00 [INF] Application Started...
+2024-10-31 02:43:21.801 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2024-10-31 02:54:20.296 +00:00 [INF] Application Started...
+2024-10-31 02:54:21.697 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2024-10-31 02:54:21.794 +00:00 [WRN] No XML encryptor configured. Key {3406dbd1-9128-40b0-a0c9-0dae1eab25cd} may be persisted to storage in unencrypted form.
+2024-10-31 02:54:21.810 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://*:80'.
+2024-10-31 02:54:24.730 +00:00 [WRN] Failed to determine the https port for redirect.
+2024-10-31 03:08:21.355 +00:00 [INF] Application Started...
+2024-10-31 03:08:22.946 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+2024-10-31 03:08:23.015 +00:00 [WRN] No XML encryptor configured. Key {7123032b-de14-4f1a-b16c-58bc92a87b3a} may be persisted to storage in unencrypted form.
+2024-10-31 03:08:23.030 +00:00 [WRN] Overriding HTTP_PORTS '8080' and HTTPS_PORTS ''. Binding to values defined by URLS instead 'http://*:80'.
+2024-10-31 03:08:23.581 +00:00 [WRN] Failed to determine the https port for redirect.
+2024-10-31 03:08:28.100 +00:00 [ERR] An exception was thrown while deserializing the token.
+Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException: The antiforgery token could not be decrypted.
+ ---> System.Security.Cryptography.CryptographicException: The key {3406dbd1-9128-40b0-a0c9-0dae1eab25cd} was not found in the key ring. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.UnprotectCore(Byte[] protectedData, Boolean allowOperationsOnRevokedKeys, UnprotectStatus& status)
+   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Unprotect(Byte[] protectedData)
+   at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgeryTokenSerializer.Deserialize(String serializedToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgeryTokenSerializer.Deserialize(String serializedToken)
+   at Microsoft.AspNetCore.Antiforgery.DefaultAntiforgery.GetCookieTokenDoesNotThrow(HttpContext httpContext)
+2024-10-31 03:08:40.883 +00:00 [WRN] The temp data cookie .AspNetCore.Mvc.CookieTempDataProvider could not be loaded.
+System.Security.Cryptography.CryptographicException: The key {3406dbd1-9128-40b0-a0c9-0dae1eab25cd} was not found in the key ring. For more information go to https://aka.ms/aspnet/dataprotectionwarning
+   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.UnprotectCore(Byte[] protectedData, Boolean allowOperationsOnRevokedKeys, UnprotectStatus& status)
+   at Microsoft.AspNetCore.DataProtection.KeyManagement.KeyRingBasedDataProtector.Unprotect(Byte[] protectedData)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.CookieTempDataProvider.LoadTempData(HttpContext context)
